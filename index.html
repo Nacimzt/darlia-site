@@ -141,6 +141,7 @@
     pointer-events:none;opacity:0;transition:opacity .7s var(--ease);
   }
   .mac.on iframe{opacity:1}
+  .mac .still{display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:0 0}
   /* le soleil sur la vitre */
   .mac::after{content:"";position:absolute;inset:0;pointer-events:none;
     background:linear-gradient(245deg,rgba(255,243,210,.34) 0,rgba(255,243,210,.10) 22%,transparent 46%);mix-blend-mode:soft-light}
@@ -348,6 +349,7 @@
   .ui .lead{margin:12px 0 4px;font-size:clamp(17px,1rem + .4vw,21px);font-weight:620;letter-spacing:-.028em;line-height:1.2}
   .ui .lead span{color:#8A8983;font-weight:500}
 
+  .gains .dots{display:none}
   .gains .fine{margin:clamp(18px,1.8vw,26px) 0 0;font-size:var(--micro);color:var(--ink-2)}
   .js .reveal .gain{opacity:0;transform:translateY(34px)}
   .js .reveal.in .gain{opacity:1;transform:none;transition:opacity 1s var(--out) calc(200ms + var(--n) * 130ms),transform 1.2s var(--out) calc(200ms + var(--n) * 130ms)}
@@ -719,6 +721,8 @@
     .hero .veil{background:linear-gradient(180deg,var(--veil) 0,var(--veil) 40%,transparent 75%)}
     /* la fenêtre déborde à droite : on lit la barre latérale et l'accueil, pas une vignette */
     .rig{width:max(620px,150vw);--ry:-12deg;--rx:3deg;--rz:-1.4deg}
+    .mac .still{display:block}
+    .mac iframe{display:none}
     .stage{perspective-origin:10% 40%}
     /* empilé : le soir, puis le matin */
     .diptych{grid-template-columns:minmax(0,1fr)}
@@ -776,7 +780,10 @@
     .gains ol{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;
       margin-inline:calc(-1 * (var(--pad) - var(--frame)));padding-inline:calc(var(--pad) - var(--frame));scroll-padding-inline:calc(var(--pad) - var(--frame))}
     .gains ol::-webkit-scrollbar{display:none}
-    .gain,.gain:nth-child(2),.gain:nth-child(3){grid-column:auto;flex:0 0 86vw;max-width:440px;scroll-snap-align:center}
+    .gain,.gain:nth-child(2),.gain:nth-child(3){grid-column:auto;flex:0 0 78vw;max-width:400px;scroll-snap-align:start}
+    .gains .dots{display:flex;justify-content:center;gap:7px;margin-top:16px}
+    .gains .dots i{width:6px;height:6px;border-radius:50%;background:rgba(26,26,24,.2);transition:width .3s,background .3s}
+    .gains .dots i.on{width:18px;border-radius:3px;background:var(--accent)}
     .gain h3{font-size:clamp(24px,6.6vw,30px)}
     /* téléphone : le fragment d'app montre trois lignes au plus, le reste est coupé par un fondu */
     .gain .ui .row:nth-child(n+5),.gain .ui .tl:nth-child(n+5){display:none}
@@ -863,7 +870,8 @@
         <div class="rig" id="rig">
           <div class="mac" id="mac" role="img"
                aria-label="L’application Darlia ouverte sur l’accueil : Dali a traité 14 demandes ce matin et suit une fuite au 24 rue de Rivoli, étape par étape.">
-            <iframe src="app/index.html?embed" title="Démonstration de l’application Darlia" tabindex="-1" aria-hidden="true" scrolling="no"></iframe>
+            <img class="still" src="assets/accueil-mobile.webp" alt="" width="1600" height="1057" decoding="async" fetchpriority="high">
+            <iframe data-src="app/index.html?embed" title="Démonstration de l’application Darlia" tabindex="-1" aria-hidden="true" scrolling="no"></iframe>
           </div>
 
           <div class="pop ask" style="--t:1250ms" aria-hidden="true">
@@ -1003,6 +1011,7 @@
           </div></div>
         </li>
       </ol>
+      <div class="dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
       <p class="fine">Écrans de l’application de démonstration. Agence, biens et montants fictifs.</p>
     </div>
   </section>
@@ -1272,6 +1281,11 @@
 
   /* La fenêtre garde sa taille logique (1120 × 740) ; seule l'échelle change.
      Le texte reste vectoriel : net sur tous les écrans, quelle que soit la densité. */
+  /* Téléphone : l'app vivante coûte 300 Ko de page et ses images ; on montre une capture nette de l'accueil
+     et on ne charge l'iframe qu'à partir de 961 px (ou si l'écran s'élargit). */
+  const wide = matchMedia('(min-width:961px)');
+  const loadApp = () => { if (!frame.src) frame.src = frame.dataset.src; };
+  if (wide.matches) loadApp(); else wide.addEventListener('change', (e) => { if (e.matches) loadApp(); }, {once:true});
   const fit = () => mac.style.setProperty('--k', (mac.clientWidth / 1120).toFixed(4));
   new ResizeObserver(fit).observe(mac); fit();
 
@@ -1284,7 +1298,7 @@
     if (!still) setTimeout(parallax, 1900);
   };
   frame.addEventListener('load', () => setTimeout(show, 150), {once:true});
-  setTimeout(show, 2600);
+  setTimeout(show, wide.matches ? 2600 : 300);
 
   /* Le montage suit la souris, à peine : quelques degrés, amortis. */
   function parallax(){
@@ -1438,8 +1452,20 @@
       caps.forEach((c,k)=>{const r=c.getBoundingClientRect(); const v=Math.abs((r.top+r.bottom)/2-mid); if(v<d){d=v;best=k}});
       open(best);
     }
-    list.addEventListener('click',e=>{const c=e.target.closest('.cap'); if(!c) return; held=Date.now()+1200; open(caps.indexOf(c))});
+    list.addEventListener('click',e=>{const c=e.target.closest('.cap'); if(!c) return; held=Date.now()+1200; open(caps.indexOf(c));
+      if(!wide.matches) setTimeout(()=>{const y=c.getBoundingClientRect().top+scrollY-84; scrollTo({top:y,behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'})},60)});
     addEventListener('scroll',pick,{passive:true}); addEventListener('resize',pick); pick();
+  })();
+  /* Téléphone : les points sous les cartes de bénéfices suivent le feuilletage. */
+  (function(){
+    const list=document.querySelector('.gains ol'), dots=[...document.querySelectorAll('.gains .dots i')];
+    if(!list||!dots.length) return;
+    let raf=0;
+    list.addEventListener('scroll',()=>{ cancelAnimationFrame(raf); raf=requestAnimationFrame(()=>{
+      const cards=[...list.children]; const x=list.scrollLeft+list.clientWidth*.3; let best=0;
+      cards.forEach((c,k)=>{ if(c.offsetLeft<=x) best=k; });
+      dots.forEach((d,k)=>d.classList.toggle('on',k===best));
+    }); },{passive:true});
   })();
 </script>
 </body>
