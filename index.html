@@ -48,7 +48,7 @@
   }
 
   *{box-sizing:border-box}
-  html{-webkit-text-size-adjust:100%;scroll-padding-top:96px;scroll-behavior:smooth}
+  html{-webkit-text-size-adjust:100%;scroll-padding-top:96px;scroll-behavior:smooth;overflow-x:hidden}
   body{
     margin:0;background:var(--paper);color:var(--ink);
     font-family:var(--sans);font-size:var(--body);line-height:1.5;
@@ -450,7 +450,7 @@
   /* Une seule offre, un prix selon la taille du portefeuille : on choisit son nombre de lots, le prix suit.
      Volontairement compact et calme : la question et le sélecteur, deux montants, une ligne, le bouton.
      Le tableau complet reste dans la page pour les lecteurs d'écran et les moteurs de recherche. */
-  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .sr-only{position:absolute;left:0;top:0;display:block;width:1px;height:1px;max-width:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}   /* display:block : un tableau ignore width:1px et élargissait la page sur téléphone */
   .price{padding-block:var(--sec)}
   .price .shell{max-width:none;padding-inline:var(--frame)}
   .pp{padding-inline:calc(max(0px,(100% - var(--shell)) / 2) + var(--pad) - var(--frame) - 10px)}
