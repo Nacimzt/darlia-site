@@ -65,7 +65,8 @@
   /* ── héros ─────────────────────────────────────────────── */
   .hero{position:relative;min-height:calc(min(100svh,1100px) - 2 * var(--frame));display:grid;align-items:center;
     margin:var(--frame);border-radius:var(--round);
-    padding-block:clamp(104px,13vh,150px) clamp(72px,11vh,130px);overflow:clip;isolation:isolate}
+    padding-block:clamp(104px,13vh,150px) clamp(72px,11vh,130px);overflow:clip;isolation:isolate;
+    clip-path:inset(0 round var(--round))}   /* Safari iOS : le fond animé (transform) ignore l'arrondi de overflow:clip ; clip-path le découpe vraiment */
   /* Le fond : une photographie de scène, plein cadre. Colorée et lumineuse, mais
      faite de grandes formes douces, pour que la fenêtre reste le sujet. */
   .hero::before{content:"";position:absolute;z-index:-3;inset:0;
@@ -1300,7 +1301,9 @@
   const fit = () => mac.style.setProperty('--k', (mac.clientWidth / 1120).toFixed(4));
   new ResizeObserver(fit).observe(mac); fit();
 
-  requestAnimationFrame(() => requestAnimationFrame(() => shell.classList.add('ready'))); /* le texte n'attend jamais l'app */
+  /* le texte n'attend jamais l'app. On force un premier calcul de style (offsetWidth) avant d'ajouter la classe :
+     sinon Safari iOS peut passer directement à l'état final, sans transition, quand la page arrive vite. */
+  requestAnimationFrame(() => { void shell.offsetWidth; requestAnimationFrame(() => setTimeout(() => shell.classList.add('ready'), 40)); });
 
   let shown = false;
   const show = () => {
