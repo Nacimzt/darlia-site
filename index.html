@@ -1,0 +1,1446 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Darlia · L’assistant de gestion locative</title>
+<meta name="description" content="Dali est un assistant numérique qui prend les demandes de vos locataires, suit les interventions, relance les loyers et tient vos dossiers. Jour et nuit. En poste en 30 jours.">
+<meta name="theme-color" content="#E9E2CC">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&display=swap">
+<link rel="preload" as="image" href="assets/fond-mur.webp" type="image/webp">
+<style>
+  @property --lum{syntax:'<number>';inherits:true;initial-value:0}
+  /* Darlia, le site. Surface claire, colorée, lumineuse, jamais terne.
+     Encre #1A1A18, un seul accent (#2F6B4C). Titres : SF Pro très serrée,
+     et la chute en Instrument Serif italique. */
+  :root{
+    color-scheme:light;
+    --ink:#1A1A18;
+    --ink-2:#4F4D45;
+    --ink-3:#7F7B70;
+    --line:rgba(26,26,24,.14);
+    --accent:#2F6B4C;
+    --accent-hi:#87C7A4;
+    --logo:#3A4A42;
+    --card:#FFFFFF;
+    --paper:#FCFBF8;
+    --frame:clamp(8px,.9vw,14px);           /* la marge autour des scènes encadrées */
+    --sec:clamp(80px,8.5vw,136px);           /* le pas vertical : même respiration à l'intérieur de chaque section */
+    --gap:clamp(40px,4.6vw,72px);            /* l'air entre deux scènes encadrées qui se suivent */
+    --round:clamp(24px,2.6vw,42px);          /* leur arrondi */
+
+    --pad:clamp(20px,4.4vw,72px);
+    --shell:1560px;
+    --ease:cubic-bezier(.32,.72,0,1);
+    --out:cubic-bezier(.16,1,.3,1);
+
+    --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --serif:"Instrument Serif","Iowan Old Style","Times New Roman",serif;
+
+    --micro:clamp(12px,.72rem + .08vw,13.5px);
+    --body:clamp(16px,.95rem + .3vw,20px);
+    --display:clamp(40px,4.5vw,82px);
+
+    /* grain fin : donne de la matière, invisible en tant que motif */
+    --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .1 0 0 0 0 .09 0 0 0 0 .07 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;scroll-padding-top:96px;scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--sans);font-size:var(--body);line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:clip;
+  }
+  a{color:inherit;text-decoration:none}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:6px}
+  ::selection{background:#DDEBE2;color:var(--ink)}
+  .shell{max-width:var(--shell);margin:0 auto;padding-inline:var(--pad);width:100%}
+  /* dans une scène encadrée, la marge du cadre est déjà prise : le texte reste sur la même verticale que le reste de la page */
+  .hero .shell,.shift .shell{max-width:calc(var(--shell) - 2 * var(--frame));padding-inline:calc(var(--pad) - var(--frame))}
+
+  /* ── héros ─────────────────────────────────────────────── */
+  .hero{position:relative;min-height:calc(min(100svh,1100px) - 2 * var(--frame));display:grid;align-items:center;
+    margin:var(--frame);border-radius:var(--round);
+    padding-block:clamp(104px,13vh,150px) clamp(72px,11vh,130px);overflow:clip;isolation:isolate}
+  /* Le fond : une photographie de scène, plein cadre. Colorée et lumineuse, mais
+     faite de grandes formes douces, pour que la fenêtre reste le sujet. */
+  .hero::before{content:"";position:absolute;z-index:-3;inset:0;
+    background:var(--fond) var(--fond-pos,center)/cover no-repeat;filter:saturate(1.16) contrast(1.05);
+    transform-origin:80% 40%;animation:drift 50s ease-in-out infinite alternate}
+  @keyframes drift{from{transform:scale(1)}to{transform:scale(1.05)}}
+  .hero .veil{position:absolute;z-index:-2;inset:0;pointer-events:none;
+    background:linear-gradient(90deg,var(--veil) 0,var(--veil) 24%,transparent 60%)}
+  .hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+    background:var(--grain);opacity:.16;mix-blend-mode:multiply}
+
+  /* « Mur au soleil » (retenu) : enduit sauge, lumière du matin à travers une fenêtre */
+  [data-scene="mur"]{--fond:#E9E2CC url(assets/fond-mur.webp);--fond-pos:72% bottom;--veil:rgba(252,247,236,.42);
+    --cast:rgba(58,62,36,.5);--cast-2:rgba(58,62,36,.28)}
+  /* « Ciel du matin » : menthe, bleu poudre et pêche, nuages flous */
+  [data-scene="ciel"]{--fond:#DDEDE6 url(assets/fond-ciel.webp);--fond-pos:right center;--veil:rgba(240,248,242,.5);
+    --cast:rgba(40,50,80,.5);--cast-2:rgba(40,50,80,.28)}
+
+  .hero .shell{position:relative;display:grid;align-items:center;
+    grid-template-columns:minmax(0,45fr) minmax(0,55fr);gap:clamp(28px,3vw,56px)}
+
+  /* ── le texte ──────────────────────────────────────────── */
+  h1{margin:0;font-size:var(--display);font-weight:700;line-height:.98;letter-spacing:-.046em;text-wrap:balance}
+  /* la chute : grande serif italique, le seul vert de la page */
+  h1 em{display:block;margin-top:.06em;font-family:var(--serif);font-style:italic;font-weight:400;
+    font-size:1.13em;line-height:.96;letter-spacing:-.022em;color:var(--accent)}
+  /* chaque mot monte derrière un masque ; le rembourrage garde les jambages (g, q, p) */
+  .w{display:inline-block;overflow:hidden;vertical-align:top;padding:.06em .04em .16em;margin:-.06em -.04em -.16em}
+  .w>span{display:inline-block}
+
+  .lede{margin:clamp(24px,2.4vw,36px) 0 0;max-width:30em;color:var(--ink-2);line-height:1.55;text-wrap:pretty}
+  .lede b{color:var(--ink);font-weight:600;white-space:nowrap}
+  .go{margin-top:clamp(28px,2.8vw,42px);display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px}
+  .cta{
+    position:relative;display:inline-flex;align-items:center;gap:10px;height:58px;padding:0 28px;border-radius:99px;
+    background:var(--ink);color:#FBFBFA;overflow:hidden;
+    font-size:17px;font-weight:600;letter-spacing:-.012em;
+    box-shadow:0 18px 34px -16px rgba(26,26,24,.6),0 2px 4px -1px rgba(26,26,24,.3),inset 0 1px 0 rgba(255,255,255,.14);
+    transition:transform .3s var(--out),box-shadow .3s var(--out);
+  }
+  .cta svg{width:16px;height:16px;transition:transform .3s var(--out)}
+  /* un reflet traverse le bouton une fois à l'ouverture, puis au survol */
+  .cta::after{content:"";position:absolute;inset:0;transform:translateX(-120%) skewX(-18deg);
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent)}
+  .ready .cta::after{animation:sheen 1.1s var(--out) 1.5s 1}
+  .cta:hover::after{animation:sheen .9s var(--out) 1}
+  @keyframes sheen{to{transform:translateX(120%) skewX(-18deg)}}
+  .cta:hover{transform:translateY(-2px);box-shadow:0 24px 40px -16px rgba(26,26,24,.6),0 2px 4px -1px rgba(26,26,24,.3),inset 0 1px 0 rgba(255,255,255,.14)}
+  .cta:hover svg{transform:translateX(3px)}
+  .cta:active{transform:scale(.985)}
+  .note{font-size:var(--micro);color:var(--ink-3);letter-spacing:.005em}
+
+  /* ── l'app dans la scène ────────────────────────────────── */
+  /* Un objet posé dans la pièce, pas une capture : perspective, ombre portée dans
+     le sens du soleil (il vient d'en haut à droite), reflet sur la vitre, et une
+     seule carte vivante qui sort du cadre. Tout le montage suit la souris. */
+  .stage{position:relative;perspective:1500px;perspective-origin:12% 42%}
+  .rig{position:relative;width:calc(100% + clamp(0px,8vw,170px));transform-style:preserve-3d;
+    --ry:-19deg;--rx:5deg;--rz:-2.4deg;transform:rotateY(var(--ry)) rotateX(var(--rx)) rotateZ(var(--rz))}
+  .mac{
+    --w:1120; --h:740; --k:.6;
+    position:relative;width:100%;
+    height:calc(var(--h) * var(--k) * 1px);
+    border-radius:calc(11px * var(--k) + 4px);overflow:hidden;background:#fff;
+    box-shadow:0 0 0 .5px rgba(26,26,24,.26),
+      -70px 90px 130px -40px var(--cast),
+      -16px 22px 40px -18px var(--cast-2);
+  }
+  .mac iframe{
+    position:absolute;left:0;top:0;border:0;display:block;
+    width:calc(var(--w) * 1px);height:calc(var(--h) * 1px);
+    transform:scale(var(--k));transform-origin:0 0;
+    pointer-events:none;opacity:0;transition:opacity .7s var(--ease);
+  }
+  .mac.on iframe{opacity:1}
+  /* le soleil sur la vitre */
+  .mac::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(245deg,rgba(255,243,210,.34) 0,rgba(255,243,210,.10) 22%,transparent 46%);mix-blend-mode:soft-light}
+
+  .pop{position:absolute;z-index:2;background:var(--card);border-radius:16px;
+    box-shadow:0 0 0 .5px rgba(26,26,24,.12),-26px 34px 60px -22px var(--cast),-6px 10px 18px -8px var(--cast-2);
+    font-size:13px;line-height:1.35;letter-spacing:-.005em;color:var(--ink);
+    transform:translateZ(var(--z,70px))}
+  .pop small{display:block;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+  .pop b{display:block;font-weight:620;font-size:14px;letter-spacing:-.012em}
+  .pop span{color:var(--ink-3)}
+
+  /* ce qui vous revient : la décision */
+  .ask{right:5%;top:-15%;width:min(300px,42%);padding:14px 16px 16px;--z:130px}
+  .ask b{margin-top:6px}
+  .ask .acts{display:flex;gap:8px;margin-top:12px}
+  .ask .acts u{flex:1;display:grid;place-items:center;height:32px;border-radius:9px;text-decoration:none;font-size:12.5px;font-weight:600}
+  .ask .acts u:first-child{background:var(--ink);color:#fff}
+  .ask .acts u:last-child{background:#F1F1EF;color:var(--ink)}
+
+  /* ce que Dali vient de faire : le fil défile */
+  .feed{left:-7%;bottom:-9%;width:min(376px,54%);padding:14px 16px 14px 14px;--z:90px}
+  .feed .head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .feed .head i{width:7px;height:7px;border-radius:50%;background:var(--accent-hi);box-shadow:0 0 0 3px rgba(135,199,164,.28)}
+  .feed .rows{position:relative;height:40px}
+  .feed .row{position:absolute;inset:0;display:grid;grid-template-columns:30px 1fr auto;gap:10px;align-items:center;
+    opacity:0;transform:translateY(10px);transition:opacity .5s var(--ease),transform .6s var(--out)}
+  .feed .row[data-on="true"]{opacity:1;transform:none}
+  .feed .row[data-on="out"]{opacity:0;transform:translateY(-10px)}
+  /* une ligne par information, jamais de mot orphelin : on coupe par des points de suspension plutôt que de passer à la ligne */
+  .feed .row>div{min-width:0}
+  .feed .row b,.feed .row span:not(.ok){display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .feed .ok{width:30px;height:30px;border-radius:50%;background:#EEF5F1;display:grid;place-items:center;color:var(--accent)}
+  .feed .ok svg{width:14px;height:14px}
+  .feed time{font-size:11.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+
+
+  /* ── preuves ───────────────────────────────────────────── */
+  /* Trois résultats mesurés, en grand, sur le blanc de la page : le chiffre d'abord,
+     puis ce qu'il mesure et d'où il vient. Les chiffres comptent à l'arrivée. */
+  .proofs{padding-block:var(--sec)}
+  .proofs ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+  .proofs li{padding:4px 0 4px clamp(20px,2.6vw,44px);border-left:1px solid var(--line)}
+  .proofs li:first-child{padding-left:0;border-left:0}
+  .proofs .fig{display:flex;align-items:baseline;gap:.08em;margin:0;white-space:nowrap;
+    font-size:clamp(56px,6.2vw,104px);font-weight:700;line-height:.95;letter-spacing:-.055em;font-variant-numeric:tabular-nums}
+  .proofs .fig em{font-family:var(--serif);font-style:italic;font-weight:400;font-size:.9em;letter-spacing:-.02em;color:var(--accent)}
+  .proofs .what{margin:clamp(10px,1.1vw,16px) 0 0;font-size:clamp(16px,.95rem + .25vw,20px);line-height:1.35;color:var(--ink);font-weight:560;letter-spacing:-.012em}
+  .proofs .who{display:block;margin-top:4px;font-size:var(--micro);font-weight:400;letter-spacing:0;color:var(--ink-3)}
+  .js .proofs li{opacity:0;transform:translateY(14px)}
+  .js .proofs.in li{opacity:1;transform:none;transition:opacity .9s var(--out) calc(var(--n) * 110ms),transform .9s var(--out) calc(var(--n) * 110ms)}
+
+  /* ── avant, après ──────────────────────────────────────── */
+  /* Une scène dans le mur au soleil du héros. */
+  .shift{position:relative;isolation:isolate;margin:var(--frame);border-radius:var(--round);
+    padding-block:var(--sec);overflow:clip;background:#DCE6D6}
+  /* le mur du héros, retourné : la lumière tombe côté « aujourd'hui », le sauge calme reste côté Dali */
+  .shift::before{content:"";position:absolute;z-index:-2;inset:0;pointer-events:none;
+    background:url(assets/fond-mur.webp) 100% 30%/auto 135% no-repeat;transform:scaleX(-1);filter:saturate(1.16) contrast(1.05)}
+  .shift::after{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;
+    background:linear-gradient(180deg,rgba(252,250,244,.62) 0,rgba(252,250,244,.2) 38%,transparent 60%),var(--grain);
+    background-blend-mode:normal;opacity:1}
+  .shift .head{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(20px,4vw,80px);align-items:end;font-size:clamp(17px,1rem + .34vw,21px)}
+  h2{margin:0;font-size:clamp(36px,4.1vw,70px);font-weight:700;line-height:1;letter-spacing:-.046em;text-wrap:balance}
+  h2 em{display:block;margin-top:.08em;font-family:var(--serif);font-style:italic;font-weight:400;font-size:1.13em;line-height:1;letter-spacing:-.02em;color:var(--accent)}
+
+  .shift .head p{margin:0 0 .5em;max-width:30em;color:var(--ink-2);line-height:1.55;text-wrap:pretty}
+
+  /* Le diptyque : deux grandes photographies de scène, même bureau, même cadrage. Le soir, elle,
+     débordée ; le lendemain matin, Dali en poste. Aucun personnage détouré : tout est dans l'image.
+     La typographie se pose dessus, en blanc, sur un voile en bas de chaque photo. */
+  .diptych{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(10px,1.1vw,18px);
+    max-width:1060px;margin:clamp(36px,4vw,64px) auto 0}
+  .plate{position:relative;display:flex;flex-direction:column;justify-content:space-between;aspect-ratio:4/5.25;overflow:hidden;isolation:isolate;
+    border-radius:clamp(22px,2.2vw,34px);padding:clamp(22px,2.4vw,38px) clamp(22px,2.4vw,38px) clamp(14px,1.5vw,24px);color:#fff;background:#2A3330;
+    box-shadow:0 80px 120px -60px rgba(20,35,20,.85),0 20px 44px -24px rgba(20,35,20,.5),0 0 0 .5px rgba(26,26,24,.2)}
+  /* La photo est montrée entière, calée en haut. La carte descend plus bas qu'elle : la façade du
+     bureau se prolonge dans sa propre couleur, et c'est là que la liste se pose. Pas de flou. */
+  /* la photo remonte d'un huitième de largeur : on rogne du mur vide au-dessus des têtes, pas le bureau */
+  .plate>img{position:absolute;z-index:-2;top:-9.5%;left:0;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;
+    -webkit-mask-image:linear-gradient(180deg,#000 86%,transparent 100%);mask-image:linear-gradient(180deg,#000 86%,transparent 100%);
+    transform-origin:50% 30%;transform:scale(1.03);transition:transform 2.4s var(--out)}
+  .plate.was{background:#382425}
+  .plate.now{background:#7A4C37}
+  .plate:hover>img{transform:scale(1.07)}
+  /* le voile : un peu en haut pour le titre, plus bas pour la liste */
+  .plate::before{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;
+    background:linear-gradient(180deg,var(--top) 0,transparent 22%,transparent 60%,var(--mid) 72%,var(--bot) 100%)}
+  .plate h3,.plate ul{position:relative;z-index:1}
+  .plate.was{--top:rgba(18,26,34,.50);--mid:rgba(16,14,18,.58);--bot:rgba(12,10,14,.86)}
+  .plate.now{--top:rgba(16,44,30,.42);--mid:rgba(14,44,28,.62);--bot:rgba(8,34,20,.90)}
+  .plate.was>img{filter:saturate(.88)}
+
+  .plate h3{margin:0;display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 16px;
+    font-size:clamp(28px,1.3rem + 1.3vw,46px);font-weight:700;letter-spacing:-.045em;line-height:1;text-shadow:0 2px 24px rgba(0,0,0,.25)}
+  .plate h3 em{font-family:var(--serif);font-style:italic;font-weight:400;font-size:1.14em;letter-spacing:-.02em}
+  .plate .state{display:inline-flex;align-items:center;gap:8px;font-size:clamp(12.5px,.74rem + .1vw,14px);font-weight:600;letter-spacing:.01em;text-shadow:none}
+  .plate .state i{position:relative;width:7px;height:7px;border-radius:50%;background:currentColor}
+  .plate.was .state{color:#F0B9A4}
+  .plate.now .state{color:#A9E0C2}
+  .plate.now .state i::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1.5px solid currentColor;opacity:0;animation:ping 2.6s var(--out) infinite}
+  @keyframes ping{0%{transform:scale(.4);opacity:.7}70%,100%{transform:scale(1.25);opacity:0}}
+
+  .plate ul{list-style:none;margin:0;padding:0}
+  .plate li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:16px;align-items:center;padding:clamp(7px,.64vw,10px) 0;
+    border-top:1px solid rgba(255,255,255,.16);
+    font-size:clamp(15.5px,.92rem + .24vw,18.5px);font-weight:540;letter-spacing:-.02em;line-height:1.2;transition:opacity .35s var(--ease)}
+  .plate li svg{width:20px;height:20px}
+  .plate.was li{color:rgba(255,255,255,.78)}
+  .plate.was li svg{color:#F0A68C;width:14px;height:14px;justify-self:center}
+  .plate.now li svg{color:#9ADBB8}
+  /* Une paire à la fois : une surbrillance en verre glisse sur la ligne, le problème se raye,
+     sa réponse s'illumine en face. Rien d'autre ne s'éteint. */
+  .plate .glow{position:absolute;z-index:0;left:0;top:0;width:0;height:0;border-radius:12px;pointer-events:none;opacity:0;
+    background:rgba(255,255,255,.12);box-shadow:inset 0 0 0 1px rgba(255,255,255,.16),0 10px 24px -14px rgba(0,0,0,.5);
+    transition:transform .6s var(--out),height .6s var(--out),opacity .35s var(--ease)}
+  .plate .glow.on{opacity:1}
+  .plate li span{justify-self:start;transition:transform .5s var(--out),color .3s var(--ease),background-size .6s var(--out)}
+  .plate li svg{transition:transform .5s cubic-bezier(.2,1.5,.4,1),color .3s var(--ease)}
+  .plate.was li span{background:linear-gradient(#F3B29B,#F3B29B) 0 56%/0 1.5px no-repeat}
+  .plate.was li.lit span{background-size:100% 1.5px;color:#fff}
+  .plate.was li.lit svg{transform:rotate(90deg) scale(1.15);color:#FFC4AE}
+  .plate.now li.lit span{transform:translateX(5px);color:#fff}
+  .plate.now li.lit svg{transform:scale(1.22);color:#CFF5E0}
+  .plate li{cursor:default}
+
+  /* à la couture : du soir au matin */
+  .seam{position:absolute;z-index:3;left:50%;top:50%;translate:-50% -50%;display:grid;place-items:center;
+    width:clamp(48px,3.8vw,60px);height:clamp(48px,3.8vw,60px);border-radius:50%;background:#fff;color:var(--ink);
+    box-shadow:0 0 0 6px rgba(255,255,255,.22),0 20px 36px -12px rgba(0,0,0,.55)}
+  .seam svg{width:20px;height:20px}
+
+  /* l'arrivée : chaque photo se dévoile comme un rideau qui monte */
+  .js .reveal [data-r]{opacity:0;transform:translateY(26px)}
+  .js .reveal.in [data-r]{opacity:1;transform:none;transition:opacity 1s var(--out) calc(var(--r,0) * 120ms),transform 1.1s var(--out) calc(var(--r,0) * 120ms)}
+  .js .reveal h2 .w>span{transform:translateY(112%) rotate(4deg);transform-origin:0 100%}
+  .js .reveal.in h2 .w>span{transform:none;transition:transform 1.1s var(--out) calc(var(--i) * 55ms)}
+  .js .reveal .plate{clip-path:inset(100% 0 0 0 round 36px);transform:translateY(60px)}
+  .js .reveal.in .plate{clip-path:inset(0 0 0 0 round 36px);transform:none;transition:clip-path 1.5s var(--out) var(--t),transform 1.5s var(--out) var(--t)}
+  .js .reveal .plate>img{transform:scale(1.22)}
+  .js .reveal.in .plate>img{transform:scale(1.03);transition:transform 2.6s var(--out) var(--t)}
+  .js .reveal.in .plate:hover>img{transform:scale(1.07);transition:transform 2.4s var(--out)}
+  .plate.was{--t:450ms}.plate.now{--t:650ms}
+  .js .reveal .plate li,.js .reveal .plate h3{opacity:0;transform:translateY(12px)}
+  .js .reveal.in .plate li,.js .reveal.in .plate h3{opacity:1;transform:none;transition:opacity .8s var(--out) calc(var(--t) + 700ms + var(--k,0) * 100ms),transform .8s var(--out) calc(var(--t) + 700ms + var(--k,0) * 100ms)}
+  .js .reveal .seam{opacity:0;scale:.5}
+  .js .reveal.in .seam{opacity:1;scale:1;transition:opacity .5s var(--ease) 1500ms,scale .9s cubic-bezier(.2,1.4,.4,1) 1500ms}
+
+  /* ── ce que l'agence y gagne ───────────────────────────── */
+  /* Pour des professionnels de la gestion locative : pas d'illustration, leur métier. Chaque gain
+     est montré par un fragment de l'application (portefeuille, compte rendu de gérance, décisions,
+     encaissements), dessiné en HTML dans les codes de l'app, donc net à toute taille. Le fragment
+     flotte dans un panneau pierre et dépasse par le bas. */
+  /* Un seul grand panneau sur le ciel pastel du matin (Nacim voulait les ciels ici) ; dessus, quatre cartes
+     blanches entières, comme des feuilles posées : le ciel respire entre elles. */
+  .gains{position:relative;isolation:isolate;margin:var(--gap) var(--frame) var(--frame);border-radius:var(--round);overflow:clip;background:#DDEDE6;padding-block:var(--sec)}
+  .gains::before{content:"";position:absolute;z-index:-2;inset:0;pointer-events:none;
+    background:linear-gradient(100deg,rgba(253,252,248,.5) 0,rgba(253,252,248,.18) 40%,transparent 70%),url(assets/fond-ciel.webp) right 40%/cover no-repeat;filter:saturate(1.08)}
+  .gains::after{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;background:var(--grain);opacity:.08;mix-blend-mode:multiply}
+  .gains .shell{max-width:calc(var(--shell) - 2 * var(--frame));padding-inline:calc(var(--pad) - var(--frame))}
+  .gains .head{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(14px,1.6vw,22px)}
+  .gains .head p{margin:0;max-width:30em;color:var(--ink-2);line-height:1.55;font-size:clamp(17px,1rem + .3vw,20px);text-wrap:pretty}
+  .gains ol{list-style:none;margin:clamp(40px,4.4vw,72px) 0 0;padding:0;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(14px,1.4vw,22px)}
+  .gain{grid-column:span 7}.gain:nth-child(2),.gain:nth-child(3){grid-column:span 5}
+  .gain{position:relative;display:flex;flex-direction:column;overflow:hidden;isolation:isolate;
+    border-radius:clamp(22px,2.2vw,34px);padding:clamp(26px,3vw,44px) clamp(26px,3vw,44px) clamp(26px,3vw,44px);
+    background:#FEFDFB;
+    box-shadow:0 0 0 .5px rgba(26,26,24,.10),inset 0 1px 0 #fff,0 50px 90px -50px rgba(40,60,70,.45),0 14px 30px -20px rgba(40,60,70,.25)}
+  /* les cartes : blanc chaud, un filet, une ombre douce en deux couches ; le fragment d'app est posé entier dedans */
+  .gain .k{margin:0;display:flex;align-items:center;gap:12px;font-size:12.5px;font-weight:620;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}
+  .gain .k i{font-family:var(--serif);font-style:italic;font-weight:400;font-size:22px;letter-spacing:0;text-transform:none;color:var(--ink);line-height:1}
+  .gain .k::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(26,26,24,.18),transparent)}
+  .gain h3{margin:0;font-size:clamp(26px,1.25rem + 1.15vw,40px);font-weight:700;letter-spacing:-.038em;line-height:1.05;text-wrap:balance}
+  .gain>p:not(.k){margin:12px 0 0;max-width:34em;font-size:clamp(15px,.9rem + .16vw,17px);line-height:1.5;color:var(--ink-2);text-wrap:pretty}
+
+  /* le fragment d'application */
+  .ui{position:relative;flex:1 1 auto;min-width:0;padding:16px 18px 18px;border-radius:16px;background:#F6F5F1;color:#1A1A18;
+    font-size:13px;line-height:1.4;letter-spacing:-.006em;font-variant-numeric:tabular-nums;
+    box-shadow:inset 0 0 0 1px rgba(26,26,24,.05)}
+  /* une feuille en retrait derrière, comme une pile de documents (portée par le conteneur, pas par la carte) */
+  /* la pile descend 40 px sous le bord du panneau (qui la coupe) : elle peut se soulever au survol sans jamais montrer son bord bas */
+  .stack{position:relative;flex:none;display:flex;margin:auto 0 0;padding-top:clamp(22px,2.4vw,36px)}
+  .ui .bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:12px;margin-bottom:2px;border-bottom:1px solid #E8E7E1}
+  .ui .bar b{font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#8A8983}
+  .ui .bar span{font-size:12px;color:#8A8983}
+  .ui .row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:14px;align-items:center;padding:10px 0;border-bottom:1px solid #ECEBE5}
+  .ui .row:last-child{border-bottom:0}
+  .ui .row b{display:block;font-weight:590;font-size:13.5px;letter-spacing:-.012em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ui .row small{display:block;font-size:12px;color:#8A8983;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ui .num{font-weight:590;white-space:nowrap}
+  .ui .pill{display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 9px;border-radius:99px;font-size:11.5px;font-weight:590;white-space:nowrap;background:#EEF5F1;color:#2F6B4C}
+  .ui .pill.warn{background:#F6EFDF;color:#8A6D2F}
+  .ui .pill.alert{background:#F5E7E1;color:#8F4E38}
+  .ui .pill.calm{background:#F1F1EF;color:#6B6A65}
+  .ui .pill i{position:relative;width:5px;height:5px;border-radius:50%;background:currentColor}
+  .ui .row:first-of-type .pill:not(.warn):not(.alert):not(.calm) i::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:1.5px solid currentColor;opacity:0;animation:ping 2.6s var(--out) infinite}
+  /* le compte rendu de gérance */
+  .ui .doc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}
+  .ui .doc div{padding:12px 14px;border-radius:10px;background:#fff}
+  .ui .doc dt{font-size:11.5px;color:#8A8983}
+  .ui .doc dd{margin:4px 0 0;font-size:clamp(18px,1rem + .5vw,24px);font-weight:620;letter-spacing:-.03em}
+  .ui .acts{display:flex;gap:8px;margin-top:12px}
+  .ui .acts u{display:grid;place-items:center;height:32px;padding:0 16px;border-radius:8px;text-decoration:none;font-size:12.5px;font-weight:600;background:#fff;box-shadow:inset 0 0 0 1px rgba(26,26,24,.08)}
+  .ui .acts u:first-child{background:#1A1A18;color:#fff}
+  .ui .lead{margin:12px 0 4px;font-size:clamp(17px,1rem + .4vw,21px);font-weight:620;letter-spacing:-.028em;line-height:1.2}
+  .ui .lead span{color:#8A8983;font-weight:500}
+
+  .gains .fine{margin:clamp(18px,1.8vw,26px) 0 0;font-size:var(--micro);color:var(--ink-2)}
+  .js .reveal .gain{opacity:0;transform:translateY(34px)}
+  .js .reveal.in .gain{opacity:1;transform:none;transition:opacity 1s var(--out) calc(200ms + var(--n) * 130ms),transform 1.2s var(--out) calc(200ms + var(--n) * 130ms)}
+  .js .reveal .ui>*{opacity:0;transform:translateY(8px)}
+  .js .reveal.in .ui>*{opacity:1;transform:none;transition:opacity .7s var(--out) calc(900ms + var(--n) * 130ms + var(--q,0) * 90ms),transform .7s var(--out) calc(900ms + var(--n) * 130ms + var(--q,0) * 90ms)}
+
+  /* ── comment ça marche ─────────────────────────────────── */
+  /* Les trente jours promis par le héros, en quatre grandes capsules l'une sous l'autre (référence de Nacim :
+     un numéro géant, un titre, une ligne). La capsule courante est blanche et montre en plus l'écran Darlia
+     de l'étape ; les autres sont en filet. Le défilement choisit la capsule au milieu de l'écran ; un clic aussi. */
+  .how{position:relative;isolation:isolate;margin:var(--gap) var(--frame) var(--frame);border-radius:var(--round);overflow:clip;background:#E9EDE6;padding-block:var(--sec)}
+  .how::before{content:"";position:absolute;z-index:-2;inset:0;pointer-events:none;background:url(assets/fond-calme.webp) center/cover no-repeat}
+  .how::after{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;background:var(--grain);opacity:.08;mix-blend-mode:multiply}
+  .how .shell{max-width:calc(var(--shell) - 2 * var(--frame));padding-inline:calc(var(--pad) - var(--frame))}
+  .how .head{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(14px,1.6vw,22px)}
+  .how .head .k{margin:0 0 clamp(16px,2vh,24px);display:flex;align-items:center;gap:12px;font-size:12.5px;font-weight:620;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}
+  .how .head .k::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(26,26,24,.18),transparent)}
+  .how .head h2{margin:0}
+  .how .head>p:not(.k){margin:0;max-width:30em;font-size:clamp(16px,.95rem + .25vw,19px);line-height:1.5;color:var(--ink-2);text-wrap:pretty}
+  /* les capsules */
+  .caps{list-style:none;margin:clamp(36px,4.4vw,64px) 0 0;padding:0;display:grid;gap:clamp(14px,1.6vw,22px)}
+  .cap{position:relative;border-radius:clamp(34px,4vw,60px);background:rgba(255,255,255,.22);box-shadow:inset 0 0 0 1px rgba(26,26,24,.12);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    transition:background .6s var(--ease),box-shadow .6s var(--ease),transform .6s var(--out)}
+  .cap:hover{background:rgba(255,255,255,.4)}
+  /* la capsule ouverte : blanche, avec la même lumière de fenêtre que le panneau, très atténuée, en haut à droite */
+  .cap.on,.cap.on:hover{background:radial-gradient(60% 90% at 88% 12%,rgba(246,240,226,.9) 0,rgba(246,240,226,0) 60%),linear-gradient(120deg,#fff 0,#FBFAF7 100%);
+    box-shadow:0 0 0 .5px rgba(26,26,24,.08),inset 0 1px 0 #fff,0 70px 110px -50px rgba(50,48,28,.5),0 18px 40px -22px rgba(50,48,28,.28)}
+  /* la flèche des capsules fermées : une invitation, elle disparaît quand la capsule s'ouvre */
+  .cap .go{position:absolute;right:clamp(26px,3.4vw,56px);top:50%;translate:0 -50%;width:48px;height:48px;border-radius:50%;
+    display:grid;place-items:center;box-shadow:inset 0 0 0 1px rgba(26,26,24,.22);color:var(--ink);transition:background .35s var(--ease),color .35s var(--ease),opacity .35s var(--ease),scale .5s var(--out)}
+  .cap .go svg{width:18px;height:18px}
+  .cap:hover .go{background:var(--ink);color:#FBFBFA;box-shadow:none}
+  .cap.on .go{opacity:0;scale:.6;pointer-events:none}
+  .cap>button{all:unset;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,.75fr) minmax(0,1.4fr) minmax(0,1fr);gap:clamp(20px,3vw,48px);align-items:center;
+    width:100%;min-height:clamp(140px,16vw,260px);padding:clamp(22px,2.6vw,40px) clamp(26px,3.4vw,56px);cursor:pointer;color:var(--ink)}
+  .cap>button:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:inherit}
+  /* le numéro géant, très fin */
+  .cap .big{font-size:clamp(96px,12.5vw,220px);font-weight:100;letter-spacing:-.07em;line-height:.82;font-variant-numeric:tabular-nums;color:rgba(26,26,24,.3);
+    transform:translateX(-8px);transition:color .6s var(--ease),font-weight .6s var(--ease),transform .8s var(--out)}
+  .cap.on .big{color:var(--ink);font-weight:200;transform:none}
+  .cap .txt{display:grid;gap:10px;align-self:center}
+  .cap .d{font-family:var(--serif);font-style:italic;font-size:clamp(17px,1rem + .3vw,21px);color:var(--accent)}
+  .cap .t{font-size:clamp(21px,1.05rem + .8vw,31px);font-weight:700;letter-spacing:-.032em;line-height:1.08;text-wrap:balance}
+  .cap .x{font-size:clamp(15px,.9rem + .25vw,17.5px);line-height:1.5;color:var(--ink-2);text-wrap:pretty;max-width:28em;
+    display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .5s var(--out),opacity .4s var(--ease)}
+  .cap .x>span{overflow:hidden;display:grid;gap:6px}
+  .cap .li{display:block}
+  .cap .li i{font-style:normal;font-size:11px;font-weight:640;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-right:10px;vertical-align:.08em}
+  .cap.on .x{grid-template-rows:1fr;opacity:1;transition-delay:.1s}
+  /* l'écran Darlia de l'étape : seulement dans la capsule ouverte */
+  .cap .mini{position:relative;min-width:0;border-radius:20px;background:#fff;overflow:hidden;
+    box-shadow:0 0 0 .5px rgba(26,26,24,.12),0 40px 70px -34px rgba(50,48,28,.45),0 10px 24px -14px rgba(50,48,28,.25);opacity:0;transform:translateY(14px) scale(.97);
+    transition:opacity .5s var(--ease),transform .7s var(--out)}
+  .cap.on .mini{opacity:1;transform:none;transition-delay:.15s}
+  .cap .mini .win{display:flex;align-items:center;gap:6px;padding:10px 16px;border-bottom:1px solid #EEEDE8;background:#FAFAF8}
+  .cap .mini .win i{width:8px;height:8px;border-radius:50%;background:#E4E3DE}
+  .cap .mini .win span{margin-left:8px;font-size:12px;font-weight:590;color:#6B6A65}
+  .cap .mini,.cap .mini .ui,.cap .mini .ui>*{display:block}
+  .cap .mini .win,.cap .mini .ui .bar,.cap .mini .ui .row,.cap .mini .ui .rule,.cap .mini .ui .tl,.cap .mini .ui .tools,.cap .mini .ui .acts{display:flex}
+  .cap .mini .ui .row,.cap .mini .ui .rule,.cap .mini .ui .tl{display:grid}
+  .cap .mini .ui .doc{display:grid}
+  .cap .mini .ui{padding:14px 20px 18px;border-radius:0;box-shadow:none;flex:none;font-size:12.5px}
+  .cap .mini .ui .row{grid-template-columns:minmax(0,1fr) auto;padding:9px 0}
+  .cap .mini .ui .doc{margin:10px 0;gap:8px}
+  .cap .mini .ui .doc div{padding:9px 11px}
+  .cap .mini .ui .doc dd{font-size:18px}
+  .cap .mini .ui .lead{margin:8px 0 2px;font-size:15px}
+  .cap .mini .ui .rule{grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:9px 0;border-bottom:1px solid #F2F1ED;align-items:center}
+  .cap .mini .ui .rule:last-child{border-bottom:0}
+  .cap .mini .ui .rule small{display:block;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#8A8983;margin-bottom:2px}
+  .cap .mini .ui .rule b{font-weight:590;letter-spacing:-.012em}
+  .cap .mini .ui .tl{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #F2F1ED}
+  .cap .mini .ui .tl:last-child{border-bottom:0}
+  .cap .mini .ui .tl time{font-size:11px;color:#8A8983;font-variant-numeric:tabular-nums}
+  .cap .mini .ui .tl b{display:block;font-weight:590;letter-spacing:-.012em}
+  .cap .mini .ui .tl small{display:block;font-size:11px;color:#8A8983}
+  .cap .mini .ui .tools{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .cap .mini .ui .tools span{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:99px;background:#F4F3EF;font-size:11.5px;font-weight:590}
+  .cap .mini .ui .tools span i{width:5px;height:5px;border-radius:50%;background:#2F6B4C}
+  .cap .mini .ui .acts{margin-top:12px}
+  .cap .mini .ui .row>span:first-child{display:block;min-width:0}
+  .cap .mini .ui .row b,.cap .mini .ui .row small{display:block}
+  .cap .mini .ui .lead{display:block;font-size:16px;line-height:1.25}
+  .cap .mini .ui .lead span{display:inline}
+  .cap .mini .ui .acts u{height:28px;padding:0 12px;font-size:12px}
+  /* la fin : le bouton, seul, centré sous les capsules, la mention en dessous */
+  .how .after{margin:clamp(30px,3.4vw,52px) 0 0;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+  .how .after a{display:inline-flex;align-items:center;gap:10px;height:54px;padding:0 28px;border-radius:99px;background:var(--ink);color:#FBFBFA;
+    font-size:16.5px;font-weight:600;letter-spacing:-.012em;box-shadow:0 18px 34px -16px rgba(26,26,24,.6),inset 0 1px 0 rgba(255,255,255,.14);transition:transform .3s var(--out)}
+  .how .after a:hover{transform:translateY(-2px)}
+  .how .after a svg{width:16px;height:16px;transition:transform .3s var(--out)}
+  .how .after a:hover svg{transform:translateX(3px)}
+  .how .after span{font-size:var(--micro);color:var(--ink-3)}
+
+  .js .reveal .cap{opacity:0;transform:translateY(28px)}
+  .js .reveal.in .cap{opacity:1;transform:none;transition:opacity .9s var(--out) calc(200ms + var(--n) * 140ms),transform 1.1s var(--out) calc(200ms + var(--n) * 140ms),background .6s var(--ease),box-shadow .6s var(--ease)}
+
+  /* ── tarif ─────────────────────────────────────────────── */
+  /* Une seule offre, un prix selon la taille du portefeuille : on choisit son nombre de lots, le prix suit.
+     Volontairement compact et calme : la question et le sélecteur, deux montants, une ligne, le bouton.
+     Le tableau complet reste dans la page pour les lecteurs d'écran et les moteurs de recherche. */
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .price{padding-block:var(--sec)}
+  .price .shell{max-width:none;padding-inline:var(--frame)}
+  .pp{padding-inline:calc(max(0px,(100% - var(--shell)) / 2) + var(--pad) - var(--frame) - 10px)}
+  /* Le même langage que « Ce que votre agence y gagne » : un grand panneau dans la lumière du mur, et posée
+     dessus la feuille de prix avec son ombre. À gauche le propos et le bouton, à droite le prix. */
+  .pp{position:relative;isolation:isolate;overflow:hidden;display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);align-items:center;
+    gap:clamp(28px,4.4vw,80px);padding:clamp(28px,4.2vw,72px);border-radius:var(--round);background:#DCE6D6;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 0 0 1px rgba(26,26,24,.06),0 50px 90px -60px rgba(60,60,30,.5)}
+  /* la matière de ce panneau : le même mur au soleil que « le quotidien déborde » (demande de Nacim), retourné
+     de la même façon, la lumière côté feuille et le sauge calme côté texte. */
+  .pp::before{content:"";position:absolute;z-index:-2;inset:0;pointer-events:none;
+    background:url(assets/fond-mur.webp) 90% 45%/auto 190% no-repeat;transform:scaleX(-1);filter:saturate(1.16) contrast(1.05)}
+  .pp::after{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;
+    background:linear-gradient(100deg,rgba(252,250,244,.62) 0,rgba(252,250,244,.26) 46%,transparent 74%),var(--grain);opacity:1}
+  .pp .say .k{margin:0;max-width:none;display:flex;align-items:center;gap:12px;font-size:12.5px;font-weight:620;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}
+  .pp .say .k::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(26,26,24,.18),transparent)}
+  .pp h2{margin-top:clamp(16px,1.8vw,26px)}
+  .pp .say p{margin:clamp(16px,1.7vw,24px) 0 0;max-width:24em;font-size:clamp(16px,.95rem + .25vw,19px);line-height:1.55;color:var(--ink-2);text-wrap:pretty}
+  .pp .say a{display:inline-flex;align-items:center;gap:10px;height:54px;margin-top:clamp(24px,2.6vw,40px);padding:0 26px;border-radius:99px;background:var(--ink);color:#FBFBFA;
+    font-size:16.5px;font-weight:600;letter-spacing:-.012em;box-shadow:0 18px 34px -16px rgba(26,26,24,.6),inset 0 1px 0 rgba(255,255,255,.14);transition:transform .3s var(--out)}
+  .pp .say a:hover{transform:translateY(-2px)}
+  .pp .say a svg{width:16px;height:16px;transition:transform .3s var(--out)}
+  .pp .say a:hover svg{transform:translateX(3px)}
+  .pp .say small{display:block;margin-top:14px;font-size:var(--micro);color:var(--ink-3)}
+  /* la feuille, et une seconde feuille en retrait derrière elle */
+  .sheetwrap{position:relative}
+  .sheetwrap::before{content:"";position:absolute;left:5%;right:5%;top:-11px;height:40px;border-radius:18px 18px 0 0;background:rgba(255,255,255,.62);box-shadow:0 0 0 .5px rgba(26,26,24,.08)}
+  .tarif{position:relative;border-radius:clamp(18px,1.8vw,26px);background:#fff;overflow:hidden;
+    box-shadow:0 0 0 .5px rgba(26,26,24,.10),inset 0 1px 0 #fff,0 60px 90px -36px rgba(40,50,80,.5),0 10px 22px -12px rgba(40,50,80,.26)}
+  .tarif>*{padding-inline:clamp(22px,2.4vw,36px)}
+
+  .pick{display:flex;flex-direction:column;align-items:flex-start;gap:14px;padding-block:clamp(20px,2vw,30px);border-bottom:1px solid var(--line)}
+  .pick p{margin:0;font-family:var(--serif);font-style:italic;font-size:clamp(19px,1rem + .45vw,23px);line-height:1.1;color:var(--accent)}
+  .seg{position:relative;display:grid;grid-template-columns:repeat(4,auto);padding:4px;border-radius:99px;background:#F1EEE6;box-shadow:inset 0 0 0 1px rgba(26,26,24,.05)}
+  .seg label{position:relative;z-index:1;display:grid;place-items:center;height:40px;padding:0 clamp(12px,1.2vw,18px);border-radius:99px;cursor:pointer;
+    font-size:14px;font-weight:600;letter-spacing:-.01em;white-space:nowrap;color:var(--ink-2);transition:color .35s var(--ease)}
+  .seg label:hover{color:var(--ink)}
+  .seg label.on{color:#fff}
+  .seg input{position:absolute;opacity:0;pointer-events:none}
+  .seg label:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:3px}
+  .seg .thumb{position:absolute;z-index:0;left:0;top:0;width:0;height:0;border-radius:99px;background:var(--ink);
+    box-shadow:0 10px 18px -10px rgba(26,26,24,.6);transition:transform .55s var(--out),width .55s var(--out),height .55s var(--out)}
+
+  /* l'abonnement est le chiffre de la section (c'est lui qu'on paie chaque mois) ; la mise en place reste au second plan */
+  .amounts{position:relative;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);padding-inline:0}
+  .amt{padding:clamp(22px,2.4vw,36px) clamp(22px,2.4vw,36px);border-left:1px solid var(--line);transition:opacity .4s var(--ease),transform .6s var(--out),visibility 0s}
+  .amt:first-child{border-left:0}
+  .amt h3,.quote h3{margin:0;font-size:12px;font-weight:620;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+  .amt .v{margin:10px 0 0;display:flex;align-items:baseline;gap:.1em;white-space:nowrap;
+    font-size:clamp(40px,4vw,60px);font-weight:700;line-height:1;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+  .amt .v em{font-family:var(--serif);font-style:italic;font-weight:400;font-size:.82em;letter-spacing:-.02em;color:var(--accent)}
+  .amt .u{margin:8px 0 0;font-size:15px;color:var(--ink-2)}
+  .amt{display:flex;flex-direction:column;justify-content:flex-end}
+  .amt h3{margin-bottom:auto}
+  .amt.sub .v{margin-top:14px;font-size:clamp(60px,5.8vw,92px);line-height:.9;letter-spacing:-.06em}
+  .amt.sub .v small{margin-left:.55em;font-family:var(--serif);font-style:italic;font-weight:400;font-size:.26em;letter-spacing:0;color:var(--ink-2)}
+  /* plus de 600 lots : les deux montants s'effacent, un seul message prend leur place (même hauteur, rien ne saute) */
+  .tarif.is-quote .amt{opacity:0;transform:translateY(-8px);visibility:hidden;transition:opacity .3s var(--ease),transform .5s var(--out),visibility 0s .3s}
+  .quote{position:absolute;inset:0;display:flex;align-items:center;gap:clamp(20px,2.4vw,36px);padding-inline:clamp(22px,2.4vw,36px);
+    opacity:0;transform:translateY(10px);visibility:hidden;transition:opacity .3s var(--ease),transform .5s var(--out),visibility 0s .3s}
+  .tarif.is-quote .quote{opacity:1;transform:none;visibility:visible;transition:opacity .5s var(--ease) .15s,transform .7s var(--out) .15s,visibility 0s}
+  .quote .big{flex:none;margin:0;font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(44px,4.6vw,68px);line-height:1;letter-spacing:-.02em;color:var(--accent)}
+  .quote p:not(.big){margin:0;max-width:26em;font-size:clamp(15px,.9rem + .14vw,16.5px);line-height:1.5;color:var(--ink-2)}
+
+  .foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 28px;padding-block:clamp(16px,1.7vw,24px);border-top:1px solid var(--line);background:#FBF9F4}
+  .foot p{margin:0;flex:1 1 320px;font-size:clamp(14.5px,.88rem + .1vw,15.5px);line-height:1.5;color:var(--ink-2);text-wrap:pretty}
+  .foot p b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+  .tarif.is-quote .foot .perlot{display:none}
+  .js .reveal .pp{opacity:0;transform:translateY(34px)}
+  .js .reveal.in .pp{opacity:1;transform:none;transition:opacity 1s var(--out) .2s,transform 1.2s var(--out) .2s}
+  .js .reveal .sheetwrap{translate:0 46px}
+  .js .reveal.in .sheetwrap{translate:0 0;transition:translate 1.3s var(--out) .5s}
+
+  /* ── qui est derrière ──────────────────────────────────── */
+  /* Une personne, pas une équipe. Sur le blanc, en deux colonnes : le portrait en grand, et peu de texte.
+     Le portrait est en noir et blanc ; un soupçon de chaleur l'accorde au papier de la page. */
+  .about{padding-block:var(--sec)}
+  .about .shell{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(32px,6vw,112px);align-items:center}
+  .portrait{position:relative;margin:0;aspect-ratio:4/5;border-radius:var(--round);overflow:hidden;background:#C9C8C6;
+    box-shadow:0 60px 100px -56px rgba(40,38,30,.6),0 16px 36px -22px rgba(40,38,30,.35),0 0 0 .5px rgba(26,26,24,.14)}
+  .portrait img{display:block;width:100%;height:100%;object-fit:cover;filter:sepia(.14) contrast(1.03);transform:scale(1.02);transition:transform 2.4s var(--out)}
+  .portrait:hover img{transform:scale(1.06)}
+  .about .bio p.k{margin:0;max-width:none;display:flex;align-items:center;gap:12px;font-size:12.5px;font-weight:620;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}
+  .about .bio p.k::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(26,26,24,.18),transparent)}
+  .about h2{margin-top:clamp(16px,1.8vw,26px)}
+  .about .bio p{margin:clamp(18px,1.9vw,28px) 0 0;max-width:31em;font-size:clamp(16.5px,.98rem + .28vw,19.5px);line-height:1.6;color:var(--ink-2);text-wrap:pretty}
+  .about .bio .pull{margin-top:clamp(26px,2.8vw,44px);padding-left:clamp(18px,1.8vw,26px);border-left:2px solid var(--accent);max-width:22em;
+    font-family:var(--serif);font-style:italic;font-size:clamp(24px,1.2rem + 1vw,34px);line-height:1.18;letter-spacing:-.01em;color:var(--ink)}
+  .about .sign{margin-top:clamp(26px,2.8vw,44px);display:flex;flex-direction:column;gap:3px}
+  .about .sign b{font-size:clamp(16.5px,1rem + .2vw,19px);font-weight:640;letter-spacing:-.015em}
+  .about .sign span{font-size:15px;color:var(--ink-3)}
+  .js .reveal .portrait{clip-path:inset(100% 0 0 0 round 40px);transform:translateY(50px)}
+  .js .reveal.in .portrait{clip-path:inset(0 0 0 0 round 40px);transform:none;transition:clip-path 1.5s var(--out) .2s,transform 1.5s var(--out) .2s}
+  .js .reveal .portrait img{transform:scale(1.2)}
+  .js .reveal.in .portrait img{transform:scale(1.02);transition:transform 2.6s var(--out) .2s}
+  .js .reveal.in .portrait:hover img{transform:scale(1.06);transition:transform 2.4s var(--out)}
+
+  /* ── questions ─────────────────────────────────────────── */
+  /* Les objections d'un dirigeant, avant de réserver. Un panneau pierre uni (ni photo ni boîtes) : à gauche
+     le titre, à droite une liste à filets fins. Une seule réponse ouverte à la fois, la hauteur s'anime. */
+  .faq{margin:var(--frame);border-radius:var(--round);background:#F4F0E7;box-shadow:inset 0 0 0 1px rgba(26,26,24,.04);
+    padding-block:var(--sec)}
+  .faq .shell{max-width:calc(var(--shell) - 2 * var(--frame));padding-inline:calc(var(--pad) - var(--frame));
+    display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:clamp(32px,6vw,112px);align-items:start}
+  .faq .lead{position:sticky;top:120px}
+  .faq .lead p{margin:clamp(18px,1.9vw,28px) 0 0;max-width:22em;font-size:clamp(16px,.95rem + .25vw,19px);line-height:1.55;color:var(--ink-2);text-wrap:pretty}
+  .faq .lead a{color:var(--ink);font-weight:600;border-bottom:1px solid rgba(26,26,24,.3);transition:border-color .2s}
+  .faq .lead a:hover{border-color:var(--accent)}
+  .qa{border-top:1px solid rgba(26,26,24,.16)}
+  .qa:last-child{border-bottom:1px solid rgba(26,26,24,.16)}
+  .qa h3{margin:0}
+  .qa button{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:24px;width:100%;cursor:pointer;
+    padding:clamp(20px,2.1vw,30px) 0;font-size:clamp(18px,1rem + .5vw,24px);font-weight:640;letter-spacing:-.025em;line-height:1.2;color:var(--ink);transition:color .25s var(--ease)}
+  .qa button:hover{color:var(--accent)}
+  .qa button:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:6px}
+  .qa button i{position:relative;flex:none;width:34px;height:34px;border-radius:50%;background:rgba(26,26,24,.06);transition:background .3s var(--ease),transform .5s var(--out)}
+  .qa button i::before,.qa button i::after{content:"";position:absolute;left:50%;top:50%;width:13px;height:1.6px;margin:-.8px 0 0 -6.5px;border-radius:2px;background:currentColor;transition:transform .5s var(--out)}
+  .qa button i::after{transform:rotate(90deg)}
+  .qa button[aria-expanded="true"] i{background:var(--ink);color:#fff;transform:rotate(180deg)}
+  .qa button[aria-expanded="true"] i::after{transform:rotate(0deg)}
+  .qa .ans{display:grid;grid-template-rows:0fr;transition:grid-template-rows .6s var(--out)}
+  .qa .ans>div{overflow:hidden}
+  .qa .ans p{margin:0;padding:0 58px clamp(22px,2.4vw,34px) 0;max-width:40em;font-size:clamp(16px,.95rem + .2vw,18px);line-height:1.6;color:var(--ink-2);text-wrap:pretty;
+    opacity:0;transform:translateY(-6px);transition:opacity .4s var(--ease),transform .6s var(--out)}
+  .qa.open .ans{grid-template-rows:1fr}
+  .qa.open .ans p{opacity:1;transform:none;transition-delay:.12s}
+  .js .reveal .qa{opacity:0;transform:translateY(16px)}
+  .js .reveal.in .qa{opacity:1;transform:none;transition:opacity .8s var(--out) calc(300ms + var(--n) * 90ms),transform .9s var(--out) calc(300ms + var(--n) * 90ms)}
+
+  /* ── réserver ──────────────────────────────────────────── */
+  /* La dernière scène. Un grand panneau clair (ciel du soir sur les toits, `fond-soir.webp`). À gauche ce qui lève les derniers
+     freins : ce qui se passe pendant l'appel, ce qu'on en repart avec, et qui est en face. À droite la feuille
+     blanche avec le calendrier Cal.com, chargé seulement quand on s'en approche. */
+  .book{position:relative;isolation:isolate;margin:var(--gap) var(--frame) var(--frame);border-radius:var(--round);overflow:clip;background:#D9CFE0;
+    padding-block:var(--sec)}
+  .book::before{content:"";position:absolute;z-index:-2;inset:0;pointer-events:none;
+    background:linear-gradient(0deg,rgba(253,252,248,.55) 0,transparent 36%),
+      linear-gradient(100deg,rgba(253,252,248,.82) 0,rgba(253,252,248,.55) 34%,rgba(253,252,248,.1) 56%,transparent 72%),
+      url(assets/fond-soir.webp) center bottom/cover no-repeat}
+  .book::after{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;background:var(--grain);opacity:.10;mix-blend-mode:multiply}
+  .book .shell{max-width:calc(var(--shell) - 2 * var(--frame));padding-inline:calc(var(--pad) - var(--frame));
+    display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(32px,4.4vw,80px);align-items:stretch}
+  .book .say{display:flex;flex-direction:column}
+  .book .say h2{font-size:clamp(34px,1.3rem + 2.3vw,56px)}
+  .book .say .k{margin:0;display:flex;align-items:center;gap:12px;font-size:12.5px;font-weight:620;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}
+  .book .say .k::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(26,26,24,.18),transparent)}
+  .book h2{margin-top:clamp(16px,1.8vw,26px)}
+  .book .say>p:not(.k){margin:clamp(16px,1.7vw,24px) 0 0;max-width:24em;font-size:clamp(17px,1rem + .35vw,21px);line-height:1.45;color:var(--ink);text-wrap:pretty}
+  /* ce que l'appel donne : trois lignes, une seule fois */
+  .book .say ol{list-style:none;margin:clamp(24px,2.6vw,40px) 0 0;padding:0;max-width:30em}
+  .book .say li{display:grid;grid-template-columns:32px minmax(0,1fr);gap:14px;align-items:baseline;padding:13px 0;border-top:1px solid rgba(26,26,24,.14);
+    font-size:clamp(15.5px,.92rem + .18vw,17.5px);line-height:1.45;color:var(--ink)}
+  .book .say li:last-child{border-bottom:1px solid rgba(26,26,24,.14)}
+  .book .say li i{font-family:var(--serif);font-style:italic;font-size:1.25em;color:var(--accent)}
+  .book .say li b{font-weight:620}
+  /* qui est en face */
+  .book .who{display:flex;align-items:center;gap:14px;margin-top:auto;padding-top:clamp(22px,2.4vw,34px)}
+  .book .who img{width:56px;height:56px;border-radius:50%;object-fit:cover;filter:sepia(.14);box-shadow:0 0 0 3px #fff,0 10px 20px -10px rgba(26,26,24,.4)}
+  .book .who b{display:block;font-size:15.5px;font-weight:640;letter-spacing:-.012em}
+  .book .who span{display:block;font-size:14px;color:var(--ink-2)}
+  .calbox{position:relative;border-radius:clamp(22px,2.2vw,32px);background:#fff;overflow:hidden;min-height:clamp(480px,40vw,600px);
+    box-shadow:0 0 0 .5px rgba(26,26,24,.12),inset 0 1px 0 #fff,0 70px 110px -50px rgba(40,50,80,.5),0 14px 30px -16px rgba(40,50,80,.26)}
+  .calbox #my-cal-inline-diagnostic-ia{width:100%;overflow:auto}
+  /* la feuille fait la hauteur de la colonne de texte (sur téléphone elle reprend sa hauteur naturelle) ;
+     le calendrier, dont Cal.com fixe seul la taille, est centré dedans */
+  .book .cal{display:flex;flex-direction:column;padding-top:calc(26px + clamp(16px,2vh,24px))}   /* la feuille commence au niveau du titre (haut des capitales), sous l'étiquette */
+  .book .cal .calbox{flex:1;display:flex;flex-direction:column;justify-content:center}
+  .book .cal .calbox #my-cal-inline-diagnostic-ia{flex:1;display:flex;flex-direction:column;justify-content:center}
+  /* Cal.com règle lui-même la taille de son iframe : ne rien lui imposer, sinon il bascule en mise en page compacte */
+  .calbox .wait{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:14px;padding:24px;text-align:center;
+    font-size:15px;color:var(--ink-3);transition:opacity .4s var(--ease)}
+  .calbox .wait b{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(22px,1.1rem + .8vw,30px);color:var(--accent)}
+  .calbox.ready .wait{opacity:0;pointer-events:none}
+  .book .alt{position:relative;z-index:1;margin:0;padding:0 20px 14px;font-size:var(--micro);color:var(--ink-3);text-align:center}
+  .book .alt a{color:var(--ink);font-weight:600;border-bottom:1px solid rgba(26,26,24,.3)}
+  .js .reveal .calbox{opacity:0;transform:translateY(40px)}
+  .js .reveal.in .calbox{opacity:1;transform:none;transition:opacity 1s var(--out) .35s,transform 1.3s var(--out) .35s}
+
+  /* ── pied de page ──────────────────────────────────────── */
+  /* Sur le blanc, avec de l'air : logo et une ligne à gauche, deux colonnes de liens à droite, la ligne légale. */
+  .site-foot{margin-top:calc(var(--gap) - var(--frame));padding:0 0 clamp(36px,4vw,64px)}
+  .site-foot .shell{border-top:1px solid var(--line);padding-top:clamp(56px,6.4vw,104px)}
+  .site-foot .top{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(32px,5vw,96px);align-items:start}
+  .site-foot img{display:block;height:40px;width:auto}
+  .site-foot .tag{margin:clamp(22px,2.4vw,32px) 0 0;max-width:22em;font-size:clamp(17px,1rem + .35vw,21px);line-height:1.5;color:var(--ink-2);text-wrap:pretty}
+  .site-foot .mail{display:inline-flex;align-items:center;height:52px;margin-top:clamp(24px,2.6vw,36px);padding:0 26px;border-radius:99px;background:var(--ink);color:#FBFBFA;
+    font-size:16px;font-weight:600;letter-spacing:-.01em;box-shadow:0 18px 34px -16px rgba(26,26,24,.6),inset 0 1px 0 rgba(255,255,255,.14);transition:transform .3s var(--out)}
+  .site-foot .mail:hover{transform:translateY(-2px)}
+  .site-foot .cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(24px,3vw,48px);padding-top:8px}
+  .site-foot h3{margin:0 0 18px;font-size:12.5px;font-weight:620;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+  .site-foot ul{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+  .site-foot ul a{font-size:17px;color:var(--ink);transition:color .2s var(--ease)}
+  .site-foot ul a:hover{color:var(--accent)}
+  .site-foot .bottom{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;margin-top:clamp(56px,6vw,96px);padding-top:20px;border-top:1px solid var(--line);
+    font-size:13.5px;color:var(--ink-3)}
+  .site-foot .bottom span+span{display:flex;gap:20px}
+  .site-foot .bottom a{color:var(--ink-3)}
+  .site-foot .bottom a:hover{color:var(--ink)}
+
+  /* ── navigation ────────────────────────────────────────── */
+  /* Une seule barre, en verre, toujours présente. Son logo tombe sur la verticale du titre,
+     son bouton sur le bord droit du contenu. Sur le héros elle reste légère (bouton clair,
+     pour ne pas doubler le bouton principal) ; dès qu'on défile elle se densifie et son
+     bouton passe en encre. */
+  .dock{position:fixed;z-index:20;top:calc(var(--frame) + clamp(10px,1.2vw,18px));
+    /* une capsule compacte, centrée dans l'écran : le logo, de l'air, le bouton */
+    left:50%;translate:-50% 0;width:min(760px,calc(100% - 20px));
+    display:flex;align-items:center;justify-content:space-between;gap:20px;padding:8px 8px 8px 22px;border-radius:99px;
+    background:rgba(255,255,255,.42);-webkit-backdrop-filter:blur(20px) saturate(1.6);backdrop-filter:blur(20px) saturate(1.6);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 0 0 .5px rgba(26,26,24,.10),0 18px 40px -26px rgba(40,50,20,.5);
+    transition:background .5s var(--ease),box-shadow .5s var(--ease);
+    animation:dockin 1s var(--out) .15s both}
+  @keyframes dockin{from{opacity:0;transform:translateY(-14px)}}
+  .dock.on{background:rgba(255,255,255,.8);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 0 0 .5px rgba(26,26,24,.14),0 24px 50px -24px rgba(26,26,24,.4)}
+  .dock .home{display:block;flex:none}
+  .dock img{display:block;height:clamp(28px,2.3vw,34px);width:auto}
+  /* trois liens, les trois questions d'un dirigeant : ce que ça change, comment, combien */
+  .dock nav{display:flex;align-items:center;gap:clamp(4px,1vw,10px)}
+  .dock nav a{display:inline-flex;align-items:center;height:38px;padding:0 14px;border-radius:99px;font-size:14.5px;font-weight:560;letter-spacing:-.008em;color:var(--ink-2);transition:color .2s var(--ease),background .25s var(--ease)}
+  .dock nav a:hover{color:var(--ink);background:rgba(26,26,24,.06)}
+  .dock nav a.now{color:var(--ink)}
+  .dock a.go2{display:inline-flex;align-items:center;gap:8px;height:clamp(40px,3vw,46px);padding:0 clamp(16px,1.5vw,22px);border-radius:99px;
+    background:rgba(255,255,255,.72);color:var(--ink);box-shadow:inset 0 0 0 1px rgba(26,26,24,.10);
+    font-size:clamp(13.5px,.8rem + .1vw,15px);font-weight:600;letter-spacing:-.01em;white-space:nowrap;
+    transition:background .4s var(--ease),color .4s var(--ease),box-shadow .4s var(--ease)}
+  .dock a.go2:hover{background:#fff}
+  .dock.on a.go2{background:var(--ink);color:#fff;box-shadow:none}
+  .dock.on a.go2:hover{background:#2B2B28}
+  .dock a.go2 svg{width:14px;height:14px;transition:transform .3s var(--out)}
+  .dock a.go2:hover svg{transform:translateX(3px)}
+
+  /* ── l'ouverture ───────────────────────────────────────── */
+  .js [data-in]{opacity:0;transform:translateY(16px)}
+  .js .ready [data-in]{opacity:1;transform:none;
+    transition:opacity 1s var(--out) var(--t,0ms),transform 1s var(--out) var(--t,0ms)}
+  .js h1 .w>span{transform:translateY(112%) rotate(4deg);transform-origin:0 100%}
+  .js .ready h1 .w>span{transform:none;transition:transform 1.1s var(--out) calc(120ms + var(--i) * 55ms)}
+  /* la fenêtre arrive de loin et se pose ; elle attend que l'app soit chargée */
+  .js .rig{opacity:0;transform:translate3d(10%,70px,-420px) rotateY(-30deg) rotateX(14deg)}
+  .js .rig.on{opacity:1;transform:rotateY(var(--ry)) rotateX(var(--rx)) rotateZ(var(--rz));
+    transition:opacity .9s var(--ease),transform 1.7s var(--out)}
+  .js .rig.live{transition:none}
+  .js .pop{opacity:0;transform:translateZ(var(--z)) translateY(26px) scale(.92)}
+  .js .rig.on .pop{opacity:1;transform:translateZ(var(--z));
+    transition:opacity .7s var(--ease) var(--t),transform 1s cubic-bezier(.2,1.3,.4,1) var(--t)}
+
+  @media (max-width:1180px){
+    .pp{grid-template-columns:minmax(0,1fr)}
+    /* téléphone : le prix d'abord, le bouton après (les enfants de .say deviennent des enfants directs du panneau) */
+    .pp .say{display:contents}
+    .pp .say .k{order:0}.pp .say h2{order:1}.pp .say>p:not(.k){order:2}.pp .sheetwrap{order:3}.pp .say a{order:4;margin-top:22px}.pp .say small{order:5;margin-top:-16px}
+  }
+  @media (max-width:960px){
+    :root{--sec:clamp(56px,11vw,80px);--gap:clamp(22px,5vw,36px)}   /* téléphone : la page doit rester courte */
+    .hero .lead{margin-top:14px}
+    h2{font-size:clamp(30px,8.4vw,40px)!important}
+    .shift .head p,.gains .head p{font-size:16px;line-height:1.5}
+    .dock nav{display:none}
+    .site-foot .top{grid-template-columns:minmax(0,1fr);gap:36px}
+    .site-foot ul{gap:4px}
+    .site-foot ul a,.site-foot .bottom a{display:inline-block;padding:8px 0}   /* zones de tap de 40 px */
+    .site-foot .bottom span+span{gap:14px}
+    .hero{min-height:0;padding-block:clamp(96px,14vh,120px) clamp(84px,20vw,110px)}
+    /* minmax(0,…) : la fenêtre déborde de la piste sans l'élargir, le texte garde sa mesure */
+    .hero .shell{grid-template-columns:minmax(0,1fr);gap:clamp(56px,10vw,80px)}
+    .hero .veil{background:linear-gradient(180deg,var(--veil) 0,var(--veil) 40%,transparent 75%)}
+    /* la fenêtre déborde à droite : on lit la barre latérale et l'accueil, pas une vignette */
+    .rig{width:max(620px,150vw);--ry:-12deg;--rx:3deg;--rz:-1.4deg}
+    .stage{perspective-origin:10% 40%}
+    /* empilé : le soir, puis le matin */
+    .diptych{grid-template-columns:minmax(0,1fr)}
+    .plate{aspect-ratio:4/5.4}
+    .seam{display:none}
+    .gains .head,.shift .head{grid-template-columns:minmax(0,1fr);gap:18px}
+    .book .say h2{font-size:clamp(30px,8.4vw,40px)}
+    .book .say>p:not(.k){font-size:16px;line-height:1.5}
+    .book .say ol{margin-top:16px}
+    .book .say li{padding:9px 0;font-size:15px}
+    .book .who{margin-top:16px;padding-top:0}
+    .book .cal{padding-top:0;margin-top:22px}
+    .book .cal .calbox{flex:none;display:block}
+    .book .shell{grid-template-columns:minmax(0,1fr)}
+    .book .alt{text-align:left}
+    .faq .shell{grid-template-columns:minmax(0,1fr);gap:28px}
+    .faq .lead{position:static}
+    .qa .ans p{padding-right:0;font-size:15px}
+    .qa button{padding-block:14px}
+    .about .shell{grid-template-columns:minmax(0,1fr);gap:24px}
+    .portrait{max-width:520px}
+    .about .bio>p:not(.k):not(.pull):not(.sign){font-size:16px;line-height:1.5}
+    .about .pull{font-size:clamp(20px,5.6vw,24px)}
+    .pick{align-items:stretch}
+    .pp{padding:clamp(22px,5vw,36px) clamp(14px,3.6vw,28px)}
+    .seg{grid-template-columns:repeat(2,minmax(0,1fr));border-radius:24px}
+    .seg label,.seg .thumb{border-radius:20px}
+    .amounts{grid-template-columns:minmax(0,1fr)}
+    .amt{border-left:0;border-top:1px solid var(--line)}
+    .amt:first-child{border-top:0}
+    .amt.sub .v{font-size:clamp(56px,16vw,80px)}
+    .pp .say h2{font-size:clamp(30px,8.4vw,40px)}
+    /* téléphone : le message remplace les montants au lieu de les recouvrir */
+    .tarif.is-quote .amt{display:none}
+    .quote{position:static;display:none;flex-direction:column;align-items:flex-start;gap:12px;padding-block:24px}
+    .tarif.is-quote .quote{display:flex}
+    /* téléphone : les capsules s'empilent en accordéon, une seule ouverte à la fois (un appui ouvre la suivante) */
+    .how{margin-top:var(--frame)}
+    .how .head h2{font-size:clamp(30px,8.4vw,40px)}
+    .caps{margin-top:22px;gap:10px}
+    .cap,.cap:hover{background:rgba(255,255,255,.5);backdrop-filter:none;-webkit-backdrop-filter:none}
+    .cap.on,.cap.on:hover{background:#fff}
+    .cap .big,.cap.on .big{font-weight:200;transform:none}
+    .cap>button{grid-template-columns:auto minmax(0,1fr);grid-template-rows:none;gap:6px 16px;min-height:0;padding:18px 64px 18px 20px;align-items:center}
+    .cap .big{font-size:40px;line-height:1;color:rgba(26,26,24,.35)}
+    .cap.on .big{color:var(--ink)}
+    .cap .txt{gap:6px}
+    .cap .t{font-size:clamp(18px,5vw,22px)}
+    .cap .x{max-width:none}
+    .cap .mini{grid-column:1 / -1;margin-top:8px}
+    .cap:not(.on) .mini{display:none}
+    .cap .go{right:16px;width:40px;height:40px}
+    .how .after a{width:100%;justify-content:center}
+    /* téléphone : les quatre cartes se feuillettent de côté */
+    .gains ol{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;
+      margin-inline:calc(-1 * (var(--pad) - var(--frame)));padding-inline:calc(var(--pad) - var(--frame));scroll-padding-inline:calc(var(--pad) - var(--frame))}
+    .gains ol::-webkit-scrollbar{display:none}
+    .gain,.gain:nth-child(2),.gain:nth-child(3){grid-column:auto;flex:0 0 86vw;max-width:440px;scroll-snap-align:center}
+    .gain h3{font-size:clamp(24px,6.6vw,30px)}
+    /* téléphone : le fragment d'app montre trois lignes au plus, le reste est coupé par un fondu */
+    .gain .ui .row:nth-child(n+5),.gain .ui .tl:nth-child(n+5){display:none}
+    .gain .ui .doc{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+    .gain .ui .doc div{padding:8px 9px}
+    .gain .ui .doc dd{font-size:16px}
+    .gain>p:not(.k){font-size:15.5px}
+    .gains .fine{margin-top:14px}
+    /* téléphone : les trois chiffres sur une rangée, compacts */
+    .proofs ul{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+    .proofs li,.proofs li:first-child{display:block;padding:0 0 0 10px;border-left:1px solid var(--line)}
+    .proofs li:first-child{padding-left:0;border-left:0}
+    .proofs .fig{font-size:clamp(28px,8.6vw,40px)}
+    .proofs .what{margin:4px 0 0;font-size:12.5px;line-height:1.25}
+    .proofs small{font-size:10.5px}
+    .ask{display:none}
+    .feed{left:0;bottom:-34px;width:min(340px,88vw)}
+  }
+  @media (max-width:520px){
+    .pp .say a{width:100%;justify-content:center}
+    .how .after a{width:100%;justify-content:center;white-space:nowrap;padding:0 16px;font-size:15.5px}
+    .ui .bar span:not(.pill){display:none}   /* le titre du fragment suffit sur un petit écran */
+    .ui .row{grid-template-columns:minmax(0,1fr) auto;row-gap:4px}
+    .ui .row .num{grid-column:2;grid-row:1}
+    .ui .row .pill{grid-column:1 / -1;justify-self:start}
+    .ui .row>span:empty{display:none}
+    .ui .doc{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+    .cta{width:100%;justify-content:center}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .js .reveal .calbox{opacity:1;transform:none;transition:none}
+    .js .reveal .qa{opacity:1;transform:none;transition:none}
+    .qa .ans,.qa .ans p,.qa button i,.qa button i::before,.qa button i::after{transition:none}
+    .js .reveal .portrait,.js .reveal .portrait img{clip-path:none;transform:none;transition:none}
+    .js .reveal .pp,.js .reveal .sheetwrap{opacity:1;transform:none;translate:0 0;transition:none}
+    .seg .thumb,.seg label,.amt,.quote{transition:none!important}
+    .js .reveal .cap,.cap,.cap .big,.cap .x,.cap .mini,.cap .go{opacity:1;transform:none;transition:none}
+    .js .reveal [data-r],.js .reveal.in [data-r],.js .reveal .plate,.js .reveal .plate li,.js .reveal .plate h3,.js .reveal .seam{opacity:1;transform:none;scale:1;clip-path:none;transition:none}
+    .js .reveal h2 .w>span{transform:none;transition:none}
+    .js .reveal .plate>img,.plate>img{transform:none;transition:none}
+    .plate .state i::after{animation:none}
+    .plate .glow,.plate li span,.plate li svg{transition:none}
+    .js [data-in],.js h1 .w>span{opacity:1;transform:none;transition:none}
+    .js .rig,.js .rig.on{opacity:1;transform:rotateY(var(--ry)) rotateX(var(--rx)) rotateZ(var(--rz));transition:none}
+    .js .pop,.js .rig.on .pop{opacity:1;transform:translateZ(var(--z));transition:none}
+    .mac iframe{transition:none}
+    .hero::before,.cta::after,.dock{animation:none}
+    .js .proofs li,.js .proofs.in li{opacity:1;transform:none;transition:none}
+    .js .reveal .gain,.js .reveal .gain .stack,.js .reveal .ui>*{opacity:1;transform:none;translate:0 0;transition:none}
+    .ui .pill i::after{animation:none!important}
+  }
+</style>
+<script>document.documentElement.classList.add('js');document.documentElement.dataset.scene=(new URLSearchParams(location.search).get('scene'))||'mur'</script>
+</head>
+<body>
+
+<header class="dock" id="dock">
+  <a class="home" href="#hero" aria-label="Darlia, haut de page"><img src="assets/logo-darlia.png?v=2" alt="Darlia" width="939" height="288"></a>
+  <nav aria-label="Sections">
+    <a href="#avant-apres">Solution</a>
+    <a href="#comment">Mise en place</a>
+    <a href="#tarif">Tarif</a>
+  </nav>
+  <a class="go2" href="#reserver">Réserver une démo <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+</header>
+
+<main>
+  <section class="hero" id="hero">
+    <div class="veil" aria-hidden="true"></div>
+    <div class="shell" id="heroShell">
+      <div class="copy">
+        <h1 id="title" aria-label="L’assistant de gestion locative que vous n’arrivez pas à recruter.">L’assistant de gestion locative <em>que vous n’arrivez pas à recruter.</em></h1>
+        <p class="lede" data-in style="--t:620ms">Dali est un assistant numérique qui prend les demandes de vos locataires, suit les interventions, relance les loyers et tient vos dossiers. <b>Jour et nuit.</b> <b>En poste en 30 jours.</b></p>
+        <div class="go" data-in style="--t:760ms" id="demo">
+          <a class="cta" href="#reserver">Réserver une démo
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <span class="note">30 minutes en visio, sans engagement.</span>
+        </div>
+      </div>
+
+      <div class="stage" id="stage">
+        <div class="rig" id="rig">
+          <div class="mac" id="mac" role="img"
+               aria-label="L’application Darlia ouverte sur l’accueil : Dali a traité 14 demandes ce matin et suit une fuite au 24 rue de Rivoli, étape par étape.">
+            <iframe src="app/index.html?embed" title="Démonstration de l’application Darlia" tabindex="-1" aria-hidden="true" scrolling="no"></iframe>
+          </div>
+
+          <div class="pop ask" style="--t:1250ms" aria-hidden="true">
+            <small>Votre décision</small>
+            <b>Devis chauffage, 640 € TTC</b>
+            <span>Au-dessus de votre seuil de 300 €. Dali a tout préparé.</span>
+            <div class="acts"><u>Valider</u><u>Voir le devis</u></div>
+          </div>
+
+          <div class="pop feed" style="--t:1050ms" aria-hidden="true">
+            <div class="head"><i></i><small>Dali, à l’instant</small></div>
+            <div class="rows" id="rows">
+              <div class="row" data-on="true"><span class="ok"><svg viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>Demande analysée</b><span>Fuite sous l’évier · 24 rue de Rivoli</span></div><time>09:42</time></div>
+              <div class="row"><span class="ok"><svg viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>Plombier missionné</b><span>Plomberie Dupont · samedi matin</span></div><time>09:44</time></div>
+              <div class="row"><span class="ok"><svg viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>Locataire prévenu</b><span>Thomas Martin a confirmé samedi</span></div><time>09:47</time></div>
+              <div class="row"><span class="ok"><svg viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>Loyer relancé</b><span>Marc Bernard · 1 340 € · 2e relance</span></div><time>10:02</time></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Preuves. Ce sont les résultats réels des études de cas Darlia (fiche de marque),
+       clients anonymisés par métier et ville. Ne pas y mettre de chiffre inventé. -->
+  <section class="proofs" id="preuves" aria-labelledby="preuves-t">
+    <div class="shell">
+      <h2 id="preuves-t" hidden>Résultats mesurés chez nos clients</h2>
+      <ul>
+        <li style="--n:0">
+          <p class="fig" aria-label="moins 67 pour cent"><span data-count="67" data-pre="−">−67</span><em>%</em></p>
+          <p class="what">d’impayés au-delà de 10 jours<span class="who">Gestion locative · Nantes</span></p>
+        </li>
+        <li style="--n:1">
+          <p class="fig" aria-label="moins 8 heures"><span data-count="8" data-pre="−">−8</span><em>h</em></p>
+          <p class="what">de saisie par semaine<span class="who">Agence immobilière · Lyon</span></p>
+        </li>
+        <li style="--n:2">
+          <p class="fig" aria-label="moins 75 pour cent"><span data-count="75" data-pre="−">−75</span><em>%</em></p>
+          <p class="what">de temps administratif<span class="who">Cabinet d’expertise · Bordeaux</span></p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Avant, après -->
+  <section class="shift reveal" id="avant-apres" aria-labelledby="shift-t">
+    <div class="shell">
+      <div class="head">
+        <h2 id="shift-t" data-split aria-label="Vos gestionnaires ne manquent pas de talent. Ils manquent de temps.">Vos gestionnaires ne manquent pas de talent. <em>Ils manquent de temps.</em></h2>
+        <p data-r style="--r:3">Darlia place dans votre agence un assistant numérique, Dali. Il absorbe ce qui dévore les journées de vos gestionnaires : demandes de locataires, relances, suivi des interventions. Ils retrouvent leur métier, vous gardez les décisions, et vous pouvez prendre plus de lots sans recruter.</p>
+      </div>
+      <div class="diptych" id="duo">
+        <article class="plate was">
+          <img src="assets/scene-soir.webp" alt="Le soir, une gestionnaire locative encore à son bureau, le téléphone coincé contre l’épaule, entourée de piles de dossiers." width="1600" height="2000" loading="lazy" decoding="async">
+          <h3 style="--k:0">Aujourd’hui <span class="state"><i></i>Sous l’eau</span></h3>
+          <ul>
+            <li data-pair="1" style="--k:1"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Les demandes s’empilent</span></li>
+            <li data-pair="2" style="--k:2"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>On relance, encore et encore</span></li>
+            <li data-pair="3" style="--k:3"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Interventions suivies à la main</span></li>
+            <li data-pair="4" style="--k:4"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Des dossiers jamais à jour</span></li>
+            <li data-pair="5" style="--k:5"><svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Un poste vacant depuis des mois</span></li>
+          </ul>
+        </article>
+        <article class="plate now">
+          <img src="assets/scene-matin.webp" alt="Le lendemain matin, le même bureau rangé au soleil : Dali, casque sur la tête, travaille, et la gestionnaire sourit, une tasse à la main." width="1600" height="2000" loading="lazy" decoding="async">
+          <h3 style="--k:0"><span>Avec <em>Dali</em></span> <span class="state"><i></i>Opérationnel</span></h3>
+          <ul>
+            <li data-pair="1" style="--k:1"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5h12a1.5 1.5 0 0 1 1.5 1.5v7A1.5 1.5 0 0 1 16 14.5H9l-4 3v-3H4A1.5 1.5 0 0 1 2.5 13V6A1.5 1.5 0 0 1 4 4.5z"/><path d="M7 9.6l2 2 4-4.2"/></svg><span>Une réponse à chaque demande</span></li>
+            <li data-pair="2" style="--k:2"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3L9 11"/><path d="M17 3l-5 14-3-6-6-3z"/></svg><span>Des relances qui partent seules</span></li>
+            <li data-pair="3" style="--k:3"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="14" height="12.5" rx="2"/><path d="M3 8.5h14M7 3v3M13 3v3M7.5 12.6l1.8 1.8 3.4-3.6"/></svg><span>Chaque intervention suivie</span></li>
+            <li data-pair="4" style="--k:4"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6A1.5 1.5 0 0 1 4 4.5h3.6l1.8 2H16A1.5 1.5 0 0 1 17.5 8v6.5A1.5 1.5 0 0 1 16 16H4a1.5 1.5 0 0 1-1.5-1.5z"/><path d="M7.5 11.4l1.8 1.8 3.4-3.6"/></svg><span>Des dossiers toujours à jour</span></li>
+            <li data-pair="5" style="--k:5"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10.5" r="6.5"/><path d="M10 7v3.8l2.4 1.5M7.5 2.5h5"/></svg><span>En poste en 30 jours</span></li>
+          </ul>
+        </article>
+        <span class="seam" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ce que l'agence y gagne : quatre gains de dirigeant, montrés par des fragments de l'application
+       (mêmes données de démonstration que l'app du héros). Aucun chiffre de résultat ici. -->
+  <section class="gains reveal" id="benefices" aria-labelledby="gains-t">
+    <div class="shell">
+      <div class="head">
+        <h2 id="gains-t" data-split aria-label="Ce que votre agence y gagne, concrètement.">Ce que votre agence y gagne, <em>concrètement.</em></h2>
+        <p data-r style="--r:3">Dali travaille pour vos locataires. Mais c’est votre agence qui change : sa capacité, ses mandats, son équipe, ses encaissements.</p>
+      </div>
+      <ol>
+        <li class="gain" style="--n:0">
+          <h3>Plus de lots par gestionnaire</h3>
+          <p>Le portefeuille grandit sans ouvrir de poste : les demandes, les relances et le suivi ne passent plus par vos gestionnaires.</p>
+          <div class="stack"><div class="ui" aria-hidden="true">
+            <div style="--q:0" class="bar"><b>Portefeuille · Sophie Martin</b><span>Demandes en cours</span></div>
+            <div style="--q:1" class="row"><div><b>24 rue de Rivoli</b><small>SCI Rivoli Patrimoine · 12 lots · 12 / 12 loués</small></div><span class="num">3</span><span class="pill"><i></i>Suivies par Dali</span></div>
+            <div style="--q:2" class="row"><div><b>17 avenue Parmentier</b><small>SCI Parmentier Invest · 14 lots · 14 / 14 loués</small></div><span class="num">4</span><span class="pill"><i></i>Suivies par Dali</span></div>
+            <div style="--q:3" class="row"><div><b>8 rue Oberkampf</b><small>Claire Fontaine · 8 lots · 8 / 8 loués</small></div><span class="num">2</span><span class="pill"><i></i>Suivies par Dali</span></div>
+            <div style="--q:4" class="row"><div><b>52 rue du Faubourg Saint-Antoine</b><small>Henri Lasalle · 9 lots · 9 / 9 loués</small></div><span class="num">1</span><span class="pill warn"><i></i>Votre décision</span></div>
+            <div style="--q:5" class="row"><div><b>11 rue de Charonne</b><small>Nathalie Ferrand · 1 lot · loué</small></div><span class="num">0</span><span class="pill calm">À jour</span></div>
+          </div></div>
+        </li>
+        <li class="gain" style="--n:1">
+          <h3>Des mandats qui restent</h3>
+          <p>Un propriétaire bien informé ne va pas voir ailleurs. Le compte rendu de gérance est prêt chaque mois, et il part dès votre relecture.</p>
+          <div class="stack"><div class="ui" aria-hidden="true">
+            <div style="--q:0" class="bar"><b>Compte rendu de gérance</b><span class="pill warn"><i></i>À relire</span></div>
+            <p style="--q:1" class="lead">SCI Rivoli Patrimoine <span>· août 2026</span></p>
+            <dl style="--q:2" class="doc">
+              <div><dt>Loyers encaissés</dt><dd>18 400 €</dd></div>
+              <div><dt>Impayés</dt><dd>0 €</dd></div>
+              <div><dt>Interventions</dt><dd>3</dd></div>
+            </dl>
+            <div style="--q:3" class="row"><div><b>Pièces jointes</b><small>Relevé de compte propriétaire · 3 factures d’intervention</small></div><span></span><span class="pill calm">4 documents</span></div>
+            <div style="--q:4" class="acts"><u>Relire et envoyer</u><u>Modifier</u></div>
+          </div></div>
+        </li>
+        <li class="gain" style="--n:2">
+          <h3>Une équipe qui tient</h3>
+          <p>Vos gestionnaires ne voient plus que ce qui demande une décision. Moins de soirées à rattraper les messages, et ils restent.</p>
+          <div class="stack"><div class="ui" aria-hidden="true">
+            <div style="--q:0" class="bar"><b>À valider</b><span>4 décisions</span></div>
+            <p style="--q:1" class="lead">14 demandes traitées ce matin. <span>Il vous en reste quatre.</span></p>
+            <div style="--q:2" class="row"><div><b>Devis chauffage, 640 € TTC</b><small>Au-dessus de votre seuil de 300 €</small></div><span></span><span class="pill warn"><i></i>Validation</span></div>
+            <div style="--q:3" class="row"><div><b>Rapport mensuel, SCI Rivoli Patrimoine</b><small>Prêt à être relu</small></div><span></span><span class="pill warn"><i></i>À relire</span></div>
+            <div style="--q:4" class="row"><div><b>Résiliation, Julie Moreau</b><small>Intervention humaine requise</small></div><span></span><span class="pill alert"><i></i>Escalade</span></div>
+          </div></div>
+        </li>
+        <li class="gain" style="--n:3">
+          <h3>Des loyers qui rentrent</h3>
+          <p>Chaque retard est relancé au bon moment, sans oubli. Des encaissements réguliers pour vos propriétaires, et pour vos honoraires.</p>
+          <div class="stack"><div class="ui" aria-hidden="true">
+            <div style="--q:0" class="bar"><b>Loyers · septembre</b><span>Relances gérées par Dali</span></div>
+            <div style="--q:1" class="row"><div><b>Thomas Martin</b><small>24 rue de Rivoli · Apt 3B</small></div><span class="num">1 480 €</span><span class="pill"><i></i>Encaissé le 3</span></div>
+            <div style="--q:2" class="row"><div><b>Sarah Benali</b><small>8 rue Oberkampf · Apt 12</small></div><span class="num">1 120 €</span><span class="pill"><i></i>Encaissé le 2</span></div>
+            <div style="--q:3" class="row"><div><b>Marc Bernard</b><small>17 avenue Parmentier · 14 jours de retard</small></div><span class="num">1 340 €</span><span class="pill alert"><i></i>2e relance envoyée</span></div>
+            <div style="--q:4" class="row"><div><b>Julie Moreau</b><small>52 rue du Faubourg Saint-Antoine · Studio 2C</small></div><span class="num">890 €</span><span class="pill"><i></i>Encaissé le 1er</span></div>
+          </div></div>
+        </li>
+      </ol>
+      <p class="fine">Écrans de l’application de démonstration. Agence, biens et montants fictifs.</p>
+    </div>
+  </section>
+  <!-- Comment ça marche : les trente jours du héros, en quatre étapes datées.
+       Le découpage en semaines est une proposition à faire valider par Nacim. -->
+  <section class="how reveal" id="comment" aria-labelledby="how-t">
+    <div class="shell">
+      <div class="head">
+        <div>
+          <p class="k">Mise en place</p>
+          <h2 id="how-t" data-split aria-label="Un assistant en poste dans votre agence en trente jours.">Un assistant en poste dans votre agence <em>en trente jours.</em></h2>
+        </div>
+        <p data-r style="--r:4">Quatre rendez-vous avec Nacim. À la fin du mois, Dali travaille dans votre agence.</p>
+      </div>
+      <ol class="caps" id="steps">
+        <li class="cap on" style="--n:0">
+          <button type="button" aria-expanded="true">
+            <span class="big" aria-hidden="true">01</span>
+            <span class="txt"><span class="d">Jour 1</span><span class="t">Une visio avec Nacim</span><span class="x"><span><span class="li"><i>On fait</i>On regarde vos lots, vos outils, ce qui déborde.</span><span class="li"><i>De votre côté</i>Vous repartez avec une date.</span></span></span></span>
+            <span class="go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M4 12 12 4M6 4h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="mini" aria-hidden="true">
+              <span class="win"><i></i><i></i><i></i></span>
+              <span class="ui">
+                <span class="bar"><b>Votre agence</b><span>Jour 1</span></span>
+                <span class="lead">240 lots, 3 gestionnaires. <span>Dali en poste le 22 octobre.</span></span>
+                <span class="row"><span><b>Vos outils</b><small>Hektor · messagerie de l’agence</small></span><span class="pill"><i></i>Compatibles</span></span>
+              </span>
+            </span>
+          </button>
+        </li>
+        <li class="cap" style="--n:1">
+          <button type="button" aria-expanded="false">
+            <span class="big" aria-hidden="true">02</span>
+            <span class="txt"><span class="d">Jour 7</span><span class="t">On règle Dali sur votre agence</span><span class="x"><span><span class="li"><i>On fait</i>On le connecte à vos outils et on fixe ce qu’il décide seul.</span><span class="li"><i>De votre côté</i>Une heure avec vos gestionnaires.</span></span></span></span>
+            <span class="go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M4 12 12 4M6 4h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="mini" aria-hidden="true">
+              <span class="win"><i></i><i></i><i></i></span>
+              <span class="ui">
+                <span class="bar"><b>Une règle, par exemple</b><span>Jour 7</span></span>
+                <span class="row"><span><b>Sous 300 € TTC</b><small>Dali s’en occupe</small></span><span class="pill"><i></i>Seul</span></span>
+                <span class="row"><span><b>Au-dessus de 300 € TTC</b><small>Il vous demande</small></span><span class="pill warn"><i></i>Votre validation</span></span>
+              </span>
+            </span>
+          </button>
+        </li>
+        <li class="cap" style="--n:2">
+          <button type="button" aria-expanded="false">
+            <span class="big" aria-hidden="true">03</span>
+            <span class="txt"><span class="d">Jour 15</span><span class="t">Il travaille, vous relisez</span><span class="x"><span><span class="li"><i>On fait</i>Il répond, relance, prépare. Rien ne part sans votre accord.</span><span class="li"><i>De votre côté</i>Dix minutes par jour pour relire.</span></span></span></span>
+            <span class="go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M4 12 12 4M6 4h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="mini" aria-hidden="true">
+              <span class="win"><i></i><i></i><i></i></span>
+              <span class="ui">
+                <span class="bar"><b>À relire</b><span>Jour 15</span></span>
+                <span class="lead">Réponse à Thomas Martin. <span>Fuite sous l’évier, plombier proposé jeudi 10 h.</span></span>
+                <span class="acts"><u>Envoyer</u><u>Modifier</u></span>
+              </span>
+            </span>
+          </button>
+        </li>
+        <li class="cap" style="--n:3">
+          <button type="button" aria-expanded="false">
+            <span class="big" aria-hidden="true">04</span>
+            <span class="txt"><span class="d">Jour 30</span><span class="t">Dali est en poste</span><span class="x"><span><span class="li"><i>On fait</i>Il tient le quotidien seul.</span><span class="li"><i>De votre côté</i>Les décisions qui comptent, rien d’autre.</span></span></span></span>
+            <span class="go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M4 12 12 4M6 4h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="mini" aria-hidden="true">
+              <span class="win"><i></i><i></i><i></i></span>
+              <span class="ui">
+                <span class="bar"><b>Aujourd’hui</b><span>Jour 30</span></span>
+                <span class="lead">31 demandes traitées. <span>Deux décisions pour vous.</span></span>
+                <span class="row"><span><b>Devis chauffage, 640 € TTC</b><small>Au-dessus de votre seuil</small></span><span class="pill warn"><i></i>Votre décision</span></span>
+              </span>
+            </span>
+          </button>
+        </li>
+      </ol>
+      <p class="after" data-r style="--r:6">
+        <a href="#reserver">Réserver une démo
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <span>30 minutes en visio, sans engagement.</span>
+      </p>
+    </div>
+  </section>
+  <!-- Tarif : une seule offre, prix selon la taille du portefeuille (grille donnée par Nacim le 2026-09-21).
+       Ce que comprennent la mise en place et l'abonnement vient de la fiche de marque et du reste de la page. -->
+  <section class="price reveal" id="tarif" aria-labelledby="price-t">
+    <div class="shell">
+      <div class="pp">
+        <div class="say">
+          <p class="k">Tarif</p>
+          <h2 id="price-t" data-split aria-label="Un seul abonnement. Le prix suit votre nombre de lots.">Un seul abonnement. <em>Le prix suit votre nombre de lots.</em></h2>
+          <p>Pas de formule à options. Tout le monde a le même Dali : seul le nombre de lots que vous gérez change le prix.</p>
+          <a href="#reserver">Réserver une démo
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <small>30 minutes en visio, sans engagement.</small>
+        </div>
+        <div class="sheetwrap">
+      <div class="tarif">
+        <div class="pick">
+          <p id="pick-l">Combien de lots gérez-vous ?</p>
+          <div class="seg" id="seg" role="radiogroup" aria-labelledby="pick-l">
+            <span class="thumb" aria-hidden="true"></span>
+            <label><input type="radio" name="lots" value="0">100 à 150 lots</label>
+            <label class="on"><input type="radio" name="lots" value="1" checked>150 à 350 lots</label>
+            <label><input type="radio" name="lots" value="2">350 à 600 lots</label>
+            <label><input type="radio" name="lots" value="3">Plus de 600 lots</label>
+          </div>
+        </div>
+        <div class="amounts" id="amounts" aria-live="polite">
+          <div class="amt sub"><h3>Abonnement</h3><p class="v"><span data-k="sub">490</span><em>€</em><small>HT par mois</small></p></div>
+          <div class="amt"><h3>Mise en place</h3><p class="v"><span data-k="setup">3 000</span><em>€</em></p><p class="u">HT, une seule fois</p></div>
+          <div class="quote"><p class="big">Sur devis</p><p>À cette taille, le prix se calcule ensemble, sur votre portefeuille réel. Le Dali, lui, reste le même.</p></div>
+        </div>
+        <div class="foot">
+          <p><span class="perlot">Soit <b data-k="lot">1,40 à 3,25 €</b> par lot et par mois. </span>Tout est compris : déploiement, hébergement, maintenance et support.</p>
+        </div>
+      </div>
+        </div>
+      </div>
+      <table class="sr-only">
+        <caption>Tarif de Dali selon le nombre de lots gérés, prix hors taxes</caption>
+        <thead><tr><th scope="col">Taille du portefeuille</th><th scope="col">Mise en place</th><th scope="col">Abonnement</th><th scope="col">Soit par lot et par mois</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">100 à 150 lots</th><td>2 000 €</td><td>290 € par mois</td><td>1,95 à 2,90 €</td></tr>
+          <tr><th scope="row">150 à 350 lots</th><td>3 000 €</td><td>490 € par mois</td><td>1,40 à 3,25 €</td></tr>
+          <tr><th scope="row">350 à 600 lots</th><td>4 500 €</td><td>790 € par mois</td><td>1,30 à 2,25 €</td></tr>
+          <tr><th scope="row">Plus de 600 lots</th><td>Sur devis</td><td>Sur devis</td><td>Sur devis</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <!-- Qui est derrière. Les faits viennent de la fiche de marque (conciergerie, Rive Hôte) : ne rien y ajouter. -->
+  <section class="about reveal" id="nacim" aria-labelledby="about-t">
+    <div class="shell">
+      <figure class="portrait">
+        <img src="assets/nacim.webp?v=3" alt="Nacim Meziti, fondateur de Darlia, en tee-shirt noir, souriant, les mains jointes." width="1600" height="2000" loading="lazy" decoding="async">
+      </figure>
+      <div class="bio">
+        <p class="k">Qui est derrière</p>
+        <h2 id="about-t" data-split aria-label="Derrière l’assistant, un ancien de la gestion locative.">Derrière l’assistant, <em>un ancien de la gestion locative.</em></h2>
+        <p data-r style="--r:3">Avant Darlia, j’ai fondé une conciergerie, puis Rive Hôte, une société d’assistance pour les hôtes Airbnb et Booking. Le téléphone qui vibre à 23 h pour un code d’entrée, les mêmes questions cent fois par mois : je connais.</p>
+        <p data-r style="--r:4">L’essentiel du travail n’était que volume et répétition, et la seule réponse qu’on me proposait était d’embaucher. J’ai commencé par automatiser mon propre quotidien. Dali vient de là.</p>
+        <p class="pull" data-r style="--r:5">Je ne pars jamais de la technologie.<br>Je pars de votre quotidien.</p>
+        <p class="sign" data-r style="--r:6"><b>Nacim Meziti</b><span>Fondateur de Darlia · Paris</span></p>
+      </div>
+    </div>
+  </section>
+  <!-- Questions. Les réponses ne reprennent que ce qui est établi ailleurs sur la page ou dans l'app de démonstration.
+       À compléter avec Nacim : logiciels réellement compatibles, hébergement des données, durée d'engagement. -->
+  <section class="faq reveal" id="questions" aria-labelledby="faq-t">
+    <div class="shell">
+      <div class="lead">
+        <h2 id="faq-t" data-split aria-label="Ce que les dirigeants nous demandent avant de signer.">Ce que les dirigeants nous demandent <em>avant de signer.</em></h2>
+        <p data-r style="--r:3">Une autre question ? Écrivez à <a href="mailto:contact@darlia.fr">contact@darlia.fr</a>, c’est Nacim qui répond.</p>
+      </div>
+      <div class="list">
+        <div class="qa open" style="--n:0">
+          <h3><button type="button" aria-expanded="true" aria-controls="faq-0">Dali remplace-t-il mes gestionnaires ?<i aria-hidden="true"></i></button></h3>
+          <div class="ans" id="faq-0" role="region"><div><p>Non. Il prend ce qui les empêche de faire leur métier : les demandes des locataires, les relances, le suivi des interventions, la tenue des dossiers. Les décisions, la relation avec les propriétaires et tout ce qui demande du jugement restent chez eux.</p></div></div>
+        </div>
+        <div class="qa" style="--n:1">
+          <h3><button type="button" aria-expanded="false" aria-controls="faq-1">Que fait Dali tout seul, et quand me demande-t-il ?<i aria-hidden="true"></i></button></h3>
+          <div class="ans" id="faq-1" role="region"><div><p>Il répond, relance et suit sans attendre. Dès qu’un montant dépasse le seuil que vous avez fixé, ou qu’un sujet est sensible, une résiliation par exemple, il prépare tout et vous demande. Un geste suffit pour valider.</p></div></div>
+        </div>
+        <div class="qa" style="--n:2">
+          <h3><button type="button" aria-expanded="false" aria-controls="faq-2">Et s’il se trompe ?<i aria-hidden="true"></i></button></h3>
+          <div class="ans" id="faq-2" role="region"><div><p>Pendant les semaines 3 et 4, rien ne part sans votre accord : c’est là qu’on corrige. Ensuite, chaque action reste tracée et relisible, et Dali vous passe la main dès qu’une situation sort de ce qu’il connaît.</p></div></div>
+        </div>
+        <div class="qa" style="--n:3">
+          <h3><button type="button" aria-expanded="false" aria-controls="faq-3">Combien de temps cela me prend-il ?<i aria-hidden="true"></i></button></h3>
+          <div class="ans" id="faq-3" role="region"><div><p>Trente minutes en visio pour commencer, un point avec vos gestionnaires, puis de la relecture pendant deux semaines. Au bout de trente jours, il ne vous reste que les décisions qui comptent.</p></div></div>
+        </div>
+        <div class="qa" style="--n:4">
+          <h3><button type="button" aria-expanded="false" aria-controls="faq-4">Est-ce que cela fonctionne avec mon logiciel de gestion ?<i aria-hidden="true"></i></button></h3>
+          <div class="ans" id="faq-4" role="region"><div><p>C’est la première chose que l’on regarde ensemble pendant la visio : vos outils, et ce qu’il est possible d’y brancher proprement. Si ce n’est pas faisable chez vous, on vous le dit tout de suite.</p></div></div>
+        </div>
+      </div>
+    </div>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Dali remplace-t-il mes gestionnaires ?", "acceptedAnswer": {"@type": "Answer", "text": "Non. Il prend ce qui les empêche de faire leur métier : les demandes des locataires, les relances, le suivi des interventions, la tenue des dossiers. Les décisions, la relation avec les propriétaires et tout ce qui demande du jugement restent chez eux."}}, {"@type": "Question", "name": "Que fait Dali tout seul, et quand me demande-t-il ?", "acceptedAnswer": {"@type": "Answer", "text": "Il répond, relance et suit sans attendre. Dès qu’un montant dépasse le seuil que vous avez fixé, ou qu’un sujet est sensible, une résiliation par exemple, il prépare tout et vous demande. Un geste suffit pour valider."}}, {"@type": "Question", "name": "Et s’il se trompe ?", "acceptedAnswer": {"@type": "Answer", "text": "Pendant les semaines 3 et 4, rien ne part sans votre accord : c’est là qu’on corrige. Ensuite, chaque action reste tracée et relisible, et Dali vous passe la main dès qu’une situation sort de ce qu’il connaît."}}, {"@type": "Question", "name": "Combien de temps cela me prend-il ?", "acceptedAnswer": {"@type": "Answer", "text": "Trente minutes en visio pour commencer, un point avec vos gestionnaires, puis de la relecture pendant deux semaines. Au bout de trente jours, il ne vous reste que les décisions qui comptent."}}, {"@type": "Question", "name": "Est-ce que cela fonctionne avec mon logiciel de gestion ?", "acceptedAnswer": {"@type": "Answer", "text": "C’est la première chose que l’on regarde ensemble pendant la visio : vos outils, et ce qu’il est possible d’y brancher proprement. Si ce n’est pas faisable chez vous, on vous le dit tout de suite."}}]}</script>
+  </section>
+  <!-- Réserver : le calendrier Cal.com de Nacim (nacim-meziti-zvindl/diagnostic-ia), chargé à l'approche de la section. -->
+  <section class="book reveal" id="reserver" aria-labelledby="book-t">
+    <div class="shell">
+      <div class="say">
+        <p class="k">Audit gratuit</p>
+        <h2 id="book-t" data-split aria-label="Découvrez ce que vous pouvez déléguer, dans un audit 100 % gratuit.">Découvrez ce que vous pouvez déléguer, <em>dans un audit 100 % gratuit.</em></h2>
+        <p data-r style="--r:3">Trente minutes avec Nacim, et vous repartez avec la liste exacte de ce que Dali peut vous enlever des mains dès le mois prochain.</p>
+        <ol data-r style="--r:4">
+          <li><i>1</i><span><b>Votre agence</b> : vos lots, vos outils, ce qui déborde.</span></li>
+          <li><i>2</i><span><b>Ce que Dali prend</b>, et ce qu’il ne prend pas.</span></li>
+          <li><i>3</i><span><b>Un prix et une date</b>, avant de raccrocher.</span></li>
+        </ol>
+        <div class="who" data-r style="--r:5">
+          <img src="assets/nacim-carre.webp" alt="" width="320" height="320" loading="lazy">
+          <div><b>C’est Nacim qui vous reçoit</b><span>Fondateur de Darlia. Sans engagement.</span></div>
+        </div>
+      </div>
+      <div class="cal">
+        <div class="calbox" id="calbox">
+          <div id="my-cal-inline-diagnostic-ia"></div>
+          <div class="wait"><b>Le calendrier arrive</b><span>Quelques secondes…</span></div>
+          <p class="alt">Le calendrier ne s’affiche pas ? <a href="https://cal.com/nacim-meziti-zvindl/diagnostic-ia" target="_blank" rel="noopener">Ouvrir la page de réservation</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="shell">
+    <div class="top">
+      <div>
+        <a href="#hero" aria-label="Darlia, haut de page"><img src="assets/logo-darlia.png?v=2" alt="Darlia" width="939" height="288" loading="lazy"></a>
+        <p class="tag">Dali prend les demandes, relance, suit les interventions et tient les dossiers de votre agence. Vous gardez les décisions.</p>
+        <a class="mail" href="mailto:contact@darlia.fr">contact@darlia.fr</a>
+      </div>
+      <div class="cols">
+        <div>
+          <h3>Dali</h3>
+          <ul>
+            <li><a href="#avant-apres">Solution</a></li>
+            <li><a href="#benefices">Ce que vous y gagnez</a></li>
+            <li><a href="#comment">Mise en place</a></li>
+            <li><a href="#tarif">Tarif</a></li>
+            <li><a href="#questions">Questions</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Darlia</h3>
+          <ul>
+            <li><a href="#nacim">Qui est derrière</a></li>
+            <li><a href="#reserver">Audit gratuit</a></li>
+            <li><a href="LINKEDIN_A_COMPLETER" target="_blank" rel="noopener">LinkedIn</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="bottom">
+      <span>© 2026 Darlia · Paris · Nacim Meziti, entrepreneur individuel</span>
+      <span><span>Mentions légales</span><span>Confidentialité</span></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const $ = (s, r) => (r || document).querySelector(s);
+  const mac = $('#mac'), rig = $('#rig'), hero = $('#hero'), shell = $('#heroShell'), frame = $('iframe', mac);
+  const still = matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  /* Le titre : chaque mot dans un masque, pour la révélation. Le texte lu reste l'aria-label. */
+  let i = 0;
+  const split = (node, top = true) => { if (top) i = 0; [...node.childNodes].forEach((n) => {
+    if (n.nodeType === 3) {
+      const f = document.createDocumentFragment();
+      n.textContent.split(/(\s+)/).forEach((t) => {
+        if (!t.trim()) { if (t) f.append(' '); return; }
+        const w = document.createElement('span'); w.className = 'w'; w.setAttribute('aria-hidden', 'true');
+        const s = document.createElement('span'); s.textContent = t; s.style.setProperty('--i', i++);
+        w.append(s); f.append(w);
+      });
+      n.replaceWith(f);
+    } else if (n.nodeType === 1) split(n, false);
+  }); };
+  split($('#title'));
+  document.querySelectorAll('h2[data-split]').forEach((h) => split(h));
+
+  /* La fenêtre garde sa taille logique (1120 × 740) ; seule l'échelle change.
+     Le texte reste vectoriel : net sur tous les écrans, quelle que soit la densité. */
+  const fit = () => mac.style.setProperty('--k', (mac.clientWidth / 1120).toFixed(4));
+  new ResizeObserver(fit).observe(mac); fit();
+
+  requestAnimationFrame(() => requestAnimationFrame(() => shell.classList.add('ready'))); /* le texte n'attend jamais l'app */
+
+  let shown = false;
+  const show = () => {
+    if (shown) return; shown = true;
+    mac.classList.add('on'); rig.classList.add('on');
+    if (!still) setTimeout(parallax, 1900);
+  };
+  frame.addEventListener('load', () => setTimeout(show, 150), {once:true});
+  setTimeout(show, 2600);
+
+  /* Le montage suit la souris, à peine : quelques degrés, amortis. */
+  function parallax(){
+    if (!matchMedia('(hover:hover) and (min-width:961px)').matches) return;
+    rig.classList.add('live');
+    const base = {ry:-19, rx:5}; let tx = 0, ty = 0, x = 0, y = 0, raf = 0;
+    const step = () => {
+      x += (tx - x) * .07; y += (ty - y) * .07;
+      rig.style.setProperty('--ry', (base.ry + x * 5).toFixed(3) + 'deg');
+      rig.style.setProperty('--rx', (base.rx - y * 4).toFixed(3) + 'deg');
+      raf = (Math.abs(tx - x) + Math.abs(ty - y) > .001) ? requestAnimationFrame(step) : 0;
+    };
+    hero.addEventListener('pointermove', (e) => {
+      const r = hero.getBoundingClientRect();
+      tx = (e.clientX - r.left) / r.width - .5; ty = (e.clientY - r.top) / r.height - .5;
+      if (!raf) raf = requestAnimationFrame(step);
+    });
+    hero.addEventListener('pointerleave', () => { tx = ty = 0; if (!raf) raf = requestAnimationFrame(step); });
+  }
+
+  /* Les preuves : elles montent à l'entrée dans l'écran, et les chiffres comptent. */
+  const proofs = $('#preuves');
+  const count = (el) => {
+    const to = +el.dataset.count, pre = el.dataset.pre || '', t0 = performance.now(), D = 1400;
+    const tick = (t) => { const p = Math.min(1, (t - t0) / D), e = 1 - Math.pow(1 - p, 4);
+      el.textContent = pre + Math.round(to * e); if (p < 1) requestAnimationFrame(tick); };
+    requestAnimationFrame(tick);
+  };
+  if (still || !('IntersectionObserver' in window)) proofs.classList.add('in');
+  else new IntersectionObserver((es, io) => es.forEach((e) => {
+    if (!e.isIntersecting) return; io.disconnect(); proofs.classList.add('in');
+    proofs.querySelectorAll('[data-count]').forEach((el, n) => setTimeout(() => count(el), n * 110));
+  }), {threshold:.35}).observe(proofs);
+
+  /* Les sections suivantes montent à l'entrée dans l'écran. */
+  document.querySelectorAll('.reveal').forEach((sec) => {
+    if (still || !('IntersectionObserver' in window)) return sec.classList.add('in');
+    new IntersectionObserver((es, io) => es.forEach((e) => { if (e.isIntersecting) { io.disconnect(); sec.classList.add('in'); } }),
+      {threshold:.18}).observe(sec);
+  });
+
+  /* La barre se densifie dès qu'on quitte le haut du héros. */
+  const dock = $('#dock');
+  const dense = () => dock.classList.toggle('on', scrollY > 40);
+  addEventListener('scroll', dense, {passive:true}); dense();
+  /* le lien de la section à l'écran se marque */
+  const navLinks = [...dock.querySelectorAll('nav a')];
+  if ('IntersectionObserver' in window) navLinks.forEach((a) => { const t = document.querySelector(a.getAttribute('href')); if (!t) return;
+    new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) navLinks.forEach((x) => x.classList.toggle('now', x === a)); }), {rootMargin:'-40% 0px -55% 0px'}).observe(t); });
+
+  const duo = $('#duo');
+  /* Une paire à la fois. Au repos, la surbrillance passe seule de paire en paire ; dès qu'on survole
+     ou qu'on touche une ligne, on prend la main, et elle reprend quand on s'en va. */
+  if (duo) {
+    const plates = [...duo.querySelectorAll('.plate')], N = plates[0].querySelectorAll('li[data-pair]').length;
+    const glows = plates.map((pl) => { const g = document.createElement('span'); g.className = 'glow'; g.setAttribute('aria-hidden', 'true'); pl.append(g); return g; });
+    let cur = 0, held = false, seen = false, timer = 0;
+    const place = () => plates.forEach((pl, k) => { const li = pl.querySelector('li[data-pair="' + cur + '"]'), g = glows[k]; if (!li) return g.classList.remove('on');
+      /* mesuré à l'écran, par rapport à la carte : indépendant de qui est positionné dans la carte */
+      const ul = li.parentElement, P = pl.getBoundingClientRect(), U = ul.getBoundingClientRect(), L = li.getBoundingClientRect();
+      g.style.left = (U.left - P.left - 14) + 'px'; g.style.width = (U.width + 28) + 'px';
+      g.style.height = L.height + 'px'; g.style.transform = 'translateY(' + (L.top - P.top) + 'px)'; g.classList.add('on'); });
+    const pick = (n) => { cur = n; duo.querySelectorAll('li.lit').forEach((l) => l.classList.remove('lit'));
+      if (n) duo.querySelectorAll('li[data-pair="' + n + '"]').forEach((l) => l.classList.add('lit')); place(); };
+    const play = () => { clearInterval(timer); if (still || held || !seen) return; timer = setInterval(() => pick(cur % N + 1), 2400); };
+    duo.querySelectorAll('li[data-pair]').forEach((li) => {
+      const go = () => { held = true; clearInterval(timer); pick(+li.dataset.pair); };
+      li.addEventListener('pointerenter', go); li.addEventListener('click', go); });
+    duo.addEventListener('pointerleave', () => { held = false; play(); });
+    new ResizeObserver(() => cur && place()).observe(duo);
+    if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => { seen = e.isIntersecting;
+      if (seen && !cur) setTimeout(() => { if (!held) pick(1); play(); }, 1900); else play(); }, {threshold:.4}).observe(duo);
+  }
+
+  /* Ce que l'agence y gagne : une lueur suit le curseur sur chaque panneau. */
+  if (!still && matchMedia('(hover:hover)').matches) document.querySelectorAll('.gain').forEach((g) => g.addEventListener('pointermove', (e) => {
+    const r = g.getBoundingClientRect(); g.style.setProperty('--mx', (e.clientX - r.left) + 'px'); g.style.setProperty('--my', (e.clientY - r.top) + 'px'); }));
+
+  /* Comment ça marche : le « 30 » compte à l'arrivée de la frise. */
+  const how = $('#comment');
+  if (how && !still && 'IntersectionObserver' in window) new IntersectionObserver((es, io) => es.forEach((e) => { if (!e.isIntersecting) return; io.disconnect();
+    /* le texte reste « 30 » tant que le décompte n'a pas démarré ; il part juste avant que la colonne n'apparaisse */
+    how.querySelectorAll('[data-count]').forEach((el) => setTimeout(() => count(el), 2400)); }), {threshold:.3}).observe(how);
+
+  /* Tarif : on choisit la taille du portefeuille, les montants suivent. */
+  const seg = $('#seg');
+  if (seg) {
+    const GRID = [{setup:2000, sub:290, lot:['1,95','2,90']}, {setup:3000, sub:490, lot:['1,40','3,25']}, {setup:4500, sub:790, lot:['1,30','2,25']}, null];
+    const labels = [...seg.querySelectorAll('label')], thumb = $('.thumb', seg), box = $('#amounts');
+    const sheet = seg.closest('.tarif'), v = (k) => $('[data-k="' + k + '"]', sheet); /* les valeurs vivent dans toute la feuille, pas seulement dans les montants */
+    const fr = (n) => Math.round(n).toLocaleString('fr-FR').replace(/ | /g, ' ');
+    const now = {setup:3000, sub:490};
+    const place = () => { const l = seg.querySelector('label.on'); if (!l) return;
+      thumb.style.width = l.offsetWidth + 'px'; thumb.style.height = l.offsetHeight + 'px';
+      thumb.style.transform = 'translate(' + l.offsetLeft + 'px,' + l.offsetTop + 'px)'; };
+    const roll = (k, to) => { const el = v(k), from = now[k] || 0, t0 = performance.now(); now[k] = to;
+      if (still) { el.textContent = fr(to); return; }
+      const tick = (t) => { const p = Math.min(1, (t - t0) / 650), e = 1 - Math.pow(1 - p, 4);
+        if (now[k] !== to) return; el.textContent = fr(from + (to - from) * e); if (p < 1) requestAnimationFrame(tick); };
+      requestAnimationFrame(tick);
+      /* filet de sécurité : onglet en arrière-plan ou animation bridée, la bonne valeur s'affiche quand même */
+      setTimeout(() => { if (now[k] === to) el.textContent = fr(to); }, 760); };
+    const pick = (n) => { labels.forEach((l, k) => l.classList.toggle('on', k === n)); place(); const g = GRID[n];
+      seg.closest('.tarif').classList.toggle('is-quote', !g); if (!g) return;
+      roll('setup', g.setup); roll('sub', g.sub); v('lot').textContent = g.lot[0] + ' à ' + g.lot[1] + ' €'; };
+    seg.addEventListener('change', (e) => pick(+e.target.value));
+    new ResizeObserver(place).observe(seg); place();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+  }
+
+  /* Questions : une seule réponse ouverte à la fois. */
+  document.querySelectorAll('.qa button').forEach((b) => b.addEventListener('click', () => {
+    const item = b.closest('.qa'), was = item.classList.contains('open');
+    document.querySelectorAll('.qa.open').forEach((o) => { o.classList.remove('open'); o.querySelector('button').setAttribute('aria-expanded', 'false'); });
+    if (!was) { item.classList.add('open'); b.setAttribute('aria-expanded', 'true'); }
+  }));
+
+  /* Réserver : le calendrier Cal.com (code d'intégration fourni par Cal, inchangé) n'est chargé qu'à l'approche
+     de la section, ou dès qu'on clique sur un bouton de réservation : la page reste légère à l'ouverture. */
+  const calbox = $('#calbox'); let calOn = false;
+  const loadCal = () => { if (calOn || !calbox) return; calOn = true;
+    (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); } else p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+    Cal("init", "diagnostic-ia", {origin:"https://app.cal.com"});
+    Cal.config = Cal.config || {}; Cal.config.forwardQueryParams = true;
+    Cal.ns["diagnostic-ia"]("inline", {elementOrSelector:"#my-cal-inline-diagnostic-ia", config:{"layout":"month_view","useSlotsViewOnSmallScreen":"true","theme":"light"}, calLink:"nacim-meziti-zvindl/diagnostic-ia"});
+    Cal.ns["diagnostic-ia"]("ui", {"hideEventTypeDetails":true,"layout":"month_view","theme":"light","cssVarsPerTheme":{"light":{"cal-brand":"#1A1A18"}}});
+    Cal.ns["diagnostic-ia"]("on", {action:"linkReady", callback:() => calbox.classList.add('ready')});
+    setTimeout(() => calbox.classList.add('ready'), 6000); };
+  if (calbox) { if ('IntersectionObserver' in window) new IntersectionObserver((es, io) => es.forEach((e) => { if (e.isIntersecting) { io.disconnect(); loadCal(); } }), {rootMargin:'900px 0px'}).observe(calbox); else loadCal();
+    document.querySelectorAll('a[href="#reserver"]').forEach((a) => a.addEventListener('click', loadCal)); }
+
+  /* Le fil de Dali défile : une ligne sort par le haut, la suivante monte. */
+  const rows = [...document.querySelectorAll('#rows .row')]; let k = 0;
+  if (!still) setInterval(() => {
+    if (document.hidden) return;
+    const out = rows[k]; k = (k + 1) % rows.length;
+    out.dataset.on = 'out'; rows[k].dataset.on = 'true';
+    setTimeout(() => { out.dataset.on = 'false'; }, 700);
+  }, 3400);
+})();
+  /* Les trente jours : la capsule la plus proche du milieu de l'écran est l'étape courante ; un clic l'ouvre aussi. */
+  (function(){
+    const list=document.getElementById('steps'); if(!list) return;
+    const caps=[...list.children], wide=matchMedia('(min-width:961px)');
+    let active=-1, held=0;
+    function open(i){ if(i===active) return; active=i;
+      caps.forEach((c,k)=>{c.classList.toggle('on',k===i);c.firstElementChild.setAttribute('aria-expanded',k===i?'true':'false')}); }
+    function pick(){
+      if(!wide.matches||Date.now()<held) return;
+      const mid=innerHeight*.5; let best=0,d=Infinity;
+      caps.forEach((c,k)=>{const r=c.getBoundingClientRect(); const v=Math.abs((r.top+r.bottom)/2-mid); if(v<d){d=v;best=k}});
+      open(best);
+    }
+    list.addEventListener('click',e=>{const c=e.target.closest('.cap'); if(!c) return; held=Date.now()+1200; open(caps.indexOf(c))});
+    addEventListener('scroll',pick,{passive:true}); addEventListener('resize',pick); pick();
+  })();
+</script>
+</body>
+</html>
