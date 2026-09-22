@@ -725,8 +725,17 @@
     .mac iframe{display:none}
     .stage{perspective-origin:10% 40%}
     /* empilé : le soir, puis le matin */
-    .diptych{grid-template-columns:minmax(0,1fr)}
-    .plate{aspect-ratio:4/5.4}
+    .diptych{grid-template-columns:minmax(0,1fr);gap:14px}
+    /* téléphone : la photo est montrée entière (pas de rognage du haut), la liste se pose sous elle, dans la couleur de la planche */
+    .plate{aspect-ratio:auto;padding:20px 20px 12px;min-height:0}
+    .plate>img{position:relative;z-index:-2;top:0;display:block;width:calc(100% + 40px);margin:-4px -20px -18%;height:auto;aspect-ratio:4/5;transform:none;
+      -webkit-mask-image:linear-gradient(180deg,#000 78%,transparent 100%);mask-image:linear-gradient(180deg,#000 78%,transparent 100%)}
+    .plate:hover>img{transform:none}
+    .plate h3{position:absolute;left:20px;right:20px;top:20px;z-index:1;font-size:clamp(28px,8vw,34px)}
+    .plate::before{background:linear-gradient(180deg,var(--top) 0,transparent 26%)}
+    .plate ul{position:relative;z-index:1;margin-top:0}
+    .plate li{padding:9px 0;font-size:16px;grid-template-columns:20px minmax(0,1fr);gap:12px}
+    .plate li svg{width:18px;height:18px}
     .seam{display:none}
     .gains .head,.shift .head{grid-template-columns:minmax(0,1fr);gap:18px}
     .book .say h2{font-size:clamp(30px,8.4vw,40px)}
@@ -759,22 +768,24 @@
     .tarif.is-quote .amt{display:none}
     .quote{position:static;display:none;flex-direction:column;align-items:flex-start;gap:12px;padding-block:24px}
     .tarif.is-quote .quote{display:flex}
-    /* téléphone : les capsules s'empilent en accordéon, une seule ouverte à la fois (un appui ouvre la suivante) */
+    /* téléphone : même mécanique qu'au bureau (la capsule qui arrive au milieu de l'écran s'ouvre, les autres se replient),
+       en une colonne : numéro, jour et titre sur une ligne ; puis les deux phrases ; puis l'écran Darlia en pleine largeur */
     .how{margin-top:var(--frame)}
     .how .head h2{font-size:clamp(30px,8.4vw,40px)}
     .caps{margin-top:22px;gap:10px}
-    .cap,.cap:hover{background:rgba(255,255,255,.5);backdrop-filter:none;-webkit-backdrop-filter:none}
-    .cap.on,.cap.on:hover{background:#fff}
-    .cap .big,.cap.on .big{font-weight:200;transform:none}
-    .cap>button{grid-template-columns:auto minmax(0,1fr);grid-template-rows:none;gap:6px 16px;min-height:0;padding:18px 64px 18px 20px;align-items:center}
-    .cap .big{font-size:40px;line-height:1;color:rgba(26,26,24,.35)}
+    .cap,.cap:hover{background:rgba(255,255,255,.45);backdrop-filter:none;-webkit-backdrop-filter:none}
+    .cap.on,.cap.on:hover{background:#fff;box-shadow:0 0 0 .5px rgba(26,26,24,.08),0 40px 70px -40px rgba(50,48,28,.5)}
+    .cap>button{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:14px;align-items:start;min-height:0;padding:18px 20px}
+    .cap .big,.cap.on .big{font-size:38px;line-height:.9;font-weight:300;letter-spacing:-.04em;transform:none;color:rgba(26,26,24,.35);padding-top:2px}
     .cap.on .big{color:var(--ink)}
-    .cap .txt{gap:6px}
-    .cap .t{font-size:clamp(18px,5vw,22px)}
-    .cap .x{max-width:none}
-    .cap .mini{grid-column:1 / -1;margin-top:8px}
-    .cap:not(.on) .mini{display:none}
-    .cap .go{right:16px;width:40px;height:40px}
+    .cap .txt{display:block;min-width:0}
+    .cap .d{display:block;font-size:15px;line-height:1.2}
+    .cap .t{display:block;margin-top:4px;font-size:clamp(19px,5.4vw,23px);line-height:1.15}
+    .cap .x{display:grid;max-width:none;margin-top:0;font-size:15.5px;grid-template-rows:0fr;opacity:0}
+    .cap.on .x{grid-template-rows:1fr;opacity:1;margin-top:10px}
+    .cap .mini{grid-column:1 / -1;display:block;margin-top:0;max-height:0;opacity:0;overflow:hidden;transform:none;transition:max-height .6s var(--out),opacity .4s var(--ease),margin .6s var(--out)}
+    .cap.on .mini{max-height:420px;opacity:1;margin-top:14px}
+    .cap .go{display:none}
     .how .after a{width:100%;justify-content:center}
     /* téléphone : les quatre cartes se feuillettent de côté */
     .gains ol{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;
@@ -1447,9 +1458,12 @@
     function open(i){ if(i===active) return; active=i;
       caps.forEach((c,k)=>{c.classList.toggle('on',k===i);c.firstElementChild.setAttribute('aria-expanded',k===i?'true':'false')}); }
     function pick(){
-      if(!wide.matches||Date.now()<held) return;
-      const mid=innerHeight*.5; let best=0,d=Infinity;
-      caps.forEach((c,k)=>{const r=c.getBoundingClientRect(); const v=Math.abs((r.top+r.bottom)/2-mid); if(v<d){d=v;best=k}});
+      if(Date.now()<held) return;
+      let best=0;
+      if(wide.matches){ const mid=innerHeight*.5; let d=Infinity;
+        caps.forEach((c,k)=>{const r=c.getBoundingClientRect(); const v=Math.abs((r.top+r.bottom)/2-mid); if(v<d){d=v;best=k}}); }
+      else { /* téléphone : la dernière capsule dont le haut est passé sous le milieu de l'écran (stable quand les hauteurs changent) */
+        const line=innerHeight*.55; caps.forEach((c,k)=>{ if(c.getBoundingClientRect().top<line) best=k; }); }
       open(best);
     }
     list.addEventListener('click',e=>{const c=e.target.closest('.cap'); if(!c) return; held=Date.now()+1200; open(caps.indexOf(c));
