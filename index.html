@@ -114,8 +114,12 @@
   /* un reflet traverse le bouton une fois à l'ouverture, puis au survol */
   .cta::after{content:"";position:absolute;inset:0;transform:translateX(-120%) skewX(-18deg);
     background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent)}
-  .ready .cta::after{animation:sheen 1.1s var(--out) 1.5s 1}
-  .cta:hover::after{animation:sheen .9s var(--out) 1}
+  /* le reflet qui traverse le bouton : seulement sur les écrans à souris. Sur iPhone, une animation qui démarre
+     sur un enfant pendant que le parent est en transition fait sauter la transition : le bouton « popait » à 1,5 s. */
+  @media (hover:hover){
+    .ready .cta::after{animation:sheen 1.1s var(--out) 2.2s 1}
+    .cta:hover::after{animation:sheen .9s var(--out) 1}
+  }
   @keyframes sheen{to{transform:translateX(120%) skewX(-18deg)}}
   .cta:hover{transform:translateY(-2px);box-shadow:0 24px 40px -16px rgba(26,26,24,.6),0 2px 4px -1px rgba(26,26,24,.3),inset 0 1px 0 rgba(255,255,255,.14)}
   .cta:hover svg{transform:translateX(3px)}
