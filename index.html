@@ -741,7 +741,7 @@
     .d{display:none}.m{display:inline}   /* textes courts : on ne lit pas des pavés sur un téléphone */
     .dock{padding-left:max(22px,env(safe-area-inset-left));padding-right:max(8px,env(safe-area-inset-right))}
     .ui .row small,.ui .row b,.ui .tl small{white-space:normal;overflow:visible;text-overflow:clip}   /* on lit tout, pas de « … » */
-    :root{--sec:clamp(72px,18vw,96px);--gap:clamp(32px,9vw,48px);--head:36px}   /* téléphone : de l'air, sans rallonger la page à l'excès */
+    :root{--sec:clamp(88px,23vw,112px);--gap:clamp(48px,13vw,64px);--head:44px;--pad:28px}   /* téléphone : de l'air en haut, en bas et sur les côtés */
     .hero .lead{margin-top:14px}
     h2{font-size:clamp(30px,8.4vw,40px)!important}
     .shift .head p,.gains .head p{font-size:16px;line-height:1.5}
@@ -775,7 +775,7 @@
     .mac iframe{display:none}
     .stage{perspective-origin:10% 40%}
     /* empilé : le soir, puis le matin */
-    .diptych{grid-template-columns:minmax(0,1fr);gap:14px}
+    .diptych{grid-template-columns:minmax(0,1fr);gap:18px}
     /* téléphone : la photo part du bord haut de la carte ; la liste remonte sur le bas de la photo, qui se fond
        dans la couleur de la planche sous un voile et un léger flou, comme sur ordinateur */
     .plate{aspect-ratio:auto;padding:0 18px 10px;min-height:0}
@@ -827,7 +827,7 @@
        tout le texte prend la pleine largeur (plus de retrait), les trois points gardent coches et filets. */
     .how{margin-top:var(--gap)}
     .how .head h2{font-size:clamp(30px,8.4vw,40px)}
-    .caps{margin-top:var(--head);gap:12px}
+    .caps{margin-top:var(--head);gap:16px}
     .cap,.cap:hover,.cap.on,.cap.on:hover{border-radius:30px;backdrop-filter:none;-webkit-backdrop-filter:none;transform:none;
       background:radial-gradient(60% 90% at 88% 12%,rgba(246,240,226,.9) 0,rgba(246,240,226,0) 60%),linear-gradient(120deg,#fff 0,#FBFAF7 100%);
       box-shadow:0 0 0 .5px rgba(26,26,24,.08),inset 0 1px 0 #fff,0 40px 70px -44px rgba(50,48,28,.5)}
@@ -846,7 +846,7 @@
     .js .reveal .cap.seen,.js .reveal.in .cap.seen{opacity:1;transform:none;transition:opacity .7s var(--out),transform .8s var(--out)}
     .how .after a{width:100%;justify-content:center}
     /* téléphone : les quatre cartes se feuillettent de côté */
-    .gains ol{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;
+    .gains ol{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;
       margin-inline:calc(-1 * (var(--pad) - var(--frame)));padding-inline:calc(var(--pad) - var(--frame));scroll-padding-inline:calc(var(--pad) - var(--frame))}
     .gains ol::-webkit-scrollbar{display:none}
     /* les quatre cartes font la même hauteur : titre sur deux lignes réservées, phrase sur deux lignes réservées,
