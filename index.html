@@ -58,6 +58,7 @@
   a{color:inherit;text-decoration:none}
   :focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:6px}
   ::selection{background:#DDEBE2;color:var(--ink)}
+  .m{display:none}   /* version courte d'un texte, pour le téléphone */
   a,button,label{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
   /* écrans tactiles : un survol qui « colle » après un tap n'a pas de sens ; on neutralise les levées au survol */
   @media (hover:none){a:hover,button:hover,.cap:hover,.gain:hover,.plate:hover>img{transform:none!important}}
@@ -715,6 +716,7 @@
     .pp .say .k{order:0}.pp .say h2{order:1}.pp .say>p:not(.k){order:2}.pp .sheetwrap{order:3}.pp .say a{order:4;margin-top:22px}.pp .say small{order:5;margin-top:-16px}
   }
   @media (max-width:960px){
+    .d{display:none}.m{display:inline}   /* textes courts : on ne lit pas des pavés sur un téléphone */
     .dock{padding-left:max(22px,env(safe-area-inset-left));padding-right:max(8px,env(safe-area-inset-right))}
     .ui .row small,.ui .row b,.ui .tl small{white-space:normal;overflow:visible;text-overflow:clip}   /* on lit tout, pas de « … » */
     :root{--sec:clamp(56px,11vw,80px);--gap:clamp(22px,5vw,36px)}   /* téléphone : la page doit rester courte */
@@ -808,10 +810,10 @@
     .gains .dots i.on{width:18px;border-radius:3px;background:var(--accent)}
     .gain h3{font-size:clamp(24px,6.6vw,30px)}
     /* téléphone : le fragment d'app montre trois lignes au plus, le reste est coupé par un fondu */
-    .gain .ui .row:nth-child(n+5),.gain .ui .tl:nth-child(n+5){display:none}
-    .gain .ui .doc{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
-    .gain .ui .doc div{padding:8px 9px}
-    .gain .ui .doc dd{font-size:16px}
+    /* le fragment d'app : la barre et deux lignes, rien d'autre */
+    .gain .ui .row:nth-child(n+4),.gain .ui .tl:nth-child(n+4),.gain .ui .doc,.gain .ui .acts{display:none}
+    .gain .ui .lead{font-size:15px;margin:10px 0 2px}
+    .gain .ui .row .pill{grid-column:1 / -1;justify-self:start}
     .gain>p:not(.k){font-size:15.5px}
     .gains .fine{margin-top:14px}
     /* téléphone : les trois chiffres sur une rangée, compacts */
@@ -879,7 +881,7 @@
     <div class="shell" id="heroShell">
       <div class="copy">
         <h1 id="title" aria-label="L’assistant de gestion locative que vous n’arrivez pas à recruter.">L’assistant de gestion locative <em>que vous n’arrivez pas à recruter.</em></h1>
-        <p class="lede" data-in style="--t:620ms">Dali est un assistant numérique qui prend les demandes de vos locataires, suit les interventions, relance les loyers et tient vos dossiers. <b>Jour et nuit.</b> <b>En poste en 30 jours.</b></p>
+        <p class="lede" data-in style="--t:620ms"><span class="d">Dali est un assistant numérique qui prend les demandes de vos locataires, suit les interventions, relance les loyers et tient vos dossiers. <b>Jour et nuit. En poste en 30 jours.</b></span><span class="m">Dali prend les demandes des locataires, relance les loyers et suit les interventions. <b>En poste en 30 jours.</b></span></p>
         <div class="go" data-in style="--t:760ms" id="demo">
           <a class="cta" href="#reserver">Réserver une démo
             <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -944,7 +946,7 @@
     <div class="shell">
       <div class="head">
         <h2 id="shift-t" data-split aria-label="Vos gestionnaires ne manquent pas de talent. Ils manquent de temps.">Vos gestionnaires ne manquent pas de talent. <em>Ils manquent de temps.</em></h2>
-        <p data-r style="--r:3">Darlia place dans votre agence un assistant numérique, Dali. Il absorbe ce qui dévore les journées de vos gestionnaires : demandes de locataires, relances, suivi des interventions. Ils retrouvent leur métier, vous gardez les décisions, et vous pouvez prendre plus de lots sans recruter.</p>
+        <p data-r style="--r:3"><span class="d">Darlia place dans votre agence un assistant numérique, Dali. Il absorbe ce qui dévore les journées de vos gestionnaires : demandes de locataires, relances, suivi des interventions. Ils retrouvent leur métier, vous gardez les décisions, et vous pouvez prendre plus de lots sans recruter.</span><span class="m">Darlia place Dali, un assistant numérique, dans votre agence. Il absorbe demandes, relances et suivi. Vous gardez les décisions.</span></p>
       </div>
       <div class="diptych" id="duo">
         <article class="plate was">
@@ -980,12 +982,12 @@
     <div class="shell">
       <div class="head">
         <h2 id="gains-t" data-split aria-label="Ce que votre agence y gagne, concrètement.">Ce que votre agence y gagne, <em>concrètement.</em></h2>
-        <p data-r style="--r:3">Dali travaille pour vos locataires. Mais c’est votre agence qui change : sa capacité, ses mandats, son équipe, ses encaissements.</p>
+        <p data-r style="--r:3"><span class="d">Dali travaille pour vos locataires. Mais c’est votre agence qui change : sa capacité, ses mandats, son équipe, ses encaissements.</span><span class="m">Ce qui change pour votre agence.</span></p>
       </div>
       <ol>
         <li class="gain" style="--n:0">
           <h3>Plus de lots par gestionnaire</h3>
-          <p>Le portefeuille grandit sans ouvrir de poste : les demandes, les relances et le suivi ne passent plus par vos gestionnaires.</p>
+          <p><span class="d">Le portefeuille grandit sans ouvrir de poste : les demandes, les relances et le suivi ne passent plus par vos gestionnaires.</span><span class="m">Le portefeuille grandit sans ouvrir de poste.</span></p>
           <div class="stack"><div class="ui" aria-hidden="true">
             <div style="--q:0" class="bar"><b>Portefeuille · Sophie Martin</b><span>Demandes en cours</span></div>
             <div style="--q:1" class="row"><div><b>24 rue de Rivoli</b><small>SCI Rivoli Patrimoine · 12 lots · 12 / 12 loués</small></div><span class="num">3</span><span class="pill"><i></i>Suivies par Dali</span></div>
@@ -997,7 +999,7 @@
         </li>
         <li class="gain" style="--n:1">
           <h3>Des mandats qui restent</h3>
-          <p>Un propriétaire bien informé ne va pas voir ailleurs. Le compte rendu de gérance est prêt chaque mois, et il part dès votre relecture.</p>
+          <p><span class="d">Un propriétaire bien informé ne va pas voir ailleurs. Le compte rendu de gérance est prêt chaque mois, et il part dès votre relecture.</span><span class="m">Le compte rendu de gérance part chaque mois, relu par vous.</span></p>
           <div class="stack"><div class="ui" aria-hidden="true">
             <div style="--q:0" class="bar"><b>Compte rendu de gérance</b><span class="pill warn"><i></i>À relire</span></div>
             <p style="--q:1" class="lead">SCI Rivoli Patrimoine <span>· août 2026</span></p>
@@ -1012,7 +1014,7 @@
         </li>
         <li class="gain" style="--n:2">
           <h3>Une équipe qui tient</h3>
-          <p>Vos gestionnaires ne voient plus que ce qui demande une décision. Moins de soirées à rattraper les messages, et ils restent.</p>
+          <p><span class="d">Vos gestionnaires ne voient plus que ce qui demande une décision. Moins de soirées à rattraper les messages, et ils restent.</span><span class="m">Vos gestionnaires ne voient que ce qui demande une décision.</span></p>
           <div class="stack"><div class="ui" aria-hidden="true">
             <div style="--q:0" class="bar"><b>À valider</b><span>4 décisions</span></div>
             <p style="--q:1" class="lead">14 demandes traitées ce matin. <span>Il vous en reste quatre.</span></p>
@@ -1023,7 +1025,7 @@
         </li>
         <li class="gain" style="--n:3">
           <h3>Des loyers qui rentrent</h3>
-          <p>Chaque retard est relancé au bon moment, sans oubli. Des encaissements réguliers pour vos propriétaires, et pour vos honoraires.</p>
+          <p><span class="d">Chaque retard est relancé au bon moment, sans oubli. Des encaissements réguliers pour vos propriétaires, et pour vos honoraires.</span><span class="m">Chaque retard est relancé au bon moment.</span></p>
           <div class="stack"><div class="ui" aria-hidden="true">
             <div style="--q:0" class="bar"><b>Loyers · septembre</b><span>Relances gérées par Dali</span></div>
             <div style="--q:1" class="row"><div><b>Thomas Martin</b><small>24 rue de Rivoli · Apt 3B</small></div><span class="num">1 480 €</span><span class="pill"><i></i>Encaissé le 3</span></div>
@@ -1046,7 +1048,7 @@
           <p class="k">Mise en place</p>
           <h2 id="how-t" data-split aria-label="Un assistant en poste dans votre agence en trente jours.">Un assistant en poste dans votre agence <em>en trente jours.</em></h2>
         </div>
-        <p data-r style="--r:4">Quatre rendez-vous avec Nacim. À la fin du mois, Dali travaille dans votre agence.</p>
+        <p data-r style="--r:4"><span class="d">Quatre rendez-vous avec Nacim. À la fin du mois, Dali travaille dans votre agence.</span><span class="m">Quatre rendez-vous. Dali travaille chez vous à la fin du mois.</span></p>
       </div>
       <ol class="caps" id="steps">
         <li class="cap on" style="--n:0">
@@ -1125,7 +1127,7 @@
         <div class="say">
           <p class="k">Tarif</p>
           <h2 id="price-t" data-split aria-label="Un seul abonnement. Le prix suit votre nombre de lots.">Un seul abonnement. <em>Le prix suit votre nombre de lots.</em></h2>
-          <p>Pas de formule à options. Tout le monde a le même Dali : seul le nombre de lots que vous gérez change le prix.</p>
+          <p><span class="d">Pas de formule à options. Tout le monde a le même Dali : seul le nombre de lots que vous gérez change le prix.</span><span class="m">Une seule offre. Le nombre de lots fait le prix.</span></p>
           <a href="#reserver">Réserver une démo
             <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           <small>30 minutes en visio, sans engagement.</small>
@@ -1175,7 +1177,7 @@
         <p class="k">Qui est derrière</p>
         <h2 id="about-t" data-split aria-label="Derrière l’assistant, un ancien de la gestion locative.">Derrière l’assistant, <em>un ancien de la gestion locative.</em></h2>
         <p data-r style="--r:3">Avant Darlia, j’ai fondé une conciergerie, puis Rive Hôte, une société d’assistance pour les hôtes Airbnb et Booking. Le téléphone qui vibre à 23 h pour un code d’entrée, les mêmes questions cent fois par mois : je connais.</p>
-        <p data-r style="--r:4">L’essentiel du travail n’était que volume et répétition, et la seule réponse qu’on me proposait était d’embaucher. J’ai commencé par automatiser mon propre quotidien. Dali vient de là.</p>
+        <p data-r class="d" style="--r:4">L’essentiel du travail n’était que volume et répétition, et la seule réponse qu’on me proposait était d’embaucher. J’ai commencé par automatiser mon propre quotidien. Dali vient de là.</p>
         <p class="pull" data-r style="--r:5">Je ne pars jamais de la technologie.<br>Je pars de votre quotidien.</p>
         <p class="sign" data-r style="--r:6"><b>Nacim Meziti</b><span>Fondateur de Darlia · Paris</span></p>
       </div>
@@ -1220,7 +1222,7 @@
       <div class="say">
         <p class="k">Audit gratuit</p>
         <h2 id="book-t" data-split aria-label="Découvrez ce que vous pouvez déléguer, dans un audit 100 % gratuit.">Découvrez ce que vous pouvez déléguer, <em>dans un audit 100 % gratuit.</em></h2>
-        <p data-r style="--r:3">Trente minutes avec Nacim, et vous repartez avec la liste exacte de ce que Dali peut vous enlever des mains dès le mois prochain.</p>
+        <p data-r style="--r:3"><span class="d">Trente minutes avec Nacim, et vous repartez avec la liste exacte de ce que Dali peut vous enlever des mains dès le mois prochain.</span><span class="m">Trente minutes avec Nacim. Vous repartez avec ce que Dali peut vous enlever des mains.</span></p>
         <ol data-r style="--r:4">
           <li><i>1</i><span><b>Votre agence</b> : vos lots, vos outils, ce qui déborde.</span></li>
           <li><i>2</i><span><b>Ce que Dali prend</b>, et ce qu’il ne prend pas.</span></li>
