@@ -818,20 +818,16 @@
     .pick{align-items:stretch}
     .pp{padding:var(--sec) calc(var(--pad) - var(--frame));row-gap:0}   /* même marge haute que les autres panneaux */
     .pp .sheetwrap{margin-top:28px}
-    /* téléphone : le choix devient une liste de quatre lignes, chacune avec son prix ; on voit toute la grille d'un coup d'œil */
-    .seg{grid-template-columns:minmax(0,1fr);gap:6px;padding:0;border-radius:0;background:none;box-shadow:none}
-    .seg .thumb{display:none}
-    .seg label,.seg label.on{display:flex;align-items:center;gap:12px;height:auto;min-height:58px;padding:0 16px;border-radius:16px;
-      background:#F6F5F1;color:var(--ink);font-size:15.5px;font-weight:560;white-space:normal;box-shadow:inset 0 0 0 1px rgba(26,26,24,.06);
-      transition:background .25s var(--ease),box-shadow .25s var(--ease)}
-    .seg label::before{content:"";flex:none;width:20px;height:20px;border-radius:50%;box-sizing:border-box;border:1.5px solid rgba(26,26,24,.28);background:#fff;transition:border .25s var(--ease)}
-    .seg label.on{background:#fff;box-shadow:inset 0 0 0 1.5px var(--ink),0 12px 24px -16px rgba(26,26,24,.45)}
-    .seg label.on::before{border:6px solid var(--ink)}
-    .seg .rg{flex:1}
-    .seg .pr{display:block;font-size:17px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;white-space:nowrap}
-    .seg .pr small{font-size:13px;font-weight:500;color:var(--ink-3)}
-    .amt.sub{display:none}
-    .amt{border-top:0}
+    /* téléphone : le sélecteur en 2 × 2, cases égales, la pastille noire glisse de l'une à l'autre ; le grand chiffre reste */
+    .seg{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;padding:5px;border-radius:20px;width:100%;box-sizing:border-box}
+    .seg label{height:46px;padding:0 10px;border-radius:15px;font-size:14.5px}
+    .seg .thumb{border-radius:15px}
+    .amt.sub .v small{font-size:.3em}
+    /* la mise en place au second plan : un cran plus petite que l'abonnement, sur la même ligne que sa légende */
+    .amt:not(.sub){flex-direction:row;flex-wrap:wrap;justify-content:flex-start;align-items:baseline;column-gap:12px;padding-block:18px}
+    .amt:not(.sub) h3{width:100%;margin-bottom:6px}
+    .amt:not(.sub) .v{margin:0;font-size:32px}
+    .amt:not(.sub) .u{margin:0;font-size:14px}
     .amounts{grid-template-columns:minmax(0,1fr)}
     .amt{border-left:0;border-top:1px solid var(--line)}
     .amt:first-child{border-top:0}
