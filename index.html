@@ -197,7 +197,7 @@
   /* ── preuves ───────────────────────────────────────────── */
   /* Trois résultats mesurés, en grand, sur le blanc de la page : le chiffre d'abord,
      puis ce qu'il mesure et d'où il vient. Les chiffres comptent à l'arrivée. */
-  .proofs{padding-block:var(--sec)}
+  .proofs{padding-block:calc(var(--sec) * .55)}   /* la bande de preuves fait le lien entre l'ouverture et la solution : moins d'air autour */
   .proofs ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
   .proofs li{padding:4px 0 4px clamp(20px,2.6vw,44px);border-left:1px solid var(--line)}
   .proofs li:first-child{padding-left:0;border-left:0}
@@ -734,6 +734,7 @@
   .pp .say .k + h2,.book .say .k + h2,.about .k + h2{margin-top:22px}
   .shift .head,.gains .head{row-gap:22px}
   @media (max-width:960px){
+    .proofs{padding-block:40px}
     .outro h2{font-size:clamp(30px,8.6vw,40px);line-height:1.08}
     .outro .go-end .cta{width:100%;justify-content:center}
     .say-big{padding-block:calc(var(--sec) * .8)}
