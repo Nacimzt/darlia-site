@@ -218,11 +218,11 @@
   .shift::after{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;
     background:linear-gradient(180deg,rgba(252,250,244,.62) 0,rgba(252,250,244,.2) 38%,transparent 60%),var(--grain);
     background-blend-mode:normal;opacity:1}
-  .shift .head{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(20px,4vw,80px);align-items:end;font-size:clamp(17px,1rem + .34vw,21px)}
+  .shift .head{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(14px,1.6vw,22px);font-size:clamp(17px,1rem + .34vw,21px)}
   h2{margin:0;font-size:clamp(36px,4.1vw,70px);font-weight:700;line-height:1;letter-spacing:-.046em;text-wrap:balance}
   h2 em{display:block;margin-top:.08em;font-family:var(--serif);font-style:italic;font-weight:400;font-size:1.13em;line-height:1;letter-spacing:-.02em;color:var(--accent)}
 
-  .shift .head p{margin:0 0 .5em;max-width:30em;color:var(--ink-2);line-height:1.55;text-wrap:pretty}
+  .shift .head p{margin:0;max-width:30em;color:var(--ink-2);line-height:1.55;text-wrap:pretty}
 
   /* Le diptyque : deux grandes photographies de scène, même bureau, même cadrage. Le soir, elle,
      débordée ; le lendemain matin, Dali en poste. Aucun personnage détouré : tout est dans l'image.
@@ -379,6 +379,10 @@
   .how::after{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;background:var(--grain);opacity:.08;mix-blend-mode:multiply}
   .how .shell{max-width:calc(var(--shell) - 2 * var(--frame));padding-inline:calc(var(--pad) - var(--frame))}
   .how .head{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(14px,1.6vw,22px)}
+  /* l'étiquette au-dessus de chaque titre de section : même style partout */
+  .shell .k.eyebrow{margin:0;display:flex;align-items:center;gap:12px;font-size:12.5px;font-weight:620;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);line-height:1.3}
+  .shell .k.eyebrow::after{content:"";flex:1;max-width:520px;height:1px;background:linear-gradient(90deg,rgba(26,26,24,.18),transparent)}
+  .faq .lead .k.eyebrow{margin-bottom:clamp(16px,2vh,24px)}
   .how .head .k{margin:0 0 clamp(16px,2vh,24px);display:flex;align-items:center;gap:12px;font-size:12.5px;font-weight:620;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}
   .how .head .k::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(26,26,24,.18),transparent)}
   .how .head h2{margin:0}
@@ -440,13 +444,13 @@
      Volontairement compact et calme : la question et le sélecteur, deux montants, une ligne, le bouton.
      Le tableau complet reste dans la page pour les lecteurs d'écran et les moteurs de recherche. */
   .sr-only{position:absolute;left:0;top:0;display:block;width:1px;height:1px;max-width:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}   /* display:block : un tableau ignore width:1px et élargissait la page sur téléphone */
-  .price{padding-block:var(--sec)}
+  .price{padding-block:0;margin-top:var(--gap)}   /* le tarif est un panneau comme les autres : même écart au-dessus, mêmes marges */
   .price .shell{max-width:none;padding-inline:var(--frame)}
   .pp{padding-inline:calc(max(0px,(100% - var(--shell)) / 2) + var(--pad) - var(--frame) - 10px)}
   /* Le même langage que « Ce que votre agence y gagne » : un grand panneau dans la lumière du mur, et posée
      dessus la feuille de prix avec son ombre. À gauche le propos et le bouton, à droite le prix. */
   .pp{position:relative;isolation:isolate;overflow:hidden;display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);align-items:center;
-    gap:clamp(28px,4.4vw,80px);padding:clamp(28px,4.2vw,72px);border-radius:var(--round);background:#DCE6D6;
+    gap:clamp(28px,4.4vw,80px);padding:var(--sec) calc(max(0px,(100% - var(--shell)) / 2) + var(--pad) - var(--frame));border-radius:var(--round);background:#DCE6D6;
     box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 0 0 1px rgba(26,26,24,.06),0 50px 90px -60px rgba(60,60,30,.5)}
   /* la matière de ce panneau : le même mur au soleil que « le quotidien déborde » (demande de Nacim), retourné
      de la même façon, la lumière côté feuille et le sauge calme côté texte. */
@@ -693,8 +697,12 @@
     .pp{grid-template-columns:minmax(0,1fr)}
     /* téléphone : le prix d'abord, le bouton après (les enfants de .say deviennent des enfants directs du panneau) */
     .pp .say{display:contents}
-    .pp .say .k{order:0}.pp .say h2{order:1}.pp .say>p:not(.k){order:2}.pp .sheetwrap{order:3}.pp .say a{order:4;margin-top:22px}.pp .say small{order:5;margin-top:-16px}
+    .pp .say .k{order:0}.pp .say h2{order:1}.pp .say>p:not(.k){order:2}.pp .sheetwrap{order:3}.pp .say a{order:4;margin-top:22px}.pp .say small{order:5;margin-top:12px;text-align:center}
   }
+  /* rythme commun : l'étiquette de section, puis le titre 22 px plus bas, dans toutes les sections */
+  .how .head .k,.faq .lead .k.eyebrow{margin-bottom:22px}
+  .pp .say .k + h2,.book .say .k + h2,.about .k + h2{margin-top:22px}
+  .shift .head,.gains .head{row-gap:22px}
   @media (max-width:960px){
     .d{display:none}.m{display:inline}   /* textes courts : on ne lit pas des pavés sur un téléphone */
     .dock{padding-left:max(22px,env(safe-area-inset-left));padding-right:max(8px,env(safe-area-inset-right))}
@@ -750,7 +758,7 @@
     .plate li{padding:9px 0;font-size:16px;grid-template-columns:20px minmax(0,1fr);gap:12px}
     .plate li svg{width:18px;height:18px}
     .seam{display:none}
-    .gains .head,.shift .head{grid-template-columns:minmax(0,1fr);gap:18px}
+    .gains .head,.shift .head{grid-template-columns:minmax(0,1fr);gap:22px}
     .book .say h2{font-size:clamp(30px,8.4vw,40px)}
     .book .say>p:not(.k){font-size:16px;line-height:1.5}
     .book .say ol{margin-top:16px}
@@ -769,7 +777,8 @@
     .about .bio>p:not(.k):not(.pull):not(.sign){font-size:16px;line-height:1.5}
     .about .pull{font-size:clamp(20px,5.6vw,24px)}
     .pick{align-items:stretch}
-    .pp{padding:clamp(22px,5vw,36px) clamp(14px,3.6vw,28px)}
+    .pp{padding:var(--sec) calc(var(--pad) - var(--frame));row-gap:0}   /* même marge haute que les autres panneaux */
+    .pp .sheetwrap{margin-top:28px}
     .seg{grid-template-columns:repeat(2,minmax(0,1fr));border-radius:24px}
     .seg label,.seg .thumb{border-radius:20px}
     .amounts{grid-template-columns:minmax(0,1fr)}
@@ -783,7 +792,7 @@
     .tarif.is-quote .quote{display:flex}
     /* téléphone : les capsules du bureau, empilées et toutes ouvertes. Le grand numéro fin passe au-dessus,
        tout le texte prend la pleine largeur (plus de retrait), les trois points gardent coches et filets. */
-    .how{margin-top:var(--frame)}
+    .how{margin-top:var(--gap)}
     .how .head h2{font-size:clamp(30px,8.4vw,40px)}
     .caps{margin-top:24px;gap:10px}
     .cap,.cap:hover,.cap.on,.cap.on:hover{border-radius:30px;backdrop-filter:none;-webkit-backdrop-filter:none;transform:none;
@@ -957,6 +966,7 @@
   <section class="shift reveal" id="avant-apres" aria-labelledby="shift-t">
     <div class="shell">
       <div class="head">
+        <p class="k eyebrow">Solution</p>
         <h2 id="shift-t" data-split aria-label="Vos gestionnaires ne manquent pas de talent. Ils manquent de temps.">Vos gestionnaires ne manquent pas de talent. <em>Ils manquent de temps.</em></h2>
         <p data-r style="--r:3"><span class="d">Darlia place dans votre agence un assistant numérique, Dali. Il absorbe ce qui dévore les journées de vos gestionnaires : demandes de locataires, relances, suivi des interventions. Ils retrouvent leur métier, vous gardez les décisions, et vous pouvez prendre plus de lots sans recruter.</span><span class="m">Darlia place Dali, un assistant numérique, dans votre agence. Il absorbe demandes, relances et suivi. Vous gardez les décisions.</span></p>
       </div>
@@ -993,6 +1003,7 @@
   <section class="gains reveal" id="benefices" aria-labelledby="gains-t">
     <div class="shell">
       <div class="head">
+        <p class="k eyebrow">Ce que vous y gagnez</p>
         <h2 id="gains-t" data-split aria-label="Ce que votre agence y gagne, concrètement.">Ce que votre agence y gagne, <em>concrètement.</em></h2>
         <p data-r style="--r:3"><span class="d">Dali travaille pour vos locataires. Mais c’est votre agence qui change : sa capacité, ses mandats, son équipe, ses encaissements.</span><span class="m">Ce qui change pour votre agence.</span></p>
       </div>
@@ -1172,6 +1183,7 @@
   <section class="faq reveal" id="questions" aria-labelledby="faq-t">
     <div class="shell">
       <div class="lead">
+        <p class="k eyebrow">Questions</p>
         <h2 id="faq-t" data-split aria-label="Vos questions.">Vos <em>questions.</em></h2>
       </div>
       <div class="list">
