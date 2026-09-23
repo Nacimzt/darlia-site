@@ -481,7 +481,7 @@
   /* la matière de ce panneau : le même mur au soleil que « le quotidien déborde » (demande de Nacim), retourné
      de la même façon, la lumière côté feuille et le sauge calme côté texte. */
   .pp::before{content:"";position:absolute;z-index:-2;inset:0;pointer-events:none;
-    background:url(assets/fond-mur.webp) 90% 45%/auto 190% no-repeat;transform:scaleX(-1);filter:saturate(1.16) contrast(1.05)}
+    background:url(assets/fond-mur-miroir.webp) 10% 45%/auto 190% no-repeat}   /* image déjà retournée et étalonnée : pas de transform ni de filtre (sur iPhone, ils faisaient « poper » le panneau) */
   .pp::after{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;
     background:linear-gradient(100deg,rgba(252,250,244,.62) 0,rgba(252,250,244,.26) 46%,transparent 74%),var(--grain);opacity:1}
   .pp .say .k{margin:0;max-width:none;display:flex;align-items:center;gap:12px;font-size:12.5px;font-weight:620;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}
@@ -539,7 +539,10 @@
   .foot p b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
   .tarif.is-quote .foot .perlot{display:none}
   .js .reveal .pp{opacity:0;transform:translateY(34px)}
-  .js .reveal.in .pp{opacity:1;transform:none;transition:opacity 1s var(--out) .2s,transform 1.2s var(--out) .2s}
+  .js .reveal.in .pp{opacity:1;transform:none;animation:rise-pp 1.1s var(--out) .15s both}   /* état final explicite : visible même si l'animation ne joue pas */
+  @keyframes rise-pp{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:none}}
+  /* tactile : la feuille du prix ne glisse pas pendant que le panneau apparaît (même raison) */
+  @media (hover:none){html.js .reveal .sheetwrap,html.js .reveal.in .sheetwrap{translate:0 0;transition:none}}
   .js .reveal .sheetwrap{translate:0 46px}
   .js .reveal.in .sheetwrap{translate:0 0;transition:translate 1.3s var(--out) .5s}
 
@@ -898,7 +901,7 @@
     .js .reveal .qa{opacity:1;transform:none;transition:none}
     .qa .ans,.qa .ans p,.qa button i,.qa button i::before,.qa button i::after{transition:none}
     .js .reveal .portrait,.js .reveal .portrait img{clip-path:none;transform:none;transition:none}
-    .js .reveal .pp,.js .reveal .sheetwrap{opacity:1;transform:none;translate:0 0;transition:none}
+    .js .reveal .pp,.js .reveal.in .pp,.js .reveal .sheetwrap{opacity:1;transform:none;translate:0 0;transition:none;animation:none}
     .seg .thumb,.seg label,.amt,.quote{transition:none!important}
     .js .reveal .cap,.js .reveal.in .cap,.cap,.cap .big,.cap .x,.cap .mini,.cap .go{opacity:1!important;transform:none!important;transition:none}
     .js .reveal [data-r],.js .reveal.in [data-r],.js .reveal .plate,.js .reveal .plate li,.js .reveal .plate h3,.js .reveal .seam{opacity:1;transform:none;scale:1;clip-path:none;transition:none}
