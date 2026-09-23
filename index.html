@@ -811,9 +811,15 @@
     .gains ol{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;
       margin-inline:calc(-1 * (var(--pad) - var(--frame)));padding-inline:calc(var(--pad) - var(--frame));scroll-padding-inline:calc(var(--pad) - var(--frame))}
     .gains ol::-webkit-scrollbar{display:none}
-    .gains ol{align-items:flex-start}
+    /* les quatre cartes font la même hauteur : titre sur deux lignes réservées, phrase sur deux lignes réservées,
+       fragment de hauteur fixe ; ainsi rien ne dépend de la longueur des textes */
+    .gains ol{align-items:stretch}
     .gain,.gain:nth-child(2),.gain:nth-child(3){grid-column:auto;flex:0 0 78vw;max-width:400px;scroll-snap-align:start;padding-bottom:22px}
-    .gain .stack{margin-top:18px}
+    .gain h3{min-height:2.3em}
+    .gain>p:not(.k){min-height:3em}
+    .gain .stack{margin-top:18px;flex:1}
+    .gain .ui{display:flex;flex-direction:column;height:100%;min-height:172px}
+    .gain .ui .row{padding:8px 0}
     .gains .dots{display:flex;justify-content:center;gap:7px;margin-top:16px}
     .gains .dots i{width:6px;height:6px;border-radius:50%;background:rgba(26,26,24,.2);transition:width .3s,background .3s}
     .gains .dots i.on{width:18px;border-radius:3px;background:var(--accent)}
@@ -821,6 +827,7 @@
     /* téléphone : le fragment d'app montre trois lignes au plus, le reste est coupé par un fondu */
     /* le fragment d'app : la barre et deux lignes, rien d'autre */
     .gain .ui .row:nth-child(n+4),.gain .ui .tl:nth-child(n+4),.gain .ui .doc,.gain .ui .acts{display:none}
+    .gain .ui .doc + .row{display:grid}   /* la carte « mandats » : la ligne des pièces jointes remplace la grille de chiffres */
     .gain .ui .lead{font-size:15px;margin:10px 0 2px}
     .gain .ui .row .pill{grid-column:1 / -1;justify-self:start}
     .gain>p:not(.k){font-size:15.5px}
