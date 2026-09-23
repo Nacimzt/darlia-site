@@ -371,6 +371,17 @@
   .js .reveal .ui>*{opacity:0;transform:translateY(8px)}
   .js .reveal.in .ui>*{opacity:1;transform:none;transition:opacity .7s var(--out) calc(900ms + var(--n) * 130ms + var(--q,0) * 90ms),transform .7s var(--out) calc(900ms + var(--n) * 130ms + var(--q,0) * 90ms)}
 
+  /* ── la phrase qui se lit en descendant ──────────────────── */
+  /* Entre les bénéfices et la mise en place : une phrase en très grand, sur le papier. Ses mots passent du gris
+     à l'encre à mesure qu'on descend (seule la couleur change : rien ne bloque ni ne bouge sous le doigt). */
+  .say-big{padding-block:calc(var(--sec) * .9)}
+  .say-big .shell{max-width:calc(var(--shell) - 2 * var(--frame));padding-inline:calc(var(--pad) - var(--frame))}
+  .say-big p{margin:0;max-width:19em;font-size:clamp(34px,1.2rem + 3.6vw,76px);font-weight:700;line-height:1.08;letter-spacing:-.045em;text-wrap:balance}
+  .say-big .sw{color:rgba(26,26,24,.14);transition:color .35s var(--ease)}
+  .say-big .sw.lit{color:var(--ink)}
+  .say-big em{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-.02em;font-size:1.1em}
+  .say-big em .sw.lit{color:var(--accent)}
+
   /* ── comment ça marche ─────────────────────────────────── */
   /* Les trente jours promis par le héros, en quatre grandes capsules l'une sous l'autre (référence de Nacim :
      un numéro géant, un titre, une ligne). La capsule courante est blanche et montre en plus l'écran Darlia
@@ -705,6 +716,8 @@
   .pp .say .k + h2,.book .say .k + h2,.about .k + h2{margin-top:22px}
   .shift .head,.gains .head{row-gap:22px}
   @media (max-width:960px){
+    .say-big{padding-block:calc(var(--sec) * .8)}
+    .say-big p{font-size:clamp(30px,8.6vw,40px);line-height:1.1}
     .d{display:none}.m{display:inline}   /* textes courts : on ne lit pas des pavés sur un téléphone */
     .dock{padding-left:max(22px,env(safe-area-inset-left));padding-right:max(8px,env(safe-area-inset-right))}
     .ui .row small,.ui .row b,.ui .tl small{white-space:normal;overflow:visible;text-overflow:clip}   /* on lit tout, pas de « … » */
@@ -1065,6 +1078,11 @@
   </section>
   <!-- Comment ça marche : les trente jours du héros, en quatre étapes datées.
        Le découpage en semaines est une proposition à faire valider par Nacim. -->
+  <section class="say-big" aria-label="En ce moment, un locataire attend votre réponse, un loyer n’est pas relancé et un propriétaire regarde ailleurs. Les agences équipées, elles, récupèrent ses mandats.">
+    <div class="shell">
+      <p id="saybig" aria-hidden="true">En ce moment, un locataire attend votre réponse, un loyer n’est pas relancé et un propriétaire regarde ailleurs. <em>Les agences équipées, elles, récupèrent ses mandats.</em></p>
+    </div>
+  </section>
   <section class="how reveal" id="comment" aria-labelledby="how-t">
     <div class="shell">
       <div class="head">
@@ -1506,6 +1524,24 @@
       cards.forEach((c,k)=>{ if(c.offsetLeft<=x) best=k; });
       dots.forEach((d,k)=>d.classList.toggle('on',k===best));
     }); },{passive:true});
+  })();
+  /* La phrase qui se lit en descendant : chaque mot s'allume quand la lecture l'atteint. */
+  (function(){
+    const p=document.getElementById('saybig'); if(!p) return;
+    const wrap=(node)=>{ [...node.childNodes].forEach(n=>{
+      if(n.nodeType===3){ const f=document.createDocumentFragment(); n.textContent.split(/(\s+)/).forEach(t=>{ if(!t) return; if(!t.trim()){ f.append(t); return; } const w=document.createElement('span'); w.className='sw'; w.textContent=t; f.append(w); }); n.replaceWith(f); }
+      else if(n.nodeType===1) wrap(n); }); };
+    wrap(p);
+    const words=[...p.querySelectorAll('.sw')];
+    if(matchMedia('(prefers-reduced-motion:reduce)').matches){ words.forEach(w=>w.classList.add('lit')); return; }
+    let raf=0;
+    const paint=()=>{ raf=0; const r=p.getBoundingClientRect(), vh=innerHeight;
+      /* début : le haut de la phrase à 90 % de l'écran ; fin : son bas à 35 % */
+      const start=vh*.9, end=vh*.35; const prog=(start-r.top)/((start-end)+r.height);
+      const n=Math.round(Math.max(0,Math.min(1,prog))*words.length);
+      words.forEach((w,k)=>w.classList.toggle('lit',k<n)); };
+    addEventListener('scroll',()=>{ if(!raf) raf=requestAnimationFrame(paint); },{passive:true});
+    addEventListener('resize',paint); paint();
   })();
 </script>
 </body>
