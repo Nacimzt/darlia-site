@@ -724,7 +724,14 @@
     h2{font-size:clamp(30px,8.4vw,40px)!important}
     .shift .head p,.gains .head p{font-size:16px;line-height:1.5}
     .dock nav{display:none}
-    .site-foot .top{grid-template-columns:minmax(0,1fr);gap:36px}
+    .site-foot{margin-top:36px;padding-bottom:max(40px,env(safe-area-inset-bottom))}
+    .site-foot .shell{padding-top:48px}
+    .site-foot .top{grid-template-columns:minmax(0,1fr);gap:32px}
+    .site-foot img{height:34px}
+    .site-foot .tag{font-size:16px;margin-top:16px}
+    .site-foot .mail{width:100%;justify-content:center;margin-top:20px}
+    .site-foot .cols{padding-top:0}
+    .site-foot .bottom{flex-direction:column;gap:10px;margin-top:40px;font-size:12.5px}
     .site-foot ul{gap:4px}
     .site-foot ul a,.site-foot .bottom a{display:inline-block;padding:8px 0}   /* zones de tap de 40 px */
     .site-foot .bottom span+span{gap:14px}
@@ -794,17 +801,20 @@
     .cap .txt{display:block;min-width:0}
     .cap .d{display:block;font-size:15px;line-height:1.2}
     .cap .t{display:block;margin-top:4px;font-size:clamp(19px,5.4vw,23px);line-height:1.15}
-    .cap .x{display:grid;max-width:none;margin-top:0;font-size:15.5px;grid-template-rows:0fr;opacity:0}
+    .cap .x{display:grid;max-width:none;margin-top:0;font-size:15.5px;grid-template-rows:0fr;opacity:0;transition:opacity .35s var(--ease)}
     .cap.on .x{grid-template-rows:1fr;opacity:1;margin-top:10px}
-    .cap .mini{grid-column:1 / -1;display:block;margin-top:0;max-height:0;opacity:0;overflow:hidden;transform:none;transition:max-height .6s var(--out),opacity .4s var(--ease),margin .6s var(--out)}
-    .cap.on .mini{max-height:420px;opacity:1;margin-top:14px}
+    .cap .mini{grid-column:1 / -1;display:none;margin-top:14px;opacity:0;transform:none;transition:opacity .35s var(--ease)}
+    .cap.on .mini{display:block;opacity:1}
+    .cap,.cap.on{transition:background .35s var(--ease),box-shadow .35s var(--ease)}
     .cap .go{display:none}
     .how .after a{width:100%;justify-content:center}
     /* téléphone : les quatre cartes se feuillettent de côté */
     .gains ol{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;
       margin-inline:calc(-1 * (var(--pad) - var(--frame)));padding-inline:calc(var(--pad) - var(--frame));scroll-padding-inline:calc(var(--pad) - var(--frame))}
     .gains ol::-webkit-scrollbar{display:none}
-    .gain,.gain:nth-child(2),.gain:nth-child(3){grid-column:auto;flex:0 0 78vw;max-width:400px;scroll-snap-align:start}
+    .gains ol{align-items:flex-start}
+    .gain,.gain:nth-child(2),.gain:nth-child(3){grid-column:auto;flex:0 0 78vw;max-width:400px;scroll-snap-align:start;padding-bottom:22px}
+    .gain .stack{margin-top:18px}
     .gains .dots{display:flex;justify-content:center;gap:7px;margin-top:16px}
     .gains .dots i{width:6px;height:6px;border-radius:50%;background:rgba(26,26,24,.2);transition:width .3s,background .3s}
     .gains .dots i.on{width:18px;border-radius:3px;background:var(--accent)}
@@ -1481,14 +1491,20 @@
     const caps=[...list.children], wide=matchMedia('(min-width:961px)');
     let active=-1, held=0;
     function open(i){ if(i===active) return; active=i;
-      caps.forEach((c,k)=>{c.classList.toggle('on',k===i);c.firstElementChild.setAttribute('aria-expanded',k===i?'true':'false')}); }
+      const anchor=caps[i], top0=anchor.getBoundingClientRect().top;
+      caps.forEach((c,k)=>{c.classList.toggle('on',k===i);c.firstElementChild.setAttribute('aria-expanded',k===i?'true':'false')});
+      /* téléphone : les hauteurs changent d'un coup ; on décale le défilement pour que la capsule ouverte ne bouge pas à l'écran */
+      if(!wide.matches){ const d=anchor.getBoundingClientRect().top-top0; if(Math.abs(d)>1) scrollBy({top:d,left:0,behavior:'instant'}); } }
     function pick(){
       if(Date.now()<held) return;
       let best=0;
       if(wide.matches){ const mid=innerHeight*.5; let d=Infinity;
         caps.forEach((c,k)=>{const r=c.getBoundingClientRect(); const v=Math.abs((r.top+r.bottom)/2-mid); if(v<d){d=v;best=k}}); }
-      else { /* téléphone : la dernière capsule dont le haut est passé sous le milieu de l'écran (stable quand les hauteurs changent) */
-        const line=innerHeight*.55; caps.forEach((c,k)=>{ if(c.getBoundingClientRect().top<line) best=k; }); }
+      else { /* téléphone : la capsule qui contient la ligne au milieu de l'écran (une fermée fait 80 px, une ouverte plus de 400 :
+                on ne peut pas en sauter une, et l'ouverture, compensée par le décalage du défilement, garde la ligne dedans) */
+        const line=innerHeight*.5; best=active<0?0:active;
+        caps.forEach((c,k)=>{const r=c.getBoundingClientRect(); if(r.top<=line&&r.bottom>line) best=k;});
+        if(caps[0].getBoundingClientRect().top>line) best=0; }
       open(best);
     }
     list.addEventListener('click',e=>{const c=e.target.closest('.cap'); if(!c) return; held=Date.now()+1200; open(caps.indexOf(c));
