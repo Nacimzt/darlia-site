@@ -405,47 +405,19 @@
   .cap .t{font-size:clamp(21px,1.05rem + .8vw,31px);font-weight:700;letter-spacing:-.032em;line-height:1.08;text-wrap:balance}
   .cap .x{font-size:clamp(15px,.9rem + .25vw,17.5px);line-height:1.5;color:var(--ink-2);text-wrap:pretty;max-width:28em;
     display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .5s var(--out),opacity .4s var(--ease)}
-  .cap .x>span{overflow:hidden;display:grid;gap:6px}
+  .cap .x>span{overflow:hidden;display:block}
   .cap .li{display:block}
   .cap .li i{font-style:normal;font-size:11px;font-weight:640;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-right:10px;vertical-align:.08em}
   .cap.on .x{grid-template-rows:1fr;opacity:1;transition-delay:.1s}
   /* l'écran Darlia de l'étape : seulement dans la capsule ouverte */
-  .cap .mini{position:relative;min-width:0;border-radius:20px;background:#fff;overflow:hidden;
-    box-shadow:0 0 0 .5px rgba(26,26,24,.12),0 40px 70px -34px rgba(50,48,28,.45),0 10px 24px -14px rgba(50,48,28,.25);opacity:0;transform:translateY(14px) scale(.97);
+  /* à droite de la capsule ouverte : les trois choses concrètes qu'on fait à cette étape */
+  .cap .mini{position:relative;min-width:0;display:grid;gap:0;align-self:center;opacity:0;transform:translateY(10px);
     transition:opacity .5s var(--ease),transform .7s var(--out)}
   .cap.on .mini{opacity:1;transform:none;transition-delay:.15s}
-  .cap .mini .win{display:flex;align-items:center;gap:6px;padding:10px 16px;border-bottom:1px solid #EEEDE8;background:#FAFAF8}
-  .cap .mini .win i{width:8px;height:8px;border-radius:50%;background:#E4E3DE}
-  .cap .mini .win span{margin-left:8px;font-size:12px;font-weight:590;color:#6B6A65;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .cap .mini .shot{display:block;width:100%;height:auto;aspect-ratio:2/1;object-fit:cover;object-position:0 0}
-  .cap .mini,.cap .mini .ui,.cap .mini .ui>*{display:block}
-  .cap .mini .win,.cap .mini .ui .bar,.cap .mini .ui .row,.cap .mini .ui .rule,.cap .mini .ui .tl,.cap .mini .ui .tools,.cap .mini .ui .acts{display:flex}
-  .cap .mini .ui .row,.cap .mini .ui .rule,.cap .mini .ui .tl{display:grid}
-  .cap .mini .ui .doc{display:grid}
-  .cap .mini .ui{padding:14px 20px 18px;border-radius:0;box-shadow:none;flex:none;font-size:12.5px}
-  .cap .mini .ui .row{grid-template-columns:minmax(0,1fr) auto;padding:9px 0}
-  .cap .mini .ui .doc{margin:10px 0;gap:8px}
-  .cap .mini .ui .doc div{padding:9px 11px}
-  .cap .mini .ui .doc dd{font-size:18px}
-  .cap .mini .ui .lead{margin:8px 0 2px;font-size:15px}
-  .cap .mini .ui .rule{grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:9px 0;border-bottom:1px solid #F2F1ED;align-items:center}
-  .cap .mini .ui .rule:last-child{border-bottom:0}
-  .cap .mini .ui .rule small{display:block;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#8A8983;margin-bottom:2px}
-  .cap .mini .ui .rule b{font-weight:590;letter-spacing:-.012em}
-  .cap .mini .ui .tl{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #F2F1ED}
-  .cap .mini .ui .tl:last-child{border-bottom:0}
-  .cap .mini .ui .tl time{font-size:11px;color:#8A8983;font-variant-numeric:tabular-nums}
-  .cap .mini .ui .tl b{display:block;font-weight:590;letter-spacing:-.012em}
-  .cap .mini .ui .tl small{display:block;font-size:11px;color:#8A8983}
-  .cap .mini .ui .tools{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-  .cap .mini .ui .tools span{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:99px;background:#F4F3EF;font-size:11.5px;font-weight:590}
-  .cap .mini .ui .tools span i{width:5px;height:5px;border-radius:50%;background:#2F6B4C}
-  .cap .mini .ui .acts{margin-top:12px}
-  .cap .mini .ui .row>span:first-child{display:block;min-width:0}
-  .cap .mini .ui .row b,.cap .mini .ui .row small{display:block}
-  .cap .mini .ui .lead{display:block;font-size:16px;line-height:1.25}
-  .cap .mini .ui .lead span{display:inline}
-  .cap .mini .ui .acts u{height:28px;padding:0 12px;font-size:12px}
+  .cap .pt{display:grid;grid-template-columns:22px minmax(0,1fr);gap:12px;align-items:center;padding:13px 0;border-top:1px solid rgba(26,26,24,.1);
+    font-size:clamp(15px,.9rem + .2vw,17px);font-weight:560;letter-spacing:-.012em;line-height:1.3;color:var(--ink)}
+  .cap .pt:first-child{border-top:0}
+  .cap .pt svg{width:22px;height:22px;padding:4px;box-sizing:border-box;border-radius:50%;background:#EEF5F1;color:var(--accent)}
   /* la fin : le bouton, seul, centré sous les capsules, la mention en dessous */
   .how .after{margin:clamp(30px,3.4vw,52px) 0 0;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
   .how .after a{display:inline-flex;align-items:center;gap:10px;height:54px;padding:0 28px;border-radius:99px;background:var(--ink);color:#FBFBFA;
@@ -802,7 +774,8 @@
     .cap .d{display:block;font-size:15px;line-height:1.2}
     .cap .t{display:block;margin-top:4px;font-size:clamp(19px,5.4vw,23px);line-height:1.15}
     .cap .x,.cap.on .x{display:grid;grid-template-rows:1fr;opacity:1;max-width:none;margin-top:10px;font-size:15.5px;transition:none}
-    .cap .mini,.cap.on .mini{grid-column:1 / -1;display:block;margin-top:14px;opacity:1;transform:none;transition:none}
+    .cap .mini,.cap.on .mini{grid-column:1 / -1;display:grid;margin-top:2px;opacity:1;transform:none;transition:none}
+    .cap .pt{padding:11px 0;font-size:15px}
     .cap .go{display:none}
     /* apparition à l'entrée dans l'écran, une étape à la fois */
     .js .reveal .cap,.js .reveal.in .cap{opacity:0;transform:translateY(22px);transition:none}
@@ -1065,51 +1038,39 @@
           <p class="k">Mise en place</p>
           <h2 id="how-t" data-split aria-label="Un assistant en poste dans votre agence en trente jours.">Un assistant en poste dans votre agence <em>en trente jours.</em></h2>
         </div>
-        <p data-r style="--r:4"><span class="d">Quatre étapes, aucun projet informatique. Voici ce qui se passe, et ce que ça vous demande.</span><span class="m">Quatre étapes, aucun projet informatique.</span></p>
+        <p data-r style="--r:4"><span class="d">Quatre étapes, aucun projet informatique. Voici comment Dali prend son poste chez vous.</span><span class="m">Quatre étapes, aucun projet informatique.</span></p>
       </div>
       <ol class="caps" id="steps">
         <li class="cap on" style="--n:0">
           <button type="button" aria-expanded="true">
             <span class="big" aria-hidden="true">01</span>
-            <span class="txt"><span class="t">On regarde votre agence</span><span class="x"><span><span class="li"><i>On fait</i>Une visio de trente minutes : vos lots, vos outils, ce qui déborde.</span><span class="li"><i>De votre côté</i>Trente minutes, et vous repartez avec une date.</span></span></span></span>
+            <span class="txt"><span class="t">On regarde votre agence</span><span class="x"><span>Une visio avec Nacim pour comprendre comment votre agence tourne aujourd’hui.</span></span></span>
             <span class="go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M4 12 12 4M6 4h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <span class="mini" aria-hidden="true">
-              <span class="win"><i></i><i></i><i></i><span>Biens · votre portefeuille</span></span>
-              <img class="shot" src="assets/etape-biens.webp" alt="" width="1000" height="500" loading="lazy">
-            </span>
+            <span class="mini pts"><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Votre portefeuille et votre équipe</span></span><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Les outils que vous utilisez</span></span><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Ce qui déborde, et ce que Dali peut reprendre</span></span></span>
           </button>
         </li>
         <li class="cap" style="--n:1">
           <button type="button" aria-expanded="false">
             <span class="big" aria-hidden="true">02</span>
-            <span class="txt"><span class="t">On connecte Dali à vos outils</span><span class="x"><span><span class="li"><i>On fait</i>Votre logiciel de gestion et votre messagerie. Rien à installer chez vous.</span><span class="li"><i>De votre côté</i>Rien. C’est nous qui le faisons.</span></span></span></span>
+            <span class="txt"><span class="t">On connecte Dali à vos outils</span><span class="x"><span>On le branche sur ce que vous utilisez déjà. Vous ne changez rien à vos habitudes.</span></span></span>
             <span class="go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M4 12 12 4M6 4h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <span class="mini" aria-hidden="true">
-              <span class="win"><i></i><i></i><i></i><span>Connexions · vos outils</span></span>
-              <img class="shot" src="assets/etape-connexions.webp" alt="" width="1000" height="500" loading="lazy">
-            </span>
+            <span class="mini pts"><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Votre logiciel de gestion</span></span><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Votre messagerie et vos formulaires</span></span><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Votre agenda et vos modèles de courrier</span></span></span>
           </button>
         </li>
         <li class="cap" style="--n:2">
           <button type="button" aria-expanded="false">
             <span class="big" aria-hidden="true">03</span>
-            <span class="txt"><span class="t">On fixe ce qu’il décide seul</span><span class="x"><span><span class="li"><i>On fait</i>Les seuils, les délais, ce qui vous revient. Par exemple : toute dépense sous 300 €.</span><span class="li"><i>De votre côté</i>Une heure avec vos gestionnaires.</span></span></span></span>
+            <span class="txt"><span class="t">On fixe ce qu’il décide seul</span><span class="x"><span>Ensemble, on écrit ses règles : ce qu’il traite seul, et ce qui vous revient.</span></span></span>
             <span class="go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M4 12 12 4M6 4h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <span class="mini" aria-hidden="true">
-              <span class="win"><i></i><i></i><i></i><span>Réglages · ce que Dali décide seul</span></span>
-              <img class="shot" src="assets/etape-regles.webp" alt="" width="1000" height="500" loading="lazy">
-            </span>
+            <span class="mini pts"><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Les seuils de dépense, par exemple 300 €</span></span><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Le rythme des relances</span></span><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Les sujets sensibles, qu’il vous passe toujours</span></span></span>
           </button>
         </li>
         <li class="cap" style="--n:3">
           <button type="button" aria-expanded="false">
             <span class="big" aria-hidden="true">04</span>
-            <span class="txt"><span class="t">Il travaille, vous relisez</span><span class="x"><span><span class="li"><i>On fait</i>Il répond, relance, prépare. Rien ne part sans votre accord les premières semaines.</span><span class="li"><i>De votre côté</i>Dix minutes par jour, puis seulement les décisions.</span></span></span></span>
+            <span class="txt"><span class="t">Il travaille, vous gardez la main</span><span class="x"><span>Il prend le quotidien en charge. Les premières semaines, rien ne part sans votre accord.</span></span></span>
             <span class="go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M4 12 12 4M6 4h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <span class="mini" aria-hidden="true">
-              <span class="win"><i></i><i></i><i></i><span>Accueil · aujourd’hui</span></span>
-              <img class="shot" src="assets/etape-accueil.webp" alt="" width="1000" height="500" loading="lazy">
-            </span>
+            <span class="mini pts"><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Il répond aux locataires et relance les loyers</span></span><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Il suit les interventions jusqu’au bout</span></span><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Il vous soumet chaque décision qui compte</span></span></span>
           </button>
         </li>
       </ol>
