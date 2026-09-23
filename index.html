@@ -1078,9 +1078,9 @@
   </section>
   <!-- Comment ça marche : les trente jours du héros, en quatre étapes datées.
        Le découpage en semaines est une proposition à faire valider par Nacim. -->
-  <section class="say-big" aria-label="Vous refusez des mandats parce que votre équipe est déjà pleine. Pendant ce temps, vos concurrents les signent. Avec Dali, vous prenez plus de lots, sans recruter.">
+  <section class="say-big" aria-label="Aujourd’hui, pour gérer plus de lots, vous recrutez : un salaire de plus, des mois pour trouver la bonne personne, puis la former. Avec Dali, votre parc grandit, votre équipe reste la même.">
     <div class="shell">
-      <p id="saybig" aria-hidden="true">Vous refusez des mandats parce que votre équipe est déjà pleine. Pendant ce temps, vos concurrents les signent. <em>Avec Dali, vous prenez plus de lots, sans recruter.</em></p>
+      <p id="saybig" aria-hidden="true">Aujourd’hui, pour gérer plus de lots, vous recrutez : un salaire de plus, des mois pour trouver la bonne personne, puis la former. <em>Avec Dali, votre parc grandit, votre équipe reste la même.</em></p>
     </div>
   </section>
   <section class="how reveal" id="comment" aria-labelledby="how-t">
@@ -1529,7 +1529,7 @@
   (function(){
     const p=document.getElementById('saybig'); if(!p) return;
     const wrap=(node)=>{ [...node.childNodes].forEach(n=>{
-      if(n.nodeType===3){ const f=document.createDocumentFragment(); n.textContent.split(/(\s+)/).forEach(t=>{ if(!t) return; if(!t.trim()){ f.append(t); return; } const w=document.createElement('span'); w.className='sw'; w.textContent=t; f.append(w); }); n.replaceWith(f); }
+      if(n.nodeType===3){ const f=document.createDocumentFragment(); n.textContent.split(/([ \n\t]+)/).forEach(t=>{ if(!t) return; if(!/[^ \n\t]/.test(t)){ f.append(t); return; } const w=document.createElement('span'); w.className='sw'; w.textContent=t; f.append(w); }); n.replaceWith(f); }
       else if(n.nodeType===1) wrap(n); }); };
     wrap(p);
     const words=[...p.querySelectorAll('.sw')];
