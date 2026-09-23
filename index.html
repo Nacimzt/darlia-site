@@ -715,7 +715,16 @@
     .site-foot ul{gap:4px}
     .site-foot ul a,.site-foot .bottom a{display:inline-block;padding:8px 0}   /* zones de tap de 40 px */
     .site-foot .bottom span+span{gap:14px}
-    .hero{min-height:0;padding-block:clamp(96px,14vh,120px) clamp(84px,20vw,110px)}
+    .hero{min-height:0;padding-block:clamp(92px,13vh,112px) clamp(84px,20vw,110px)}
+    /* premier écran sur téléphone : le titre a plus de présence, le texte respire, la fenêtre remonte */
+    h1{font-size:clamp(40px,11.8vw,52px);line-height:.95;letter-spacing:-.05em}
+    .hero .lede{margin-top:18px;font-size:17px;line-height:1.5;max-width:22em}
+    .go{margin-top:26px;gap:12px}
+    .go .note{width:100%;text-align:center}
+    .hero .shell{gap:44px!important}
+    /* la barre : en haut de page, le logo seul ; son bouton n'arrive qu'une fois celui du hero dépassé */
+    .dock a.go2{transition:opacity .35s var(--ease),transform .45s var(--out),background .4s var(--ease),color .4s var(--ease)}
+    .dock:not(.past) a.go2{opacity:0;transform:translateX(10px);pointer-events:none}
     /* minmax(0,…) : la fenêtre déborde de la piste sans l'élargir, le texte garde sa mesure */
     .hero .shell{grid-template-columns:minmax(0,1fr);gap:clamp(56px,10vw,80px)}
     .hero .veil{background:linear-gradient(180deg,var(--veil) 0,var(--veil) 40%,transparent 75%)}
@@ -1353,6 +1362,10 @@
     else if (d < -6 && hidden) { hidden = false; dock.classList.remove('away'); }
     lastY = y;
   };
+  /* la barre sait quand le bouton du hero est sorti de l'écran (téléphone : son propre bouton n'apparaît qu'alors) */
+  const heroCta = document.querySelector('#demo .cta');
+  if (heroCta && 'IntersectionObserver' in window) new IntersectionObserver((es) => es.forEach((e) => dock.classList.toggle('past', !e.isIntersecting && e.boundingClientRect.top < 0)), {threshold:0}).observe(heroCta);
+  else dock.classList.add('past');
   addEventListener('scroll', () => { dense(); hideOnScroll(); }, {passive:true}); dense();
   /* le lien de la section à l'écran se marque */
   const navLinks = [...dock.querySelectorAll('nav a')];
