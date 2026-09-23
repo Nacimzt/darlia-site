@@ -772,25 +772,28 @@
     .tarif.is-quote .amt{display:none}
     .quote{position:static;display:none;flex-direction:column;align-items:flex-start;gap:12px;padding-block:24px}
     .tarif.is-quote .quote{display:flex}
-    /* téléphone : pas de mécanique au défilement (elle se bat avec l'inertie d'iOS). Les quatre étapes sont
-       ouvertes, l'une sous l'autre, et chacune apparaît en fondu quand elle entre à l'écran. */
+    /* téléphone : les quatre étapes dans une seule feuille blanche, séparées par un filet (comme la FAQ) ;
+       numéro fin et titre sur une ligne, phrase et trois points en pleine largeur. Pas de mécanique au défilement. */
     .how{margin-top:var(--frame)}
     .how .head h2{font-size:clamp(30px,8.4vw,40px)}
-    .caps{margin-top:22px;gap:12px}
-    .cap,.cap:hover,.cap.on,.cap.on:hover{background:#fff;backdrop-filter:none;-webkit-backdrop-filter:none;transform:none;
-      box-shadow:0 0 0 .5px rgba(26,26,24,.08),0 30px 50px -36px rgba(50,48,28,.45)}
-    .cap>button{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:14px;align-items:start;min-height:0;padding:18px 18px 18px 20px;cursor:default}
-    .cap .big,.cap.on .big{font-size:38px;line-height:.9;font-weight:300;letter-spacing:-.04em;transform:none;color:var(--ink);padding-top:2px}
-    .cap .txt{display:block;min-width:0}
-    .cap .d{display:block;font-size:15px;line-height:1.2}
-    .cap .t{display:block;margin-top:4px;font-size:clamp(19px,5.4vw,23px);line-height:1.15}
-    .cap .x,.cap.on .x{display:grid;grid-template-rows:1fr;opacity:1;max-width:none;margin-top:10px;font-size:15.5px;transition:none}
-    .cap .mini,.cap.on .mini{grid-column:1 / -1;display:grid;margin-top:2px;opacity:1;transform:none;transition:none}
-    .cap .pt{padding:11px 0;font-size:15px}
+    .caps{margin-top:24px;gap:0;padding:4px 20px;border-radius:24px;background:#fff;
+      box-shadow:0 0 0 .5px rgba(26,26,24,.08),0 40px 70px -44px rgba(50,48,28,.5)}
+    .cap,.cap:hover,.cap.on,.cap.on:hover{background:none;box-shadow:none;border-radius:0;backdrop-filter:none;-webkit-backdrop-filter:none;transform:none;
+      border-top:1px solid rgba(26,26,24,.1)}
+    .cap:first-child{border-top:0}
+    .cap>button{display:block;min-height:0;padding:22px 0 20px;cursor:default}
+    .cap .big,.cap.on .big{display:block;font-size:15px;line-height:1;font-weight:600;letter-spacing:.04em;color:var(--accent);transform:none;margin-bottom:8px;font-variant-numeric:tabular-nums}
+    .cap .txt{display:block}
+    .cap .t{display:block;font-size:clamp(20px,5.6vw,23px);line-height:1.15;letter-spacing:-.028em}
+    .cap .x,.cap.on .x{display:block;opacity:1;max-width:none;margin-top:8px;font-size:15.5px;line-height:1.5;color:var(--ink-2);transition:none}
+    .cap .mini,.cap.on .mini{display:grid;gap:8px;margin-top:14px;opacity:1;transform:none;transition:none}
+    .cap .pt{padding:0;border-top:0;grid-template-columns:18px minmax(0,1fr);gap:10px;align-items:start;font-size:15px;font-weight:540;line-height:1.35}
+    .cap .pt svg{width:18px;height:18px;padding:3px;margin-top:1px}
     .cap .go{display:none}
-    /* apparition à l'entrée dans l'écran, une étape à la fois */
-    .js .reveal .cap,.js .reveal.in .cap{opacity:0;transform:translateY(22px);transition:none}
-    .js .reveal .cap.seen,.js .reveal.in .cap.seen{opacity:1;transform:none;transition:opacity .7s var(--out),transform .8s var(--out)}
+    /* la feuille apparaît en fondu à son arrivée, les étapes avec elle */
+    .js .reveal .cap,.js .reveal.in .cap,.js .reveal .cap.seen,.js .reveal.in .cap.seen{opacity:1;transform:none;transition:none}
+    .js .reveal .caps{opacity:0;transform:translateY(24px)}
+    .js .reveal.in .caps{opacity:1;transform:none;transition:opacity .9s var(--out) .2s,transform 1s var(--out) .2s}
     .how .after a{width:100%;justify-content:center}
     /* téléphone : les quatre cartes se feuillettent de côté */
     .gains ol{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;
