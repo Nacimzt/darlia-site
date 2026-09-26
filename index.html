@@ -747,6 +747,17 @@
   .foot.incl p{flex:none;font-size:clamp(13.5px,.82rem + .1vw,14.5px);line-height:1.5}
   .foot.incl p b{display:block;margin-bottom:2px;font-size:11.5px;font-weight:650;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
   .foot.incl .launch{font-size:12.5px;color:var(--ink-3)}
+  /* tarif : tant qu'aucune tranche n'est choisie, pas de montant ; une invitation à choisir */
+  .amounts .empty{display:none}
+  .tarif.is-empty .amounts .empty{display:flex;align-items:center;gap:14px;grid-column:1 / -1;min-height:clamp(120px,11vw,150px);padding:clamp(22px,2.4vw,36px);box-sizing:border-box}
+  .tarif.is-empty .amounts .amt{display:none}
+  .amounts .empty svg{flex:none;width:34px;height:34px;padding:8px;box-sizing:border-box;border-radius:50%;background:#EEF5F1;color:var(--accent);animation:nudge 1.8s var(--ease) infinite}
+  @keyframes nudge{0%,100%{transform:none}50%{transform:translateY(-3px)}}
+  .amounts .empty p{margin:0;font-size:clamp(16px,.95rem + .25vw,19px);line-height:1.4;color:var(--ink-2);text-wrap:balance}
+  .amounts .empty em{font-family:var(--serif);font-style:italic;font-size:1.12em;color:var(--accent)}
+  /* à la première sélection, les montants arrivent en fondu */
+  .tarif.just-picked .amt{animation:amt-in .6s var(--out) both}
+  @keyframes amt-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
   /* rythme commun : l'étiquette de section, puis le titre 22 px plus bas, dans toutes les sections */
   .how .head .k,.faq .lead .k.eyebrow{margin-bottom:22px}
   .pp .say .k + h2,.book .say .k + h2,.about .k + h2{margin-top:22px}
@@ -919,6 +930,7 @@
     .cta{width:100%;justify-content:center}
   }
   @media (prefers-reduced-motion:reduce){
+    .amounts .empty svg,.tarif.just-picked .amt{animation:none}
     html{scroll-behavior:auto}
     .js .reveal .calbox{opacity:1;transform:none;transition:none}
     .js .reveal .qa{opacity:1;transform:none;transition:none}
@@ -1196,13 +1208,13 @@
           <small>30 minutes en visio, sans engagement.</small>
         </div>
         <div class="sheetwrap">
-      <div class="tarif">
+      <div class="tarif is-empty">
         <div class="pick">
           <p id="pick-l">Combien de lots gérez-vous ?</p>
           <div class="seg" id="seg" role="radiogroup" aria-labelledby="pick-l">
             <span class="thumb" aria-hidden="true"></span>
             <label><input type="radio" name="lots" value="0"><span class="rg">100 à 199 lots</span></label>
-            <label class="on"><input type="radio" name="lots" value="1" checked><span class="rg">200 à 399 lots</span></label>
+            <label><input type="radio" name="lots" value="1"><span class="rg">200 à 399 lots</span></label>
             <label><input type="radio" name="lots" value="2"><span class="rg">400 à 699 lots</span></label>
             <label><input type="radio" name="lots" value="3"><span class="rg">700 à 999 lots</span></label>
             <label><input type="radio" name="lots" value="4"><span class="rg">1 000 à 1 499 lots</span></label>
@@ -1210,6 +1222,7 @@
           </div>
         </div>
         <div class="amounts" id="amounts" aria-live="polite">
+          <div class="empty"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 13V3M4 7l4-4 4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><p>Choisissez votre nombre de lots, <em>votre tarif s’affiche ici.</em></p></div>
           <div class="amt sub"><h3>Exploitation Darlia</h3><p class="v"><span data-k="sub">590</span><em>€</em><small>HT par mois</small></p></div>
           <div class="amt"><h3>Déploiement Darlia</h3><p class="v"><span data-k="setup">3 500</span><em>€</em></p><p class="u">HT, une seule fois</p></div>
           <div class="quote"><p class="big">Sur devis</p><p>À cette taille, le prix se calcule ensemble, sur votre portefeuille réel. Le Dali, lui, reste le même.</p></div>
@@ -1506,7 +1519,7 @@
     const labels = [...seg.querySelectorAll('label')], thumb = $('.thumb', seg), box = $('#amounts');
     const sheet = seg.closest('.tarif'), v = (k) => $('[data-k="' + k + '"]', sheet); /* les valeurs vivent dans toute la feuille, pas seulement dans les montants */
     const fr = (n) => Math.round(n).toLocaleString('fr-FR').replace(/[\s\u00a0\u202f]/g, '\u00a0');
-    const now = {setup:3500, sub:590};
+    const now = {setup:0, sub:0};
     const place = () => { const l = seg.querySelector('label.on'); if (!l) return;
       thumb.style.width = l.offsetWidth + 'px'; thumb.style.height = l.offsetHeight + 'px';
       thumb.style.transform = 'translate(' + l.offsetLeft + 'px,' + l.offsetTop + 'px)'; };
@@ -1518,6 +1531,7 @@
       /* filet de sécurité : onglet en arrière-plan ou animation bridée, la bonne valeur s'affiche quand même */
       setTimeout(() => { if (now[k] === to) el.textContent = fr(to); }, 760); };
     const pick = (n) => { labels.forEach((l, k) => l.classList.toggle('on', k === n)); place(); const g = GRID[n];
+      if (sheet.classList.contains('is-empty')) { sheet.classList.remove('is-empty'); sheet.classList.add('just-picked'); setTimeout(() => sheet.classList.remove('just-picked'), 700); }
       seg.closest('.tarif').classList.toggle('is-quote', !g); if (!g) return;
       roll('setup', g.setup); roll('sub', g.sub); };
     seg.addEventListener('change', (e) => pick(+e.target.value));
