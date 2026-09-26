@@ -7,7 +7,7 @@
 <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Darlia · La plateforme opérationnelle de la gestion locative</title>
-<meta name="description" content="Darlia est la plateforme opérationnelle des agences de gestion locative. Son assistant intégré, Dali, exécute les tâches répétitives ; votre équipe décide. Une capacité opérationnelle en plus, déployée en 30 jours.">
+<meta name="description" content="Darlia, la plateforme opérationnelle des agences de gestion locative. Son assistant, Dali, traite demandes, relances et interventions. Déployé en 30 jours.">
 <meta name="theme-color" content="#E9E2CC">
 <link rel="canonical" href="https://darlia.fr/">
 <!-- aperçu de partage (LinkedIn, WhatsApp, iMessage, X) : scène Higgsfield + texte rendu en HTML, source dans brand/og/ -->
@@ -24,11 +24,12 @@
 <meta property="og:image:alt" content="Dali, l’hirondelle de Darlia, perchée sur un balcon parisien au petit matin.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://darlia.fr/assets/og-darlia-6.jpg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&display=swap">
+<link rel="preload" href="assets/fonts/instrument-serif-italic-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" as="image" href="assets/fond-mur.webp" type="image/webp">
 <style>
+  /* police hébergée sur le site (plus rapide, et aucune adresse IP transmise à Google) */
+  @font-face { font-family: 'Instrument Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url(assets/fonts/instrument-serif-italic-latin-ext.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+  @font-face { font-family: 'Instrument Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url(assets/fonts/instrument-serif-italic-latin.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
   @property --lum{syntax:'<number>';inherits:true;initial-value:0}
   /* Darlia, le site. Surface claire, colorée, lumineuse, jamais terne.
      Encre #1A1A18, un seul accent (#2F6B4C). Titres : SF Pro très serrée,
@@ -1007,6 +1008,7 @@
   }
 </style>
 <script>document.documentElement.classList.add('js');document.documentElement.dataset.scene=(new URLSearchParams(location.search).get('scene'))||'mur'</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://darlia.fr/#organisation", "name": "Darlia", "url": "https://darlia.fr/", "logo": "https://darlia.fr/icon-512.png", "image": "https://darlia.fr/assets/og-darlia-6.jpg", "description": "Plateforme opérationnelle pour les agences de gestion locative, avec un assistant intégré, Dali, qui exécute les tâches répétitives.", "email": "contact@darlia.fr", "telephone": "+33616753910", "address": {"@type": "PostalAddress", "streetAddress": "85 avenue Édouard Vaillant", "postalCode": "93500", "addressLocality": "Pantin", "addressCountry": "FR"}, "areaServed": {"@type": "Country", "name": "France"}, "founder": {"@type": "Person", "name": "Nacim Meziti", "jobTitle": "Fondateur", "sameAs": ["https://www.linkedin.com/in/nacim-meziti-225493261/"]}}, {"@type": "WebSite", "@id": "https://darlia.fr/#site", "url": "https://darlia.fr/", "name": "Darlia", "inLanguage": "fr-FR", "publisher": {"@id": "https://darlia.fr/#organisation"}}, {"@type": "Service", "@id": "https://darlia.fr/#service", "name": "Darlia", "serviceType": "Plateforme opérationnelle pour la gestion locative", "provider": {"@id": "https://darlia.fr/#organisation"}, "areaServed": {"@type": "Country", "name": "France"}, "audience": {"@type": "BusinessAudience", "audienceType": "Agences immobilières, gestionnaires locatifs et administrateurs de biens"}, "description": "Darlia est déployé en 30 jours dans l’agence. Son assistant, Dali, prend en charge les demandes des locataires, les relances de loyers, le suivi des interventions et la préparation des comptes rendus ; l’équipe garde les décisions."}]}</script>
 </head>
 <body>
 
