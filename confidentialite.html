@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Confidentialité · Darlia</title>
+<meta name="description" content="Politique de confidentialité de darlia.fr : quelles données sont collectées, pourquoi, combien de temps, et comment exercer vos droits.">
+<meta name="robots" content="noindex,follow">
+<meta name="theme-color" content="#FCFBF8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&display=swap">
+<style>
+  /* Mentions légales : la même matière que le site (papier, encre, un seul accent), en une colonne de lecture. */
+  :root{
+    color-scheme:light;
+    --ink:#1A1A18; --ink-2:#4F4D45; --ink-3:#7F7B70;
+    --line:rgba(26,26,24,.14); --accent:#2F6B4C; --paper:#FCFBF8;
+    --serif:'Instrument Serif',Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --pad:clamp(22px,5vw,56px);
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  a{color:var(--ink);text-decoration:underline;text-decoration-color:rgba(26,26,24,.3);text-underline-offset:3px;transition:color .2s,text-decoration-color .2s}
+  a:hover{color:var(--accent);text-decoration-color:var(--accent)}
+
+  .bar{position:sticky;top:0;z-index:2;background:rgba(252,251,248,.86);-webkit-backdrop-filter:saturate(1.4) blur(14px);backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid var(--line)}
+  .bar .in{max-width:1120px;margin:0 auto;padding:14px var(--pad);display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .bar img{display:block;height:30px;width:auto}
+  .bar .back{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 16px;border-radius:99px;background:var(--ink);color:#FBFBFA;text-decoration:none;font-size:14.5px;font-weight:600;letter-spacing:-.01em}
+  .bar .back:hover{color:#fff}
+  .bar .back svg{width:14px;height:14px}
+
+  main{max-width:760px;margin:0 auto;padding:clamp(56px,9vw,112px) var(--pad) clamp(64px,9vw,120px)}
+  .k{margin:0;display:flex;align-items:center;gap:12px;font-size:12.5px;font-weight:620;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}
+  .k::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(26,26,24,.18),transparent)}
+  h1{margin:22px 0 0;font-size:clamp(38px,6vw,64px);font-weight:700;line-height:1.02;letter-spacing:-.045em;text-wrap:balance}
+  h1 em{font-family:var(--serif);font-style:italic;font-weight:400;font-size:1.1em;letter-spacing:-.02em;color:var(--accent)}
+  .lead{margin:22px 0 0;max-width:34em;font-size:clamp(17px,1rem + .25vw,19px);color:var(--ink-2)}
+  .toc{margin:36px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+  .toc a{display:inline-flex;align-items:center;height:36px;padding:0 14px;border-radius:99px;background:#F1EFE8;text-decoration:none;font-size:14px;font-weight:590;color:var(--ink)}
+  .toc a:hover{background:#E8EFEA;color:var(--accent)}
+
+  section{margin-top:clamp(56px,7vw,80px);padding-top:clamp(28px,3.4vw,36px);border-top:1px solid var(--line);scroll-margin-top:84px}
+  h2{margin:0;font-size:clamp(24px,2.6vw,30px);font-weight:700;letter-spacing:-.035em;line-height:1.1}
+  h3{margin:30px 0 0;font-size:17px;font-weight:650;letter-spacing:-.015em}
+  section p,section li{color:var(--ink-2)}
+  section p{margin:12px 0 0}
+  section ul{margin:12px 0 0;padding-left:1.1em}
+  section li{margin-top:6px}
+  section li::marker{color:var(--accent)}
+  b,strong{color:var(--ink);font-weight:620}
+
+  /* la fiche : libellé à gauche, valeur à droite */
+  dl{margin:22px 0 0;display:grid;grid-template-columns:minmax(0,13em) minmax(0,1fr);border-top:1px solid var(--line)}
+  dt,dd{margin:0;padding:13px 0;border-bottom:1px solid var(--line)}
+  dt{font-size:14.5px;font-weight:590;color:var(--ink-3);padding-right:20px}
+  dd{color:var(--ink)}
+
+  /* l'essentiel en trois lignes, en tête de page */
+  .brief{margin:36px 0 0;padding:22px 26px;border-radius:18px;background:#fff;box-shadow:0 0 0 1px var(--line),0 24px 40px -30px rgba(40,38,30,.35);list-style:none;display:grid;gap:10px}
+  .brief li{display:flex;gap:12px;align-items:flex-start;margin:0;color:var(--ink)}
+  .brief svg{flex:none;width:18px;height:18px;margin-top:4px;color:var(--accent)}
+  /* une fiche par situation : ce qui est collecté, pourquoi, sur quelle base, combien de temps */
+  .case{margin-top:22px;padding:20px 24px 6px;border-radius:16px;background:#F6F4EE}
+  .case h3{margin:0}
+  .case dl{margin-top:12px;border-top:0}
+  .case dt,.case dd{border-bottom-color:rgba(26,26,24,.09)}
+  .case dl>dd:last-of-type,.case dl>dt:last-of-type{border-bottom:0}
+  .updated{margin-top:clamp(56px,7vw,80px);font-size:14px;color:var(--ink-3)}
+  footer{border-top:1px solid var(--line)}
+  footer .in{max-width:1120px;margin:0 auto;padding:22px var(--pad) max(28px,env(safe-area-inset-bottom));display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;font-size:13.5px;color:var(--ink-3)}
+  footer a{color:var(--ink-3)}
+
+  @media (max-width:620px){
+    .case{padding:16px 18px 4px}
+    .brief{padding:18px 20px}
+    body{font-size:16px}
+    dl{grid-template-columns:minmax(0,1fr)}
+    dt{padding:14px 0 0;border-bottom:0}
+    dd{padding:2px 0 14px}
+    .bar img{height:26px}
+    .bar .back{height:36px;padding:0 14px;font-size:14px}
+    footer .in{flex-direction:column}
+  }
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="in">
+    <a href="index.html" aria-label="Darlia, retour à l’accueil"><img src="assets/logo-darlia.png?v=2" alt="Darlia" width="939" height="288"></a>
+    <a class="back" href="index.html"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13 8H3M7 4L3 8l4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Retour au site</a>
+  </div>
+</header>
+
+<main>
+  <p class="k">Informations légales</p>
+  <h1>Politique de <em>confidentialité.</em></h1>
+  <p class="lead">Quelles informations nous recevons quand vous visitez darlia.fr ou demandez une démonstration, ce que nous en faisons, et comment garder la main dessus.</p>
+  <ul class="brief">
+    <li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Pas de compte à créer, pas de publicité, pas de mesure d’audience.</span></li>
+    <li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Vos informations servent uniquement à préparer votre démonstration et à vous répondre.</span></li>
+    <li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Elles ne sont jamais vendues, louées ni cédées.</span></li>
+  </ul>
+  <ul class="toc">
+    <li><a href="#responsable">Responsable</a></li>
+    <li><a href="#donnees">Données collectées</a></li>
+    <li><a href="#destinataires">Destinataires</a></li>
+    <li><a href="#droits">Vos droits</a></li>
+    <li><a href="#cookies">Cookies</a></li>
+  </ul>
+
+  <section id="responsable" aria-labelledby="responsable-t">
+    <h2 id="responsable-t">Responsable du traitement</h2>
+    <dl>
+      <dt>Responsable</dt><dd>Nacim Meziti, entrepreneur individuel, nom commercial Darlia</dd>
+      <dt>Adresse</dt><dd>85 avenue Édouard Vaillant, 93500 Pantin</dd>
+      <dt>Contact</dt><dd><a href="mailto:contact@darlia.fr">contact@darlia.fr</a></dd>
+    </dl>
+  </section>
+
+  <section id="donnees" aria-labelledby="donnees-t">
+    <h2 id="donnees-t">Les données collectées</h2>
+    <p>Le site se consulte sans rien vous demander. Nous recevons des informations dans trois situations seulement.</p>
+    <div class="case">
+      <h3>Vous réservez une démonstration</h3>
+      <dl><dt>Données</dt><dd>Votre nom, votre adresse email, le créneau choisi et les informations que vous ajoutez dans le formulaire.</dd><dt>Pourquoi</dt><dd>Organiser la démonstration, la préparer à partir de votre situation, et vous envoyer la confirmation.</dd><dt>Base légale</dt><dd>Les mesures précontractuelles prises à votre demande.</dd><dt>Conservation</dt><dd>Trois ans au plus après notre dernier échange, puis suppression.</dd></dl>
+    </div>
+    <div class="case">
+      <h3>Vous nous écrivez</h3>
+      <dl><dt>Données</dt><dd>Votre adresse email, votre nom s’il apparaît et le contenu de votre message.</dd><dt>Pourquoi</dt><dd>Vous répondre et assurer le suivi de votre demande.</dd><dt>Base légale</dt><dd>Notre intérêt légitime à répondre aux personnes qui nous contactent.</dd><dt>Conservation</dt><dd>Trois ans au plus après notre dernier échange, puis suppression.</dd></dl>
+    </div>
+    <div class="case">
+      <h3>Vous consultez le site</h3>
+      <dl><dt>Données</dt><dd>Des données techniques de connexion, comme l’adresse IP et le navigateur, enregistrées automatiquement par l’hébergeur.</dd><dt>Pourquoi</dt><dd>Faire fonctionner le site et le protéger contre les abus.</dd><dt>Base légale</dt><dd>Notre intérêt légitime à assurer la sécurité du site.</dd><dt>Conservation</dt><dd>La durée limitée fixée par l’hébergeur.</dd></dl>
+    </div>
+  </section>
+
+  <section id="destinataires" aria-labelledby="destinataires-t">
+    <h2 id="destinataires-t">Qui y a accès</h2>
+    <p>Seul Nacim Meziti a accès à vos informations. Elles transitent par quelques prestataires techniques, qui les traitent uniquement pour notre compte :</p>
+    <dl>
+      <dt>Cal.com</dt><dd>La prise de rendez-vous pour les démonstrations.</dd>
+      <dt>Netlify</dt><dd>L’hébergement du site.</dd>
+      <dt>Google Fonts</dt><dd>Une police d’écriture du site. Votre navigateur la télécharge auprès de Google, qui reçoit à ce titre votre adresse IP.</dd>
+      <dt>Hostinger</dt><dd>La messagerie contact@darlia.fr.</dd>
+    </dl>
+    <p>Cal.com, Netlify et Google sont établis aux États-Unis. Ces transferts hors de l’Union européenne sont encadrés par les garanties prévues par le RGPD, comme le cadre de protection des données entre l’Union européenne et les États-Unis ou les clauses contractuelles types de la Commission européenne.</p>
+  </section>
+
+  <section id="securite" aria-labelledby="securite-t">
+    <h2 id="securite-t">Sécurité</h2>
+    <p>Le site est servi exclusivement en connexion chiffrée (HTTPS). Les accès aux outils qui contiennent vos informations sont personnels et protégés.</p>
+  </section>
+
+  <section id="droits" aria-labelledby="droits-t">
+    <h2 id="droits-t">Vos droits</h2>
+    <p>Vous pouvez à tout moment :</p>
+    <ul>
+      <li>savoir quelles informations nous avons sur vous et en obtenir une copie ;</li>
+      <li>les faire corriger ou compléter ;</li>
+      <li>les faire effacer ;</li>
+      <li>vous opposer à leur utilisation, ou en demander la limitation ;</li>
+      <li>les récupérer dans un format lisible pour les transmettre à quelqu’un d’autre ;</li>
+      <li>définir ce qu’elles deviennent après votre décès.</li>
+    </ul>
+    <p>Il suffit d’écrire à <a href="mailto:contact@darlia.fr">contact@darlia.fr</a>. Nous vous répondons sous un mois au plus. Nous pourrons vous demander de justifier de votre identité si un doute existe.</p>
+    <p>Si vous estimez que vos droits ne sont pas respectés, vous pouvez adresser une réclamation à la CNIL sur <a href="https://www.cnil.fr" rel="noopener">cnil.fr</a>.</p>
+  </section>
+
+  <section id="cookies" aria-labelledby="cookies-t">
+    <h2 id="cookies-t">Cookies</h2>
+    <p>Ce site n’utilise ni cookie publicitaire ni outil de mesure d’audience. C’est pourquoi il ne vous demande pas votre consentement à l’arrivée.</p>
+    <p>Le calendrier de réservation, fourni par Cal.com, se charge seulement à l’approche de la section démonstration. Il peut alors utiliser des traceurs strictement nécessaires à la prise de rendez-vous. Ces traceurs sont dispensés de consentement.</p>
+  </section>
+
+  <section id="modifications" aria-labelledby="modifications-t">
+    <h2 id="modifications-t">Évolutions de cette politique</h2>
+    <p>Cette politique peut évoluer, par exemple si le site propose un nouveau service. La date de mise à jour ci-dessous indique la version en vigueur.</p>
+  </section>
+
+  <p class="updated">Dernière mise à jour : 26 septembre 2026. Voir aussi les <a href="mentions-legales.html">mentions légales</a>.</p>
+</main>
+
+<footer>
+  <div class="in">
+    <span>© 2026 Darlia · Paris · Nacim Meziti, entrepreneur individuel</span>
+    <span><a href="mentions-legales.html">Mentions légales</a> · <a href="index.html">Retour au site</a></span>
+  </div>
+</footer>
+</body>
+</html>
