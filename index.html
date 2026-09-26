@@ -160,7 +160,7 @@
   .rig{position:relative;width:calc(100% + clamp(0px,8vw,170px));transform-style:preserve-3d;
     --ry:-19deg;--rx:5deg;--rz:-2.4deg;transform:rotateY(var(--ry)) rotateX(var(--rx)) rotateZ(var(--rz))}
   .mac{
-    --w:1200; --h:750; --k:.6;
+    --w:1280; --h:800; --k:.6;
     position:relative;width:100%;
     height:calc(var(--h) * var(--k) * 1px);
     border-radius:calc(11px * var(--k) + 4px);overflow:hidden;background:#fff;
@@ -1463,15 +1463,15 @@
   split($('#title'));
   document.querySelectorAll('h2[data-split]').forEach((h) => split(h));
 
-  /* La fenêtre garde sa taille logique (1200 × 750) ; seule l’échelle change.
-     1200 px : au-dessus de tous les points de rupture de l’app, donc sa mise en page large.
+  /* La fenêtre garde sa taille logique (1280 × 800) ; seule l’échelle change.
+     1280 px : bien au-dessus du dernier point de rupture de l’app (1180), donc toujours sa mise en page large.
      Le texte reste vectoriel : net sur tous les écrans, quelle que soit la densité. */
   /* Téléphone : l'app vivante coûte 300 Ko de page et ses images ; on montre une capture nette de l'accueil
      et on ne charge l'iframe qu'à partir de 961 px (ou si l'écran s'élargit). */
   const wide = matchMedia('(min-width:961px)');
   const loadApp = () => { if (!frame.src) frame.src = frame.dataset.src; };
   if (wide.matches) loadApp(); else wide.addEventListener('change', (e) => { if (e.matches) loadApp(); }, {once:true});
-  const fit = () => mac.style.setProperty('--k', (mac.clientWidth / 1200).toFixed(4));
+  const fit = () => mac.style.setProperty('--k', (mac.clientWidth / 1280).toFixed(4));
   new ResizeObserver(fit).observe(mac); fit();
 
   /* le texte n'attend jamais l'app. On force un premier calcul de style (offsetWidth) avant d'ajouter la classe :
