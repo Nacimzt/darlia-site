@@ -499,46 +499,60 @@
   .sheetwrap::before{content:"";position:absolute;left:5%;right:5%;top:-11px;height:40px;border-radius:18px 18px 0 0;background:rgba(255,255,255,.62);box-shadow:0 0 0 .5px rgba(26,26,24,.08)}
   .tarif{position:relative;border-radius:clamp(18px,1.8vw,26px);background:#fff;overflow:hidden;
     box-shadow:0 0 0 .5px rgba(26,26,24,.10),inset 0 1px 0 #fff,0 60px 90px -36px rgba(40,50,80,.5),0 10px 22px -12px rgba(40,50,80,.26)}
-  .tarif>*{padding-inline:clamp(22px,2.4vw,36px)}
+  /* Une question d'abord, puis le prix (piste B du canevas « Tarif, trois pistes », 2026-09-26).
+     Les deux volets occupent la même case de grille : la feuille garde sa hauteur, rien ne saute quand on choisit. */
+  .tarif{display:grid}
+  .tarif>.t-ask,.tarif>.t-res{grid-area:1 / 1;min-width:0;display:flex;flex-direction:column}
+  .tarif>.t-ask{transition:opacity .45s var(--ease) .1s,transform .6s var(--out) .1s,visibility 0s}
+  .tarif>.t-res{opacity:0;visibility:hidden;transform:translateX(16px);transition:opacity .25s var(--ease),transform .4s var(--out),visibility 0s .25s}
+  .tarif.is-set>.t-ask{opacity:0;visibility:hidden;transform:translateX(-16px);transition:opacity .25s var(--ease),transform .4s var(--out),visibility 0s .25s}
+  .tarif.is-set>.t-res{opacity:1;visibility:visible;transform:none;transition:opacity .45s var(--ease) .1s,transform .6s var(--out) .1s,visibility 0s}
+  .tarif .top{padding:clamp(26px,2.6vw,36px) clamp(22px,2.4vw,36px) clamp(20px,2vw,26px)}
+  .tarif .bq{margin:0;font-size:clamp(28px,2.5vw,36px);font-weight:700;letter-spacing:-.045em;line-height:1.02}
+  .tarif .bq em{white-space:nowrap;font-family:var(--serif);font-style:italic;font-weight:400;font-size:1.12em;letter-spacing:-.02em;color:var(--accent)}
+  .tarif .bs{margin:12px 0 0;font-size:15px;line-height:1.5;color:var(--ink-2)}
+  .tarif .list{flex:1;display:flex;flex-direction:column;border-top:1px solid var(--line)}   /* les lignes se partagent la hauteur de la feuille : pas de vide sous la liste */
+  .tarif .row{position:relative;display:flex;align-items:center;gap:14px;flex:1 0 60px;padding:0 clamp(16px,2vw,28px) 0 clamp(22px,2.4vw,36px);border-bottom:1px solid var(--line);cursor:pointer;transition:background .2s var(--ease)}
+  .tarif .row:hover{background:#F8F7F2}
+  .tarif .row input{position:absolute;opacity:0;pointer-events:none}
+  .tarif .row:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:-2px}
+  .tarif .rn{flex:none;font-size:17px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--ink)}
+  .tarif .rn i{font-family:var(--serif);font-style:italic;font-weight:400;font-size:1.08em;color:var(--ink-3);margin:0 .22em}
+  .tarif .rt{min-width:0;margin-left:auto;overflow:hidden;text-overflow:ellipsis;font-size:13px;color:var(--ink-3);white-space:nowrap}
+  .tarif .t-go{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#F4F3EF;color:var(--ink);transition:background .2s var(--ease),color .2s var(--ease),transform .3s var(--out)}
+  .tarif .t-go svg,.tarif .mod svg,.tarif .chip svg{width:14px;height:14px}
+  .tarif .row:hover .t-go{background:var(--ink);color:#fff;transform:translateX(2px)}
+  .tarif .t-note{margin:0;padding:18px clamp(22px,2.4vw,36px) 22px;font-size:12.5px;color:var(--ink-3)}
+  .tarif .bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px clamp(14px,2vw,28px) 18px clamp(22px,2.4vw,36px);border-bottom:1px solid var(--line)}
+  .tarif .chip{display:inline-flex;align-items:center;gap:8px;min-width:0;height:34px;padding:0 14px 0 12px;border-radius:99px;background:#EEF5F1;color:var(--accent);font-size:14px;font-weight:620;letter-spacing:-.01em;white-space:nowrap}
+  .tarif .mod{flex:none;display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border:0;border-radius:99px;background:none;font:inherit;font-size:14px;font-weight:600;color:var(--ink-2);cursor:pointer;transition:background .2s var(--ease),color .2s var(--ease)}
+  .tarif .mod:hover{background:#F4F3EF;color:var(--ink)}
+  .tarif .t-price{padding:clamp(24px,2.6vw,32px) clamp(22px,2.4vw,36px) clamp(22px,2.4vw,28px)}
+  .tarif .lab{margin:0;font-size:12px;font-weight:620;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+  .tarif .num{margin:16px 0 0;display:flex;align-items:baseline;flex-wrap:wrap;row-gap:6px;font-size:clamp(64px,6.4vw,100px);font-weight:700;line-height:.9;letter-spacing:-.055em;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .tarif .num em{margin-left:.06em;font-family:var(--serif);font-style:italic;font-weight:400;font-size:.8em;letter-spacing:-.02em;color:var(--accent)}
+  .tarif .num small{margin-left:.55em;font-family:var(--serif);font-style:italic;font-weight:400;font-size:.26em;letter-spacing:0;color:var(--ink-2)}
+  .tarif .plus{margin:26px 0 0;padding-top:18px;border-top:1px solid var(--line);display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;font-size:15px;line-height:1.4;color:var(--ink-2)}
+  .tarif .plus b{font-size:28px;font-weight:700;letter-spacing:-.04em;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .tarif .plus b em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--accent)}
+  .tarif>.t-res{display:grid;grid-template-rows:auto 1fr auto}
+  .tarif .t-price,.tarif .bquote{grid-area:2 / 1}   /* prix et « sur devis » dans la même case : la feuille ne change pas de hauteur */
+  .tarif .bquote{visibility:hidden;padding:clamp(30px,3vw,40px) clamp(22px,2.4vw,36px) clamp(30px,3vw,40px)}
+  .tarif .bquote .sf{margin:0;font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(56px,5.4vw,76px);line-height:1;letter-spacing:-.015em;color:var(--accent)}
+  .tarif .bquote p:not(.sf){margin:16px 0 0;max-width:26em;font-size:16px;line-height:1.5;color:var(--ink-2)}
+  .tarif.is-quote .t-price{visibility:hidden}
+  .tarif.is-quote .bquote{visibility:visible}
+  .tarif .incl{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px 24px;padding:22px clamp(22px,2.4vw,36px) 20px;background:#FBF9F4;border-top:1px solid var(--line)}
+  .tarif .incl b{display:block;font-size:11px;font-weight:640;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+  .tarif .incl ul{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:7px}
+  .tarif .incl li{display:flex;align-items:flex-start;gap:8px;font-size:13.5px;line-height:1.4;color:var(--ink-2)}
+  .tarif .incl li svg{flex:none;width:14px;height:14px;margin-top:2px;color:var(--accent)}
+  .tarif .incl .launch{grid-column:1 / -1;margin:0;font-size:12.5px;color:var(--ink-3)}
 
-  .pick{display:flex;flex-direction:column;align-items:flex-start;gap:14px;padding-block:clamp(20px,2vw,30px);border-bottom:1px solid var(--line)}
-  .pick p{margin:0;font-family:var(--serif);font-style:italic;font-size:clamp(19px,1rem + .45vw,23px);line-height:1.1;color:var(--accent)}
-  .seg{position:relative;display:grid;grid-template-columns:repeat(4,auto);padding:4px;border-radius:99px;background:#F1EEE6;box-shadow:inset 0 0 0 1px rgba(26,26,24,.05)}
-  .seg label{position:relative;z-index:1;display:grid;place-items:center;height:40px;padding:0 clamp(12px,1.2vw,18px);border-radius:99px;cursor:pointer;
-    font-size:14px;font-weight:600;letter-spacing:-.01em;white-space:nowrap;color:var(--ink-2);transition:color .35s var(--ease)}
-  .seg label:hover{color:var(--ink)}
-  .seg label.on{color:#fff}
-  .seg input{position:absolute;opacity:0;pointer-events:none}
-  .seg .pr{display:none}
-  .seg label:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:3px}
-  .seg .thumb{position:absolute;z-index:0;left:0;top:0;width:0;height:0;border-radius:99px;background:var(--ink);
-    box-shadow:0 10px 18px -10px rgba(26,26,24,.6);transition:transform .55s var(--out),width .55s var(--out),height .55s var(--out)}
 
   /* l'abonnement est le chiffre de la section (c'est lui qu'on paie chaque mois) ; la mise en place reste au second plan */
-  .amounts{position:relative;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);padding-inline:0}
-  .amt{padding:clamp(22px,2.4vw,36px) clamp(22px,2.4vw,36px);border-left:1px solid var(--line);transition:opacity .4s var(--ease),transform .6s var(--out),visibility 0s}
-  .amt:first-child{border-left:0}
-  .amt h3,.quote h3{margin:0;font-size:12px;font-weight:620;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
-  .amt .v{margin:10px 0 0;display:flex;align-items:baseline;gap:.1em;white-space:nowrap;
-    font-size:clamp(40px,4vw,60px);font-weight:700;line-height:1;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
-  .amt .v em{font-family:var(--serif);font-style:italic;font-weight:400;font-size:.82em;letter-spacing:-.02em;color:var(--accent)}
-  .amt .u{margin:8px 0 0;font-size:15px;color:var(--ink-2)}
-  .amt{display:flex;flex-direction:column;justify-content:flex-end}
-  .amt h3{margin-bottom:auto}
-  .amt.sub .v{margin-top:14px;font-size:clamp(60px,5.8vw,92px);line-height:.9;letter-spacing:-.06em}
-  .amt.sub .v small{margin-left:.55em;font-family:var(--serif);font-style:italic;font-weight:400;font-size:.26em;letter-spacing:0;color:var(--ink-2)}
   /* plus de 600 lots : les deux montants s'effacent, un seul message prend leur place (même hauteur, rien ne saute) */
-  .tarif.is-quote .amt{opacity:0;transform:translateY(-8px);visibility:hidden;transition:opacity .3s var(--ease),transform .5s var(--out),visibility 0s .3s}
-  .quote{position:absolute;inset:0;display:flex;align-items:center;gap:clamp(20px,2.4vw,36px);padding-inline:clamp(22px,2.4vw,36px);
-    opacity:0;transform:translateY(10px);visibility:hidden;transition:opacity .3s var(--ease),transform .5s var(--out),visibility 0s .3s}
-  .tarif.is-quote .quote{opacity:1;transform:none;visibility:visible;transition:opacity .5s var(--ease) .15s,transform .7s var(--out) .15s,visibility 0s}
-  .quote .big{flex:none;margin:0;font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(44px,4.6vw,68px);line-height:1;letter-spacing:-.02em;color:var(--accent)}
-  .quote p:not(.big){margin:0;max-width:26em;font-size:clamp(15px,.9rem + .14vw,16.5px);line-height:1.5;color:var(--ink-2)}
 
-  .foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 28px;padding-block:clamp(16px,1.7vw,24px);border-top:1px solid var(--line);background:#FBF9F4}
-  .foot p{margin:0;flex:1 1 320px;font-size:clamp(14.5px,.88rem + .1vw,15.5px);line-height:1.5;color:var(--ink-2);text-wrap:pretty}
-  .foot p b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
-  .tarif.is-quote .foot .perlot{display:none}
   .js .reveal .pp{opacity:0;transform:translateY(34px)}
   .js .reveal.in .pp{opacity:1;transform:none;animation:rise-pp 1.1s var(--out) .15s both}   /* état final explicite : visible même si l'animation ne joue pas */
   @keyframes rise-pp{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:none}}
@@ -739,25 +753,8 @@
   .rule-line b{color:var(--ink);font-weight:650;letter-spacing:-.01em}
   .rule-line b::before{content:"";display:inline-block;width:7px;height:7px;margin:0 9px 2px 0;border-radius:50%;background:var(--accent)}
   /* tarif : six tranches sur deux rangées de trois */
-  .seg{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;border-radius:20px;padding:5px;width:100%;box-sizing:border-box}
-  .seg label,.seg .thumb{border-radius:15px}
-  .seg label{height:42px;padding:0 8px}
-  .amt.sub .v{flex-wrap:wrap;row-gap:4px;font-size:clamp(56px,5.2vw,82px)}
-  .foot.incl{display:grid;gap:10px}
-  .foot.incl p{flex:none;font-size:clamp(13.5px,.82rem + .1vw,14.5px);line-height:1.5}
-  .foot.incl p b{display:block;margin-bottom:2px;font-size:11.5px;font-weight:650;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
-  .foot.incl .launch{font-size:12.5px;color:var(--ink-3)}
   /* tarif : tant qu'aucune tranche n'est choisie, pas de montant ; une invitation à choisir */
-  .amounts .empty{display:none}
-  .tarif.is-empty .amounts .empty{display:flex;align-items:center;gap:14px;grid-column:1 / -1;min-height:clamp(120px,11vw,150px);padding:clamp(22px,2.4vw,36px);box-sizing:border-box}
-  .tarif.is-empty .amounts .amt{display:none}
-  .amounts .empty svg{flex:none;width:34px;height:34px;padding:8px;box-sizing:border-box;border-radius:50%;background:#EEF5F1;color:var(--accent);animation:nudge 1.8s var(--ease) infinite}
-  @keyframes nudge{0%,100%{transform:none}50%{transform:translateY(-3px)}}
-  .amounts .empty p{margin:0;font-size:clamp(16px,.95rem + .25vw,19px);line-height:1.4;color:var(--ink-2);text-wrap:balance}
-  .amounts .empty em{font-family:var(--serif);font-style:italic;font-size:1.12em;color:var(--accent)}
   /* à la première sélection, les montants arrivent en fondu */
-  .tarif.just-picked .amt{animation:amt-in .6s var(--out) both}
-  @keyframes amt-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
   /* rythme commun : l'étiquette de section, puis le titre 22 px plus bas, dans toutes les sections */
   .how .head .k,.faq .lead .k.eyebrow{margin-bottom:22px}
   .pp .say .k + h2,.book .say .k + h2,.about .k + h2{margin-top:22px}
@@ -839,28 +836,20 @@
     .portrait{max-width:520px}
     .about .bio>p:not(.k):not(.pull):not(.sign){font-size:16px;line-height:1.5}
     .about .pull{font-size:clamp(20px,5.6vw,24px)}
-    .pick{align-items:stretch}
     .pp{padding:var(--sec) calc(var(--pad) - var(--frame));row-gap:0}   /* même marge haute que les autres panneaux */
     .pp .sheetwrap{margin-top:28px}
     /* téléphone : le sélecteur en 2 × 2, cases égales, la pastille noire glisse de l'une à l'autre ; le grand chiffre reste */
-    .seg{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;padding:5px;border-radius:20px;width:100%;box-sizing:border-box}
-    .seg label{height:46px;padding:0 10px;border-radius:15px;font-size:14.5px}
-    .seg .thumb{border-radius:15px}
-    .amt.sub .v small{font-size:.3em}
     /* la mise en place au second plan : un cran plus petite que l'abonnement, sur la même ligne que sa légende */
-    .amt:not(.sub){flex-direction:row;flex-wrap:wrap;justify-content:flex-start;align-items:baseline;column-gap:12px;padding-block:18px}
-    .amt:not(.sub) h3{width:100%;margin-bottom:6px}
-    .amt:not(.sub) .v{margin:0;font-size:32px}
-    .amt:not(.sub) .u{margin:0;font-size:14px}
-    .amounts{grid-template-columns:minmax(0,1fr)}
-    .amt{border-left:0;border-top:1px solid var(--line)}
-    .amt:first-child{border-top:0}
-    .amt.sub .v{font-size:clamp(56px,16vw,80px)}
     .pp .say h2{font-size:clamp(30px,8.4vw,40px)}
+    /* tarif téléphone : lignes un peu plus serrées, ce qui est compris sur une seule colonne */
+    .tarif .row{flex-basis:58px}
+    .tarif .rn{font-size:16.5px}
+    .tarif .bq{font-size:clamp(26px,7.4vw,30px)}
+    .tarif .num{font-size:clamp(60px,19vw,80px)}
+    .tarif .num small{flex-basis:100%;margin:10px 0 0;font-size:.3em}   /* « HT par mois » toujours dessous : même hauteur quelle que soit la tranche */
+    .tarif .plus b{font-size:24px}
+    .tarif .incl{grid-template-columns:minmax(0,1fr);gap:18px}
     /* téléphone : le message remplace les montants au lieu de les recouvrir */
-    .tarif.is-quote .amt{display:none}
-    .quote{position:static;display:none;flex-direction:column;align-items:flex-start;gap:12px;padding-block:24px}
-    .tarif.is-quote .quote{display:flex}
     /* téléphone : les capsules du bureau, empilées et toutes ouvertes. Le grand numéro fin passe au-dessus,
        tout le texte prend la pleine largeur (plus de retrait), les trois points gardent coches et filets. */
     .how{margin-top:var(--gap)}
@@ -930,14 +919,13 @@
     .cta{width:100%;justify-content:center}
   }
   @media (prefers-reduced-motion:reduce){
-    .amounts .empty svg,.tarif.just-picked .amt{animation:none}
+    .tarif>.t-ask,.tarif>.t-res{transition:none!important}
     html{scroll-behavior:auto}
     .js .reveal .calbox{opacity:1;transform:none;transition:none}
     .js .reveal .qa{opacity:1;transform:none;transition:none}
     .qa .ans,.qa .ans p,.qa button i,.qa button i::before,.qa button i::after{transition:none}
     .js .reveal .portrait,.js .reveal .portrait img{clip-path:none;transform:none;transition:none}
     .js .reveal .pp,.js .reveal.in .pp,.js .reveal .sheetwrap{opacity:1;transform:none;translate:0 0;transition:none;animation:none}
-    .seg .thumb,.seg label,.amt,.quote{transition:none!important}
     .js .reveal .cap,.js .reveal.in .cap,.cap,.cap .big,.cap .x,.cap .mini,.cap .go{opacity:1!important;transform:none!important;transition:none}
     .js .reveal [data-r],.js .reveal.in [data-r],.js .reveal .plate,.js .reveal .plate li,.js .reveal .plate h3,.js .reveal .seam{opacity:1;transform:none;scale:1;clip-path:none;transition:none}
     .js .reveal h2 .w>span{transform:none;transition:none}
@@ -1208,29 +1196,35 @@
           <small>30 minutes en visio, sans engagement.</small>
         </div>
         <div class="sheetwrap">
-      <div class="tarif is-empty">
-        <div class="pick">
-          <p id="pick-l">Combien de lots gérez-vous ?</p>
-          <div class="seg" id="seg" role="radiogroup" aria-labelledby="pick-l">
-            <span class="thumb" aria-hidden="true"></span>
-            <label><input type="radio" name="lots" value="0"><span class="rg">100 à 199 lots</span></label>
-            <label><input type="radio" name="lots" value="1"><span class="rg">200 à 399 lots</span></label>
-            <label><input type="radio" name="lots" value="2"><span class="rg">400 à 699 lots</span></label>
-            <label><input type="radio" name="lots" value="3"><span class="rg">700 à 999 lots</span></label>
-            <label><input type="radio" name="lots" value="4"><span class="rg">1 000 à 1 499 lots</span></label>
-            <label><input type="radio" name="lots" value="5"><span class="rg">1 500 lots et plus</span></label>
+      <div class="tarif">
+        <div class="t-ask">
+          <div class="top">
+            <h3 class="bq" id="pick-l">Combien de lots <em>gérez-vous ?</em></h3>
+            <p class="bs">Votre tarif s’affiche aussitôt. Sans formulaire, sans adresse e-mail.</p>
           </div>
+          <div class="list" id="seg" role="radiogroup" aria-labelledby="pick-l">
+            <label class="row" data-r="100 à 199 lots"><input type="radio" name="lots" value="0"><span class="rn">100<i>à</i>199</span><span class="rt">lots</span><span class="t-go"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
+            <label class="row" data-r="200 à 399 lots"><input type="radio" name="lots" value="1"><span class="rn">200<i>à</i>399</span><span class="rt">lots</span><span class="t-go"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
+            <label class="row" data-r="400 à 699 lots"><input type="radio" name="lots" value="2"><span class="rn">400<i>à</i>699</span><span class="rt">lots</span><span class="t-go"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
+            <label class="row" data-r="700 à 999 lots"><input type="radio" name="lots" value="3"><span class="rn">700<i>à</i>999</span><span class="rt">lots</span><span class="t-go"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
+            <label class="row" data-r="1 000 à 1 499 lots"><input type="radio" name="lots" value="4"><span class="rn">1 000<i>à</i>1 499</span><span class="rt">lots</span><span class="t-go"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
+            <label class="row" data-r="1 500 lots et plus"><input type="radio" name="lots" value="5"><span class="rn">1 500<i>et</i>plus</span><span class="rt">lots, sur devis</span><span class="t-go"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
+          </div>
+          <p class="t-note">Tarifs de lancement, hors taxes.</p>
         </div>
-        <div class="amounts" id="amounts" aria-live="polite">
-          <div class="empty"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 13V3M4 7l4-4 4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><p>Choisissez votre nombre de lots, <em>votre tarif s’affiche ici.</em></p></div>
-          <div class="amt sub"><h3>Exploitation Darlia</h3><p class="v"><span data-k="sub">590</span><em>€</em><small>HT par mois</small></p></div>
-          <div class="amt"><h3>Déploiement Darlia</h3><p class="v"><span data-k="setup">3 500</span><em>€</em></p><p class="u">HT, une seule fois</p></div>
-          <div class="quote"><p class="big">Sur devis</p><p>À cette taille, le prix se calcule ensemble, sur votre portefeuille réel. Le Dali, lui, reste le même.</p></div>
-        </div>
-        <div class="foot incl">
-          <p><b>Le déploiement comprend</b> l’audit, l’intégration, le paramétrage, la configuration de vos procédures et de l’assistant, la formation et la phase de rodage.</p>
-          <p><b>L’exploitation comprend</b> la plateforme, l’hébergement, l’assistant et ses coûts d’utilisation, la supervision, le support, la maintenance, les ajustements et les évolutions.</p>
-          <p class="launch">Tarifs de lancement, hors taxes.</p>
+        <div class="t-res" id="amounts" aria-live="polite">
+          <div class="bar"><span class="chip"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-k="range">200 à 399 lots</span></span><button type="button" class="mod" id="mod"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13 8H3M7 4L3 8l4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier</button></div>
+          <div class="t-price">
+            <h3 class="lab">Exploitation Darlia</h3>
+            <p class="num"><span data-k="sub">590</span><em>€</em><small>HT par mois</small></p>
+            <p class="plus"><span>Et une seule fois,</span><b><span data-k="setup">3 500</span><em> €</em></b><span>HT pour le déploiement Darlia.</span></p>
+          </div>
+          <div class="bquote"><p class="sf">Sur devis</p><p>À cette taille, le prix se calcule ensemble, sur votre portefeuille réel. Parlons-en pendant la démonstration.</p></div>
+          <div class="incl">
+            <div><b>Le déploiement comprend</b><ul><li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>L’audit et l’intégration</li><li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Le paramétrage de vos procédures</li><li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>La formation et le rodage</li></ul></div>
+            <div><b>L’exploitation comprend</b><ul><li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>La plateforme et l’hébergement</li><li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>L’assistant et la supervision</li><li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Le support et les évolutions</li></ul></div>
+            <p class="launch">Tarifs de lancement, hors taxes.</p>
+          </div>
         </div>
       </div>
         </div>
@@ -1511,32 +1505,31 @@
     /* le texte reste « 30 » tant que le décompte n'a pas démarré ; il part juste avant que la colonne n'apparaisse */
     how.querySelectorAll('[data-count]').forEach((el) => setTimeout(() => count(el), 2400)); }), {threshold:.3}).observe(how);
 
-  /* Tarif : on choisit la taille du portefeuille, les montants suivent. */
+  /* Tarif : une question d'abord (combien de lots ?), puis le prix de la tranche ; « Modifier » ramène à la question. */
   const seg = $('#seg');
   if (seg) {
     /* tarifs de lancement (HT) : déploiement une fois, exploitation par mois ; null = sur devis. À modifier ici. */
     const GRID = [{setup:2500, sub:390}, {setup:3500, sub:590}, {setup:5000, sub:890}, {setup:7000, sub:1290}, {setup:9000, sub:1690}, null];
-    const labels = [...seg.querySelectorAll('label')], thumb = $('.thumb', seg), box = $('#amounts');
-    const sheet = seg.closest('.tarif'), v = (k) => $('[data-k="' + k + '"]', sheet); /* les valeurs vivent dans toute la feuille, pas seulement dans les montants */
+    const sheet = seg.closest('.tarif'), v = (k) => $('[data-k="' + k + '"]', sheet), mod = $('#mod', sheet);
+    const radios = [...seg.querySelectorAll('input')];
     const fr = (n) => Math.round(n).toLocaleString('fr-FR').replace(/[\s\u00a0\u202f]/g, '\u00a0');
     const now = {setup:0, sub:0};
-    const place = () => { const l = seg.querySelector('label.on'); if (!l) return;
-      thumb.style.width = l.offsetWidth + 'px'; thumb.style.height = l.offsetHeight + 'px';
-      thumb.style.transform = 'translate(' + l.offsetLeft + 'px,' + l.offsetTop + 'px)'; };
     const roll = (k, to) => { const el = v(k), from = now[k] || 0, t0 = performance.now(); now[k] = to;
-      if (still) { el.textContent = fr(to); return; }
+      if (still || from === to) { el.textContent = fr(to); return; }
       const tick = (t) => { const p = Math.min(1, (t - t0) / 650), e = 1 - Math.pow(1 - p, 4);
         if (now[k] !== to) return; el.textContent = fr(from + (to - from) * e); if (p < 1) requestAnimationFrame(tick); };
       requestAnimationFrame(tick);
       /* filet de sécurité : onglet en arrière-plan ou animation bridée, la bonne valeur s'affiche quand même */
       setTimeout(() => { if (now[k] === to) el.textContent = fr(to); }, 760); };
-    const pick = (n) => { labels.forEach((l, k) => l.classList.toggle('on', k === n)); place(); const g = GRID[n];
-      if (sheet.classList.contains('is-empty')) { sheet.classList.remove('is-empty'); sheet.classList.add('just-picked'); setTimeout(() => sheet.classList.remove('just-picked'), 700); }
-      seg.closest('.tarif').classList.toggle('is-quote', !g); if (!g) return;
-      roll('setup', g.setup); roll('sub', g.sub); };
-    seg.addEventListener('change', (e) => pick(+e.target.value));
-    new ResizeObserver(place).observe(seg); place();
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+    const show = (n) => { const g = GRID[n];
+      v('range').textContent = radios[n].closest('label').dataset.r;
+      sheet.classList.add('is-set'); sheet.classList.toggle('is-quote', !g);
+      if (g) { roll('setup', g.setup); roll('sub', g.sub); }
+      mod.focus({preventScroll:true}); };
+    /* « click » plutôt que « change » : retoucher la tranche déjà cochée ramène aussi au prix */
+    seg.addEventListener('click', (e) => { const i = e.target.closest('input'); if (i) show(+i.value); });
+    mod.addEventListener('click', () => { sheet.classList.remove('is-set');
+      const c = radios.find((r) => r.checked) || radios[0]; c.focus({preventScroll:true}); });
   }
 
   /* Questions : une seule réponse ouverte à la fois. */
