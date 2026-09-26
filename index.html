@@ -364,6 +364,26 @@
   .ui .lead{margin:12px 0 4px;font-size:clamp(17px,1rem + .4vw,21px);font-weight:620;letter-spacing:-.028em;line-height:1.2}
   .ui .lead span{color:#8A8983;font-weight:500}
 
+  /* la plateforme : une dernière carte sur toute la largeur, sous les quatre autres, même matière qu'elles */
+  .deck{position:relative;isolation:isolate;overflow:hidden;margin-top:clamp(14px,1.4vw,22px);display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);
+    column-gap:clamp(28px,3.6vw,64px);border-radius:clamp(22px,2.2vw,34px);padding:clamp(30px,3.4vw,52px) 0 0 clamp(26px,3vw,48px);background:#FEFDFB;
+    box-shadow:0 0 0 .5px rgba(26,26,24,.10),inset 0 1px 0 #fff,0 50px 90px -50px rgba(40,60,70,.45),0 14px 30px -20px rgba(40,60,70,.25)}
+  .deck-say{align-self:center;padding-bottom:clamp(30px,3.4vw,52px)}
+  .deck h3{margin:0;font-size:clamp(26px,1.25rem + 1.15vw,40px);font-weight:700;letter-spacing:-.038em;line-height:1.05;text-wrap:balance}
+  .deck h3 em{font-family:var(--serif);font-style:italic;font-weight:400;font-size:1.08em;letter-spacing:-.02em;color:var(--accent)}
+  .deck-say>p:not(.deck-k){margin:14px 0 0;max-width:30em;font-size:clamp(15px,.9rem + .16vw,17px);line-height:1.5;color:var(--ink-2);text-wrap:pretty}
+  .deck-k{margin:clamp(24px,2.6vw,34px) 0 0;font-size:11.5px;font-weight:620;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+  .deck-tools{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+  .deck-tools li{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 13px 0 11px;border-radius:99px;background:#F4F3EF;
+    box-shadow:inset 0 0 0 1px rgba(26,26,24,.04);font-size:13.5px;font-weight:590;letter-spacing:-.01em;color:var(--ink);white-space:nowrap}
+  .deck-tools svg{flex:none;width:15px;height:15px;color:var(--accent)}
+  /* l'écran : une fenêtre posée dans le coin, coupée par le bord droit et le bas de la carte */
+  .deck-win{align-self:end;margin:0;overflow:hidden;border-radius:14px 0 0 0;background:#fff;
+    box-shadow:0 0 0 .5px rgba(26,26,24,.14),0 40px 80px -30px rgba(40,60,70,.45),0 10px 24px -14px rgba(40,60,70,.28)}
+  .deck-bar{position:relative;display:flex;align-items:center;gap:7px;height:32px;padding:0 14px;background:#F4F3EF;border-bottom:1px solid #E8E7E1}
+  .deck-bar i{width:10px;height:10px;border-radius:50%;background:#DEDCD5}
+  .deck-bar span{position:absolute;left:0;right:0;text-align:center;font-size:12px;font-weight:600;color:#8A8983;pointer-events:none}
+  .deck-win img{display:block;width:100%;height:auto}
   .gains .dots{display:none}
   .gains .fine{margin:clamp(18px,1.8vw,26px) 0 0;font-size:var(--micro);color:var(--ink-2)}
   .js .reveal .gain{opacity:0;transform:translateY(34px)}
@@ -897,6 +917,14 @@
     .gain .ui .row .pill{grid-column:1 / -1;justify-self:start}
     .gain>p:not(.k){font-size:15.5px}
     .gains .fine{margin-top:14px}
+    /* la plateforme sur téléphone : le texte, puis l'écran recadré sur Dali (la barre latérale sort à gauche) */
+    .deck{grid-template-columns:minmax(0,1fr);row-gap:26px;margin-top:18px;padding:26px 0 0 22px}
+    .deck-say{padding:0 22px 0 0}
+    .deck h3{font-size:clamp(24px,6.6vw,30px)}
+    .deck-say>p:not(.deck-k){font-size:15.5px}
+    .deck-tools{gap:7px}
+    .deck-tools li{height:32px;padding:0 11px 0 10px;font-size:13px}
+    .deck-win img{width:125%;max-width:none;margin-left:-25%}
     /* téléphone : les trois chiffres sur une rangée, compacts */
     .proofs ul{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
     .proofs li,.proofs li:first-child{display:block;padding:0 0 0 10px;border-left:1px solid var(--line)}
@@ -1122,6 +1150,20 @@
         </li>
       </ol>
       <div class="dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
+      <!-- La plateforme : une dernière carte sur toute la largeur. Le texte et les outils reliés à gauche,
+           l'écran d'accueil de l'app (Dali y travaille) à droite, qui déborde du bord et du bas de la carte. -->
+      <div class="deck">
+        <div class="deck-say">
+          <h3>Une seule plateforme pour tout piloter. <em>L’assistant travaille dedans.</em></h3>
+          <p><span class="d">Demandes, interventions, loyers, documents : tout se suit au même endroit. Vous voyez à tout moment ce que Dali a fait, ce qu’il fait, et ce qui attend votre décision.</span><span class="m">Tout se suit au même endroit : ce que Dali a fait, et ce qui attend votre décision.</span></p>
+          <p class="deck-k">Relié à vos outils</p>
+          <ul class="deck-tools"><li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 14V3.5h6V14M9 6.5h4V14M5 6h2M5 8.5h2M5 11h2M11 9h0M11 11.5h0M2 14h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Votre logiciel de gestion</li><li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2" y="3.5" width="12" height="9" rx="1.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.5 4.5 8 9l5.5-4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Email</li><li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4.5 2.5h2l1 3-1.5 1a7 7 0 0 0 3.5 3.5l1-1.5 3 1v2a1.5 1.5 0 0 1-1.5 1.5A10.5 10.5 0 0 1 3 4a1.5 1.5 0 0 1 1.5-1.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Téléphone</li><li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2.5a5.5 5.5 0 0 0-4.7 8.4L2.5 13.5l2.7-.8A5.5 5.5 0 1 0 8 2.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>WhatsApp</li><li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2.5" y="3.5" width="11" height="10" rx="1.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.5 6.5h11M5.5 2v3M10.5 2v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Agenda</li><li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2.5 13.5c2-1 3-3.5 4.5-3.5s.5 2.5 2 2.5 2-1.5 4.5-1.5M10 2.5l3 3-5.5 5.5H4.5V8Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Signature électronique</li></ul>
+        </div>
+        <figure class="deck-win">
+          <div class="deck-bar" aria-hidden="true"><i></i><i></i><i></i><span>Darlia</span></div>
+          <img src="assets/app-accueil.webp" width="2400" height="1500" loading="lazy" decoding="async" alt="L’accueil de Darlia : Dali, votre assistant, a traité 14 demandes ce matin et suit une intervention en cours ; quatre décisions vous attendent.">
+        </figure>
+      </div>
       <p class="fine">Écrans de l’application de démonstration. Agence, biens et montants fictifs.</p>
     </div>
   </section>
