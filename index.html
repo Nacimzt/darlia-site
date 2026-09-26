@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Darlia · L’assistant de gestion locative</title>
-<meta name="description" content="Dali répond à vos locataires par email, téléphone et WhatsApp, ouvre les demandes d’intervention, relance les loyers en retard et range chaque échange dans le bon dossier. Jour et nuit. En poste en 30 jours.">
+<meta name="description" content="Darlia est la plateforme opérationnelle des agences de gestion locative, avec un assistant intégré qui exécute les tâches répétitives. Darlia exécute, votre équipe décide. En poste dans 30 jours.">
 <meta name="theme-color" content="#E9E2CC">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -734,6 +734,19 @@
     .pp .say{display:contents}
     .pp .say .k{order:0}.pp .say h2{order:1}.pp .say>p:not(.k){order:2}.pp .sheetwrap{order:3}.pp .say a{order:4;margin-top:22px}.pp .say small{order:5;margin-top:12px;text-align:center}
   }
+  /* hero : le principe, juste sous la phrase qui dit ce qu'est Darlia */
+  .rule-line{margin:14px 0 0;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;font-size:clamp(15px,.9rem + .25vw,18px);line-height:1.4;color:var(--ink-2)}
+  .rule-line b{color:var(--ink);font-weight:650;letter-spacing:-.01em}
+  .rule-line b::before{content:"";display:inline-block;width:7px;height:7px;margin:0 9px 2px 0;border-radius:50%;background:var(--accent)}
+  /* tarif : six tranches sur deux rangées de trois */
+  .seg{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;border-radius:20px;padding:5px;width:100%;box-sizing:border-box}
+  .seg label,.seg .thumb{border-radius:15px}
+  .seg label{height:42px;padding:0 8px}
+  .amt.sub .v{flex-wrap:wrap;row-gap:4px;font-size:clamp(56px,5.2vw,82px)}
+  .foot.incl{display:grid;gap:10px}
+  .foot.incl p{flex:none;font-size:clamp(13.5px,.82rem + .1vw,14.5px);line-height:1.5}
+  .foot.incl p b{display:block;margin-bottom:2px;font-size:11.5px;font-weight:650;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+  .foot.incl .launch{font-size:12.5px;color:var(--ink-3)}
   /* rythme commun : l'étiquette de section, puis le titre 22 px plus bas, dans toutes les sections */
   .how .head .k,.faq .lead .k.eyebrow{margin-bottom:22px}
   .pp .say .k + h2,.book .say .k + h2,.about .k + h2{margin-top:22px}
@@ -942,7 +955,7 @@
     <a href="#comment">Mise en place</a>
     <a href="#tarif">Tarif</a>
   </nav>
-  <a class="go2" href="#reserver">Réserver une démo <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  <a class="go2" href="#reserver">Demander une démo <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
 </header>
 
 <main>
@@ -951,9 +964,10 @@
     <div class="shell" id="heroShell">
       <div class="copy">
         <h1 id="title" aria-label="L’assistant de gestion locative que vous n’arrivez pas à recruter.">L’assistant de gestion locative <em>que vous n’arrivez pas à recruter.</em></h1>
-        <p class="lede" data-in style="--t:620ms">Dali répond à vos locataires par email, téléphone et WhatsApp, ouvre les demandes d’intervention, relance les loyers en retard et range chaque échange dans le bon dossier. <b>Jour et nuit. En poste en 30 jours.</b></p>
+        <p class="lede" data-in style="--t:620ms">Darlia est la plateforme opérationnelle de votre agence, avec un assistant intégré qui exécute les tâches répétitives à la place de votre équipe.</p>
+        <p class="rule-line" data-in style="--t:700ms"><b>Darlia exécute. Votre équipe décide.</b> <span>En poste dans 30 jours.</span></p>
         <div class="go" data-in style="--t:760ms" id="demo">
-          <a class="cta" href="#reserver">Réserver une démo
+          <a class="cta" href="#reserver">Demander une démonstration
             <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
           <span class="note">30 minutes en visio, sans engagement.</span>
@@ -981,7 +995,7 @@
               <div class="row" data-on="true"><span class="ok"><svg viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>Demande analysée</b><span>Fuite sous l’évier · 24 rue de Rivoli</span></div><time>09:42</time></div>
               <div class="row"><span class="ok"><svg viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>Plombier missionné</b><span>Plomberie Dupont · samedi matin</span></div><time>09:44</time></div>
               <div class="row"><span class="ok"><svg viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>Locataire prévenu</b><span>Thomas Martin a confirmé samedi</span></div><time>09:47</time></div>
-              <div class="row"><span class="ok"><svg viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>Loyer relancé</b><span>Marc Bernard · 1 340 € · 2e relance</span></div><time>10:02</time></div>
+              <div class="row"><span class="ok"><svg viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>Loyer relancé</b><span>Marc Bernard · 1 340 € · 2e relance</span></div><time>10:02</time></div>
             </div>
           </div>
         </div>
@@ -993,19 +1007,19 @@
        clients anonymisés par métier et ville. Ne pas y mettre de chiffre inventé. -->
   <section class="proofs" id="preuves" aria-labelledby="preuves-t">
     <div class="shell">
-      <h2 id="preuves-t" hidden>Ce que Dali change pour votre agence</h2>
+      <h2 id="preuves-t" hidden>Darlia en bref</h2>
       <ul>
         <li style="--n:0">
-          <p class="fig" aria-label="plus 25 pour cent"><span data-count="25" data-pre="+">+25</span><em>%</em></p>
-          <p class="what">d’honoraires par gestionnaire</p>
+          <p class="fig" aria-label="30 jours"><span data-count="30">30</span><em> jours</em></p>
+          <p class="what">pour mettre Darlia en poste dans votre agence</p>
         </li>
         <li style="--n:1">
-          <p class="fig" aria-label="8 sur 10"><span data-count="8">8</span><em> sur 10</em></p>
-          <p class="what">demandes traitées seul par Dali</p>
+          <p class="fig" aria-label="24 heures sur 24"><span data-count="24">24</span><em> h/24</em></p>
+          <p class="what">les demandes des locataires prises en charge, même le dimanche</p>
         </li>
         <li style="--n:2">
-          <p class="fig" aria-label="5 minutes"><span data-count="5">5</span><em> min</em></p>
-          <p class="what">pour répondre à un locataire, même le dimanche</p>
+          <p class="fig" aria-label="3 canaux"><span data-count="3">3</span><em> canaux</em></p>
+          <p class="what">email, téléphone et WhatsApp, réunis au même endroit</p>
         </li>
       </ul>
     </div>
@@ -1017,7 +1031,7 @@
       <div class="head">
         <p class="k eyebrow">Solution</p>
         <h2 id="shift-t" data-split aria-label="Vos gestionnaires ne manquent pas de talent. Ils manquent de temps.">Vos gestionnaires ne manquent pas de talent. <em>Ils manquent de temps.</em></h2>
-        <p data-r style="--r:3"><span class="d">Darlia place dans votre agence un assistant numérique, Dali. Il absorbe ce qui dévore les journées de vos gestionnaires : demandes de locataires, relances, suivi des interventions. Ils retrouvent leur métier, vous gardez les décisions, et vous pouvez prendre plus de lots sans recruter.</span><span class="m">Darlia place Dali, un assistant numérique, dans votre agence. Il absorbe demandes, relances et suivi. Vous gardez les décisions.</span></p>
+        <p data-r style="--r:3"><span class="d">Le problème n’est pas leur compétence, c’est le volume. Darlia intègre un assistant, Dali, qui prend en charge le travail répétitif : demandes de locataires, relances, suivi des interventions. Vos gestionnaires retrouvent leur métier.</span><span class="m">Le problème, c’est le volume. Dali, l’assistant de Darlia, prend le travail répétitif. Vos gestionnaires retrouvent leur métier.</span></p>
       </div>
       <div class="diptych" id="duo">
         <article class="plate was">
@@ -1053,13 +1067,13 @@
     <div class="shell">
       <div class="head">
         <p class="k eyebrow">Ce que vous y gagnez</p>
-        <h2 id="gains-t" data-split aria-label="Ce que votre agence y gagne, concrètement.">Ce que votre agence y gagne, <em>concrètement.</em></h2>
-        <p data-r style="--r:3"><span class="d">Dali travaille pour vos locataires. Mais c’est votre agence qui change : sa capacité, ses mandats, son équipe, ses encaissements.</span><span class="m">Ce qui change pour votre agence.</span></p>
+        <h2 id="gains-t" data-split aria-label="Darlia ajoute une capacité opérationnelle à votre agence.">Darlia ajoute une capacité opérationnelle <em>à votre agence.</em></h2>
+        <p data-r style="--r:3"><span class="d">Concrètement, voici le travail que Darlia absorbe chaque jour à la place de votre équipe.</span><span class="m">Le travail que Darlia absorbe chaque jour.</span></p>
       </div>
       <ol>
         <li class="gain" style="--n:0">
-          <h3>Plus de lots par gestionnaire</h3>
-          <p><span class="d">Le portefeuille grandit sans ouvrir de poste : les demandes, les relances et le suivi ne passent plus par vos gestionnaires.</span><span class="m">Le portefeuille grandit sans ouvrir de poste.</span></p>
+          <h3>Les demandes des locataires</h3>
+          <p><span class="d">Chaque demande est prise en charge et suivie jusqu’au bout, par email, téléphone ou WhatsApp.</span><span class="m">Chaque demande prise en charge, jusqu’au bout.</span></p>
           <div class="stack"><div class="ui" aria-hidden="true">
             <div style="--q:0" class="bar"><b>Portefeuille · Sophie Martin</b><span>Demandes en cours</span></div>
             <div style="--q:1" class="row"><div><b>24 rue de Rivoli</b><small>SCI Rivoli Patrimoine · 12 lots · 12 / 12 loués</small></div><span class="num">3</span><span class="pill"><i></i>Suivies par Dali</span></div>
@@ -1070,8 +1084,8 @@
           </div></div>
         </li>
         <li class="gain" style="--n:1">
-          <h3>Des mandats qui restent</h3>
-          <p><span class="d">Un propriétaire bien informé ne va pas voir ailleurs. Le compte rendu de gérance est prêt chaque mois, et il part dès votre relecture.</span><span class="m">Le compte rendu de gérance part chaque mois, relu par vous.</span></p>
+          <h3>Les comptes rendus et les documents</h3>
+          <p><span class="d">Comptes rendus de gérance, attestations, pièces à classer : préparés par Darlia, relus par vous avant envoi.</span><span class="m">Préparés par Darlia, relus par vous avant envoi.</span></p>
           <div class="stack"><div class="ui" aria-hidden="true">
             <div style="--q:0" class="bar"><b>Compte rendu de gérance</b><span class="pill warn"><i></i>À relire</span></div>
             <p style="--q:1" class="lead">SCI Rivoli Patrimoine <span>· août 2026</span></p>
@@ -1085,8 +1099,8 @@
           </div></div>
         </li>
         <li class="gain" style="--n:2">
-          <h3>Une équipe qui tient</h3>
-          <p><span class="d">Vos gestionnaires ne voient plus que ce qui demande une décision. Moins de soirées à rattraper les messages, et ils restent.</span><span class="m">Vos gestionnaires ne voient que ce qui demande une décision.</span></p>
+          <h3>Les interventions et les prestataires</h3>
+          <p><span class="d">Ouverture de l’intervention, contact du prestataire, suivi des devis. Au-delà de vos seuils, la décision vous revient.</span><span class="m">Devis et prestataires suivis. Au-delà de vos seuils, vous décidez.</span></p>
           <div class="stack"><div class="ui" aria-hidden="true">
             <div style="--q:0" class="bar"><b>À valider</b><span>4 décisions</span></div>
             <p style="--q:1" class="lead">14 demandes traitées ce matin. <span>Il vous en reste quatre.</span></p>
@@ -1096,8 +1110,8 @@
           </div></div>
         </li>
         <li class="gain" style="--n:3">
-          <h3>Des loyers qui rentrent</h3>
-          <p><span class="d">Chaque retard est relancé au bon moment, sans oubli. Des encaissements réguliers pour vos propriétaires, et pour vos honoraires.</span><span class="m">Chaque retard est relancé au bon moment.</span></p>
+          <h3>Les relances de loyers</h3>
+          <p><span class="d">Chaque retard est relancé au bon moment et sur le bon ton, jusqu’à l’encaissement.</span><span class="m">Chaque retard relancé au bon moment.</span></p>
           <div class="stack"><div class="ui" aria-hidden="true">
             <div style="--q:0" class="bar"><b>Loyers · septembre</b><span>Relances gérées par Dali</span></div>
             <div style="--q:1" class="row"><div><b>Thomas Martin</b><small>24 rue de Rivoli · Apt 3B</small></div><span class="num">1 480 €</span><span class="pill"><i></i>Encaissé le 3</span></div>
@@ -1113,9 +1127,9 @@
   </section>
   <!-- Comment ça marche : les trente jours du héros, en quatre étapes datées.
        Le découpage en semaines est une proposition à faire valider par Nacim. -->
-  <section class="say-big" aria-label="Un assistant de gestion coûte environ 3 000 € par mois chargé, sans compter les mois de recrutement et de formation. Dali commence à 490 €.">
+  <section class="say-big" aria-label="Aujourd’hui, pour gérer plus de lots, vous recrutez. Un salaire de plus. Des semaines pour trouver la bonne personne. Des mois pour la former. Avec Darlia, vous ajoutez une capacité opérationnelle à votre agence, sans agrandir immédiatement votre équipe.">
     <div class="shell">
-      <p id="saybig" aria-hidden="true">Un assistant de gestion coûte environ 3 000 € par mois chargé, sans compter les mois de recrutement et de formation. <em>Dali commence à 490 €.</em></p>
+      <p id="saybig" aria-hidden="true">Aujourd’hui, pour gérer plus de lots, vous recrutez. Un salaire de plus. Des semaines pour trouver la bonne personne. Des mois pour la former. <em>Avec Darlia, vous ajoutez une capacité opérationnelle à votre agence, sans agrandir immédiatement votre équipe.</em></p>
     </div>
   </section>
   <section class="how reveal" id="comment" aria-labelledby="how-t">
@@ -1125,44 +1139,44 @@
           <p class="k">Mise en place</p>
           <h2 id="how-t" data-split aria-label="Un assistant en poste dans votre agence en trente jours.">Un assistant en poste dans votre agence <em>en trente jours.</em></h2>
         </div>
-        <p data-r style="--r:4"><span class="d">Quatre étapes, aucun projet informatique. Voici comment Dali prend son poste chez vous.</span><span class="m">Quatre étapes, aucun projet informatique.</span></p>
+        <p data-r style="--r:4"><span class="d">Darlia apprend vos procédures, exécute les tâches répétitives et vous laisse la main sur les décisions importantes.</span><span class="m">Darlia apprend vos procédures, exécute le répétitif, vous laisse les décisions.</span></p>
       </div>
       <ol class="caps" id="steps">
         <li class="cap on" style="--n:0">
           <button type="button" aria-expanded="true">
             <span class="big" aria-hidden="true">01</span>
-            <span class="txt"><span class="t">On regarde votre agence</span><span class="x"><span>Une visio avec Nacim pour comprendre comment votre agence tourne aujourd’hui.</span></span></span>
+            <span class="txt"><span class="t">Darlia comprend votre organisation</span><span class="x"><span>Vos outils, vos procédures, vos règles et vos méthodes de travail.</span></span></span>
             <span class="go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M4 12 12 4M6 4h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <span class="mini pts"><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Votre portefeuille et votre équipe</span></span><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Les outils que vous utilisez</span></span><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Ce qui déborde, et ce que Dali peut reprendre</span></span></span>
+            <span class="mini pts"><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Votre logiciel de gestion et votre messagerie</span></span><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Vos procédures et vos modèles de courrier</span></span><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Ce qui déborde aujourd’hui</span></span></span>
           </button>
         </li>
         <li class="cap" style="--n:1">
           <button type="button" aria-expanded="false">
             <span class="big" aria-hidden="true">02</span>
-            <span class="txt"><span class="t">On connecte Dali à vos outils</span><span class="x"><span>On le branche sur ce que vous utilisez déjà. Vous ne changez rien à vos habitudes.</span></span></span>
+            <span class="txt"><span class="t">Darlia exécute le travail</span><span class="x"><span>Demandes locataires, relances, interventions, suivi et autres tâches répétitives.</span></span></span>
             <span class="go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M4 12 12 4M6 4h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <span class="mini pts"><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Votre logiciel de gestion</span></span><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Votre messagerie et vos formulaires</span></span><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Votre agenda et vos modèles de courrier</span></span></span>
+            <span class="mini pts"><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Réponses aux locataires, jour et nuit</span></span><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Relances des loyers et des prestataires</span></span><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Ouverture et suivi des interventions</span></span></span>
           </button>
         </li>
         <li class="cap" style="--n:2">
           <button type="button" aria-expanded="false">
             <span class="big" aria-hidden="true">03</span>
-            <span class="txt"><span class="t">On fixe ce qu’il décide seul</span><span class="x"><span>Ensemble, on écrit ses règles : ce qu’il traite seul, et ce qui vous revient.</span></span></span>
+            <span class="txt"><span class="t">Votre équipe garde le contrôle</span><span class="x"><span>Les actions nécessitant une décision ou une validation sont soumises à votre équipe.</span></span></span>
             <span class="go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M4 12 12 4M6 4h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <span class="mini pts"><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Les seuils de dépense, par exemple 300 €</span></span><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Le rythme des relances</span></span><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Les sujets sensibles, qu’il vous passe toujours</span></span></span>
+            <span class="mini pts"><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Des seuils de dépense fixés avec vous</span></span><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Une validation avant tout envoi sensible</span></span><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Résiliations et litiges toujours transmis</span></span></span>
           </button>
         </li>
         <li class="cap" style="--n:3">
           <button type="button" aria-expanded="false">
             <span class="big" aria-hidden="true">04</span>
-            <span class="txt"><span class="t">Il travaille, vous gardez la main</span><span class="x"><span>Il prend le quotidien en charge. Les premières semaines, rien ne part sans votre accord.</span></span></span>
+            <span class="txt"><span class="t">Darlia s’améliore avec votre agence</span><span class="x"><span>Les règles, procédures et automatisations sont ajustées au fil de l’utilisation.</span></span></span>
             <span class="go" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M4 12 12 4M6 4h6v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <span class="mini pts"><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Il répond aux locataires et relance les loyers</span></span><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Il suit les interventions jusqu’au bout</span></span><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Il vous soumet chaque décision qui compte</span></span></span>
+            <span class="mini pts"><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Des règles ajustées avec votre équipe</span></span><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>De nouvelles procédures ajoutées au fil de l’eau</span></span><span class="pt"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Suivi et ajustements compris dans l’exploitation</span></span></span>
           </button>
         </li>
       </ol>
       <p class="after" data-r style="--r:6">
-        <a href="#reserver">Réserver une démo
+        <a href="#reserver">Demander une démonstration
           <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         <span>30 minutes en visio, sans engagement.</span>
       </p>
@@ -1175,43 +1189,49 @@
       <div class="pp">
         <div class="say">
           <p class="k">Tarif</p>
-          <h2 id="price-t" data-split aria-label="Un seul abonnement. Le prix suit votre nombre de lots.">Un seul abonnement. <em>Le prix suit votre nombre de lots.</em></h2>
-          <p><span class="d">Pas de formule à options. Tout le monde a le même Dali : seul le nombre de lots que vous gérez change le prix.</span><span class="m">Une seule offre. Le nombre de lots fait le prix.</span></p>
-          <a href="#reserver">Réserver une démo
+          <h2 id="price-t" data-split aria-label="Un déploiement, puis un abonnement. Le prix suit votre nombre de lots.">Un déploiement, puis un abonnement. <em>Le prix suit votre nombre de lots.</em></h2>
+          <p><span class="d">Darlia est d’abord déployé dans votre agence, puis exploité chaque mois. Tout est compris ; seul le nombre de lots que vous gérez change le prix.</span><span class="m">Un déploiement, puis un abonnement mensuel. Le nombre de lots fait le prix.</span></p>
+          <a href="#reserver">Demander une démonstration
             <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           <small>30 minutes en visio, sans engagement.</small>
         </div>
         <div class="sheetwrap">
       <div class="tarif">
         <div class="pick">
-          <p id="pick-l">Combien de lots gérez-vous ?</p>
+          <p id="pick-l">Combien de lots gérez-vous ?</p>
           <div class="seg" id="seg" role="radiogroup" aria-labelledby="pick-l">
             <span class="thumb" aria-hidden="true"></span>
-            <label><input type="radio" name="lots" value="0"><span class="rg">100 à 150 lots</span><span class="pr">290 €<small> / mois</small></span></label>
-            <label class="on"><input type="radio" name="lots" value="1" checked><span class="rg">150 à 350 lots</span><span class="pr">490 €<small> / mois</small></span></label>
-            <label><input type="radio" name="lots" value="2"><span class="rg">350 à 600 lots</span><span class="pr">790 €<small> / mois</small></span></label>
-            <label><input type="radio" name="lots" value="3"><span class="rg">Plus de 600 lots</span><span class="pr">Sur devis</span></label>
+            <label><input type="radio" name="lots" value="0"><span class="rg">100 à 199 lots</span></label>
+            <label class="on"><input type="radio" name="lots" value="1" checked><span class="rg">200 à 399 lots</span></label>
+            <label><input type="radio" name="lots" value="2"><span class="rg">400 à 699 lots</span></label>
+            <label><input type="radio" name="lots" value="3"><span class="rg">700 à 999 lots</span></label>
+            <label><input type="radio" name="lots" value="4"><span class="rg">1 000 à 1 499 lots</span></label>
+            <label><input type="radio" name="lots" value="5"><span class="rg">1 500 lots et plus</span></label>
           </div>
         </div>
         <div class="amounts" id="amounts" aria-live="polite">
-          <div class="amt sub"><h3>Abonnement</h3><p class="v"><span data-k="sub">490</span><em>€</em><small>HT par mois</small></p></div>
-          <div class="amt"><h3>Mise en place</h3><p class="v"><span data-k="setup">3 000</span><em>€</em></p><p class="u">HT, une seule fois</p></div>
+          <div class="amt sub"><h3>Exploitation Darlia</h3><p class="v"><span data-k="sub">590</span><em>€</em><small>HT par mois</small></p></div>
+          <div class="amt"><h3>Déploiement Darlia</h3><p class="v"><span data-k="setup">3 500</span><em>€</em></p><p class="u">HT, une seule fois</p></div>
           <div class="quote"><p class="big">Sur devis</p><p>À cette taille, le prix se calcule ensemble, sur votre portefeuille réel. Le Dali, lui, reste le même.</p></div>
         </div>
-        <div class="foot">
-          <p><span class="perlot">Soit <b data-k="lot">1,40 à 3,25 €</b> par lot et par mois. </span>Tout est compris : déploiement, hébergement, maintenance et support.</p>
+        <div class="foot incl">
+          <p><b>Le déploiement comprend</b> l’audit, l’intégration, le paramétrage, la configuration de vos procédures et de l’assistant, la formation et la phase de rodage.</p>
+          <p><b>L’exploitation comprend</b> la plateforme, l’hébergement, l’assistant et ses coûts d’utilisation, la supervision, le support, la maintenance, les ajustements et les évolutions.</p>
+          <p class="launch">Tarifs de lancement, hors taxes.</p>
         </div>
       </div>
         </div>
       </div>
       <table class="sr-only">
-        <caption>Tarif de Dali selon le nombre de lots gérés, prix hors taxes</caption>
-        <thead><tr><th scope="col">Taille du portefeuille</th><th scope="col">Mise en place</th><th scope="col">Abonnement</th><th scope="col">Soit par lot et par mois</th></tr></thead>
+        <caption>Tarifs de lancement de Darlia selon le nombre de lots gérés, hors taxes</caption>
+        <thead><tr><th scope="col">Taille du portefeuille</th><th scope="col">Déploiement Darlia</th><th scope="col">Exploitation Darlia</th></tr></thead>
         <tbody>
-          <tr><th scope="row">100 à 150 lots</th><td>2 000 €</td><td>290 € par mois</td><td>1,95 à 2,90 €</td></tr>
-          <tr><th scope="row">150 à 350 lots</th><td>3 000 €</td><td>490 € par mois</td><td>1,40 à 3,25 €</td></tr>
-          <tr><th scope="row">350 à 600 lots</th><td>4 500 €</td><td>790 € par mois</td><td>1,30 à 2,25 €</td></tr>
-          <tr><th scope="row">Plus de 600 lots</th><td>Sur devis</td><td>Sur devis</td><td>Sur devis</td></tr>
+          <tr><th scope="row">100 à 199 lots</th><td>2 500 €</td><td>390 € par mois</td></tr>
+          <tr><th scope="row">200 à 399 lots</th><td>3 500 €</td><td>590 € par mois</td></tr>
+          <tr><th scope="row">400 à 699 lots</th><td>5 000 €</td><td>890 € par mois</td></tr>
+          <tr><th scope="row">700 à 999 lots</th><td>7 000 €</td><td>1 290 € par mois</td></tr>
+          <tr><th scope="row">1 000 à 1 499 lots</th><td>9 000 €</td><td>1 690 € par mois</td></tr>
+          <tr><th scope="row">1 500 lots et plus</th><td>Sur devis</td><td>Sur devis</td></tr>
         </tbody>
       </table>
     </div>
@@ -1224,9 +1244,9 @@
       </figure>
       <div class="bio">
         <p class="k">Qui est derrière</p>
-        <h2 id="about-t" data-split aria-label="Derrière l’assistant, un ancien de la gestion locative.">Derrière l’assistant, <em>un ancien de la gestion locative.</em></h2>
-        <p data-r style="--r:3">Avant Darlia, j’ai fondé une conciergerie, puis Rive Hôte, une société d’assistance pour les hôtes Airbnb et Booking. Le téléphone qui vibre à 23 h pour un code d’entrée, les mêmes questions cent fois par mois : je connais.</p>
-        <p data-r class="d" style="--r:4">L’essentiel du travail n’était que volume et répétition, et la seule réponse qu’on me proposait était d’embaucher. J’ai commencé par automatiser mon propre quotidien. Dali vient de là.</p>
+        <h2 id="about-t" data-split aria-label="Derrière l’assistant, il y a un entrepreneur qui connaît le terrain.">Derrière l’assistant, <em>un entrepreneur qui connaît le terrain.</em></h2>
+        <p data-r style="--r:3">Avant Darlia, j’ai moi-même géré une activité de location courte durée. Messages, interventions, prestataires, urgences, relances : j’ai vécu de l’intérieur les tâches opérationnelles qui s’accumulent lorsque le portefeuille grandit.</p>
+        <p data-r style="--r:4">J’ai construit Darlia à partir de ces problèmes.</p>
         <p class="pull" data-r style="--r:5">Je ne pars jamais de la technologie.<br>Je pars de votre quotidien.</p>
         <p class="sign" data-r style="--r:6"><b>Nacim Meziti</b><span>Fondateur de Darlia · Paris</span></p>
       </div>
@@ -1242,39 +1262,39 @@
       </div>
       <div class="list">
         <div class="qa" style="--n:0">
-          <h3><button type="button" aria-expanded="false" aria-controls="faq-0">Dali remplace-t-il mes gestionnaires ?<i aria-hidden="true"></i></button></h3>
-          <div class="ans" id="faq-0" role="region"><div><p>Non. Il prend ce qui les empêche de faire leur métier : les demandes des locataires, les relances, le suivi des interventions, la tenue des dossiers. Les décisions, la relation avec les propriétaires et tout ce qui demande du jugement restent chez eux.</p></div></div>
+          <h3><button type="button" aria-expanded="false" aria-controls="faq-0">Est-ce que Darlia remplace mon logiciel de gestion locative ?<i aria-hidden="true"></i></button></h3>
+          <div class="ans" id="faq-0" role="region"><div><p>Non. Darlia est une plateforme opérationnelle conçue pour travailler avec l’environnement existant de votre agence.</p></div></div>
         </div>
         <div class="qa" style="--n:1">
-          <h3><button type="button" aria-expanded="false" aria-controls="faq-1">Que fait Dali tout seul, et quand me demande-t-il ?<i aria-hidden="true"></i></button></h3>
-          <div class="ans" id="faq-1" role="region"><div><p>Il répond, relance et suit sans attendre. Dès qu’un montant dépasse le seuil que vous avez fixé, ou qu’un sujet est sensible, une résiliation par exemple, il prépare tout et vous demande. Un geste suffit pour valider.</p></div></div>
+          <h3><button type="button" aria-expanded="false" aria-controls="faq-1">Est-ce que Darlia remplace mes gestionnaires ?<i aria-hidden="true"></i></button></h3>
+          <div class="ans" id="faq-1" role="region"><div><p>Non. Darlia prend en charge une partie du travail répétitif afin que vos équipes puissent se concentrer sur les tâches nécessitant leur expertise et leur jugement.</p></div></div>
         </div>
         <div class="qa" style="--n:2">
-          <h3><button type="button" aria-expanded="false" aria-controls="faq-2">Et s’il se trompe ?<i aria-hidden="true"></i></button></h3>
-          <div class="ans" id="faq-2" role="region"><div><p>Pendant les semaines 3 et 4, rien ne part sans votre accord : c’est là qu’on corrige. Ensuite, chaque action reste tracée et relisible, et Dali vous passe la main dès qu’une situation sort de ce qu’il connaît.</p></div></div>
+          <h3><button type="button" aria-expanded="false" aria-controls="faq-2">Est-ce que l’assistant agit seul ?<i aria-hidden="true"></i></button></h3>
+          <div class="ans" id="faq-2" role="region"><div><p>Darlia peut exécuter certaines tâches automatiquement selon les règles définies avec votre agence. Les actions nécessitant une décision ou une validation restent sous le contrôle de votre équipe.</p></div></div>
         </div>
         <div class="qa" style="--n:3">
-          <h3><button type="button" aria-expanded="false" aria-controls="faq-3">Combien de temps cela me prend-il ?<i aria-hidden="true"></i></button></h3>
-          <div class="ans" id="faq-3" role="region"><div><p>Trente minutes en visio pour commencer, un point avec vos gestionnaires, puis de la relecture pendant deux semaines. Au bout de trente jours, il ne vous reste que les décisions qui comptent.</p></div></div>
+          <h3><button type="button" aria-expanded="false" aria-controls="faq-3">Combien de temps faut-il pour mettre Darlia en place ?<i aria-hidden="true"></i></button></h3>
+          <div class="ans" id="faq-3" role="region"><div><p>Le déploiement est conçu pour être opérationnel en 30 jours, sous réserve de la disponibilité des accès, données et informations nécessaires.</p></div></div>
         </div>
         <div class="qa" style="--n:4">
-          <h3><button type="button" aria-expanded="false" aria-controls="faq-4">Est-ce que cela fonctionne avec mon logiciel de gestion ?<i aria-hidden="true"></i></button></h3>
-          <div class="ans" id="faq-4" role="region"><div><p>C’est la première chose que l’on regarde ensemble pendant la visio : vos outils, et ce qu’il est possible d’y brancher proprement. Si ce n’est pas faisable chez vous, on vous le dit tout de suite.</p></div></div>
+          <h3><button type="button" aria-expanded="false" aria-controls="faq-4">Que se passe-t-il si Darlia fait une erreur ?<i aria-hidden="true"></i></button></h3>
+          <div class="ans" id="faq-4" role="region"><div><p>Les procédures sont définies avec votre équipe et les actions sensibles peuvent nécessiter une validation. Darlia est conçu pour automatiser le travail tout en conservant un contrôle humain sur les décisions importantes.</p></div></div>
         </div>
       </div>
     </div>
-    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Dali remplace-t-il mes gestionnaires ?", "acceptedAnswer": {"@type": "Answer", "text": "Non. Il prend ce qui les empêche de faire leur métier : les demandes des locataires, les relances, le suivi des interventions, la tenue des dossiers. Les décisions, la relation avec les propriétaires et tout ce qui demande du jugement restent chez eux."}}, {"@type": "Question", "name": "Que fait Dali tout seul, et quand me demande-t-il ?", "acceptedAnswer": {"@type": "Answer", "text": "Il répond, relance et suit sans attendre. Dès qu’un montant dépasse le seuil que vous avez fixé, ou qu’un sujet est sensible, une résiliation par exemple, il prépare tout et vous demande. Un geste suffit pour valider."}}, {"@type": "Question", "name": "Et s’il se trompe ?", "acceptedAnswer": {"@type": "Answer", "text": "Pendant les semaines 3 et 4, rien ne part sans votre accord : c’est là qu’on corrige. Ensuite, chaque action reste tracée et relisible, et Dali vous passe la main dès qu’une situation sort de ce qu’il connaît."}}, {"@type": "Question", "name": "Combien de temps cela me prend-il ?", "acceptedAnswer": {"@type": "Answer", "text": "Trente minutes en visio pour commencer, un point avec vos gestionnaires, puis de la relecture pendant deux semaines. Au bout de trente jours, il ne vous reste que les décisions qui comptent."}}, {"@type": "Question", "name": "Est-ce que cela fonctionne avec mon logiciel de gestion ?", "acceptedAnswer": {"@type": "Answer", "text": "C’est la première chose que l’on regarde ensemble pendant la visio : vos outils, et ce qu’il est possible d’y brancher proprement. Si ce n’est pas faisable chez vous, on vous le dit tout de suite."}}]}</script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Est-ce que Darlia remplace mon logiciel de gestion locative ?", "acceptedAnswer": {"@type": "Answer", "text": "Non. Darlia est une plateforme opérationnelle conçue pour travailler avec l’environnement existant de votre agence."}}, {"@type": "Question", "name": "Est-ce que Darlia remplace mes gestionnaires ?", "acceptedAnswer": {"@type": "Answer", "text": "Non. Darlia prend en charge une partie du travail répétitif afin que vos équipes puissent se concentrer sur les tâches nécessitant leur expertise et leur jugement."}}, {"@type": "Question", "name": "Est-ce que l’assistant agit seul ?", "acceptedAnswer": {"@type": "Answer", "text": "Darlia peut exécuter certaines tâches automatiquement selon les règles définies avec votre agence. Les actions nécessitant une décision ou une validation restent sous le contrôle de votre équipe."}}, {"@type": "Question", "name": "Combien de temps faut-il pour mettre Darlia en place ?", "acceptedAnswer": {"@type": "Answer", "text": "Le déploiement est conçu pour être opérationnel en 30 jours, sous réserve de la disponibilité des accès, données et informations nécessaires."}}, {"@type": "Question", "name": "Que se passe-t-il si Darlia fait une erreur ?", "acceptedAnswer": {"@type": "Answer", "text": "Les procédures sont définies avec votre équipe et les actions sensibles peuvent nécessiter une validation. Darlia est conçu pour automatiser le travail tout en conservant un contrôle humain sur les décisions importantes."}}]}</script>
   </section>
   <!-- Réserver : le calendrier Cal.com de Nacim (nacim-meziti-zvindl/diagnostic-ia), chargé à l'approche de la section. -->
   <section class="book reveal" id="reserver" aria-labelledby="book-t">
     <div class="shell">
       <div class="say">
-        <p class="k">Audit gratuit</p>
-        <h2 id="book-t" data-split aria-label="Découvrez ce que vous pouvez déléguer, dans un audit 100 % gratuit.">Découvrez ce que vous pouvez déléguer, <em>dans un audit 100 % gratuit.</em></h2>
-        <p data-r style="--r:3"><span class="d">Trente minutes avec Nacim, et vous repartez avec la liste exacte de ce que Dali peut vous enlever des mains dès le mois prochain.</span><span class="m">Trente minutes avec Nacim. Vous repartez avec ce que Dali peut vous enlever des mains.</span></p>
+        <p class="k">Démonstration</p>
+        <h2 id="book-t" data-split aria-label="Votre prochain gestionnaire n’a peut-être pas besoin d’être recruté.">Votre prochain gestionnaire n’a peut-être pas besoin <em>d’être recruté.</em></h2>
+        <p data-r style="--r:3">Découvrez comment Darlia peut prendre en charge une partie du travail opérationnel de votre agence.</p>
         <ol data-r style="--r:4">
           <li><i>1</i><span><b>Votre agence</b> : vos lots, vos outils, ce qui déborde.</span></li>
-          <li><i>2</i><span><b>Ce que Dali prend</b>, et ce qu’il ne prend pas.</span></li>
+          <li><i>2</i><span><b>Ce que Darlia peut prendre en charge</b>, et ce qui reste à votre équipe.</span></li>
           <li><i>3</i><span><b>Un prix et une date</b>, avant de raccrocher.</span></li>
         </ol>
         <div class="who" data-r style="--r:5">
@@ -1286,15 +1306,15 @@
         <div class="calbox" id="calbox">
           <div id="my-cal-inline-diagnostic-ia"></div>
           <div class="wait"><b>Le calendrier arrive</b><span>Quelques secondes…</span></div>
-          <p class="alt">Le calendrier ne s’affiche pas ? <a href="https://cal.com/nacim-meziti-zvindl/diagnostic-ia" target="_blank" rel="noopener">Ouvrir la page de réservation</a></p>
+          <p class="alt">Le calendrier ne s’affiche pas ? <a href="https://cal.com/nacim-meziti-zvindl/diagnostic-ia" target="_blank" rel="noopener">Ouvrir la page de réservation</a></p>
         </div>
       </div>
     </div>
   </section>
   <section class="outro" id="outro" aria-labelledby="outro-t">
     <div class="shell">
-      <h2 id="outro-t" aria-label="Votre prochain gestionnaire n’a pas besoin d’être recruté. Il peut commencer dans trente jours."><span class="l1" aria-hidden="true">Votre prochain gestionnaire n’a pas besoin d’être recruté.</span> <em aria-hidden="true">Il peut commencer dans <span class="u">trente jours.</span></em></h2>
-      <p class="go-end"><a class="cta" href="#reserver">Réserver une démo
+      <h2 id="outro-t" aria-label="Darlia exécute. Votre équipe décide."><span class="l1" aria-hidden="true">Darlia exécute.</span> <em aria-hidden="true">Votre équipe <span class="u">décide.</span></em></h2>
+      <p class="go-end"><a class="cta" href="#reserver">Demander une démonstration
         <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a></p>
     </div>
   </section>
@@ -1309,7 +1329,7 @@
       </div>
       <div class="cols">
         <div>
-          <h3>Dali</h3>
+          <h3>Plateforme</h3>
           <ul>
             <li><a href="#avant-apres">Solution</a></li>
             <li><a href="#benefices">Ce que vous y gagnez</a></li>
@@ -1322,7 +1342,7 @@
           <h3>Darlia</h3>
           <ul>
             <li><a href="#nacim">Qui est derrière</a></li>
-            <li><a href="#reserver">Audit gratuit</a></li>
+            <li><a href="#reserver">Démonstration</a></li>
             <li><a href="LINKEDIN_A_COMPLETER" target="_blank" rel="noopener">LinkedIn</a></li>
           </ul>
         </div>
@@ -1481,11 +1501,12 @@
   /* Tarif : on choisit la taille du portefeuille, les montants suivent. */
   const seg = $('#seg');
   if (seg) {
-    const GRID = [{setup:2000, sub:290, lot:['1,95','2,90']}, {setup:3000, sub:490, lot:['1,40','3,25']}, {setup:4500, sub:790, lot:['1,30','2,25']}, null];
+    /* tarifs de lancement (HT) : déploiement une fois, exploitation par mois ; null = sur devis. À modifier ici. */
+    const GRID = [{setup:2500, sub:390}, {setup:3500, sub:590}, {setup:5000, sub:890}, {setup:7000, sub:1290}, {setup:9000, sub:1690}, null];
     const labels = [...seg.querySelectorAll('label')], thumb = $('.thumb', seg), box = $('#amounts');
     const sheet = seg.closest('.tarif'), v = (k) => $('[data-k="' + k + '"]', sheet); /* les valeurs vivent dans toute la feuille, pas seulement dans les montants */
-    const fr = (n) => Math.round(n).toLocaleString('fr-FR').replace(/ | /g, ' ');
-    const now = {setup:3000, sub:490};
+    const fr = (n) => Math.round(n).toLocaleString('fr-FR').replace(/[\s\u00a0\u202f]/g, '\u00a0');
+    const now = {setup:3500, sub:590};
     const place = () => { const l = seg.querySelector('label.on'); if (!l) return;
       thumb.style.width = l.offsetWidth + 'px'; thumb.style.height = l.offsetHeight + 'px';
       thumb.style.transform = 'translate(' + l.offsetLeft + 'px,' + l.offsetTop + 'px)'; };
@@ -1498,7 +1519,7 @@
       setTimeout(() => { if (now[k] === to) el.textContent = fr(to); }, 760); };
     const pick = (n) => { labels.forEach((l, k) => l.classList.toggle('on', k === n)); place(); const g = GRID[n];
       seg.closest('.tarif').classList.toggle('is-quote', !g); if (!g) return;
-      roll('setup', g.setup); roll('sub', g.sub); v('lot').textContent = g.lot[0] + ' à ' + g.lot[1] + ' €'; };
+      roll('setup', g.setup); roll('sub', g.sub); };
     seg.addEventListener('change', (e) => pick(+e.target.value));
     new ResizeObserver(place).observe(seg); place();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
