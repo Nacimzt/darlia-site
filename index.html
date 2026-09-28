@@ -834,7 +834,9 @@
     .site-foot .cols{padding-top:0}
     .site-foot .bottom{flex-direction:column;gap:10px;margin-top:40px;font-size:12.5px}
     .site-foot ul{gap:4px}
-    .site-foot ul a,.site-foot .bottom a{display:inline-block;padding:8px 0}   /* zones de tap de 40 px */
+    .site-foot ul a,.site-foot .bottom a{display:inline-block;padding:11px 0}   /* zones de tap de 44 px */
+    .site-foot .mail{padding-block:6px 8px}
+    .book .alt a{display:inline-block;padding:10px 0}
     .site-foot .bottom span+span{gap:14px}
     .hero{min-height:0;padding-block:clamp(92px,13vh,112px) clamp(84px,20vw,110px)}
     /* premier écran sur téléphone : le titre a plus de présence, le texte respire, la fenêtre remonte */
@@ -933,6 +935,7 @@
        fragment de hauteur fixe ; ainsi rien ne dépend de la longueur des textes */
     .gains ol{align-items:stretch}
     .gain,.gain:nth-child(2),.gain:nth-child(3){grid-column:auto;flex:0 0 78vw;max-width:400px;scroll-snap-align:start;padding-bottom:22px}
+    @media (min-width:600px){.gain,.gain:nth-child(2),.gain:nth-child(3){flex:0 0 calc(50% - 7px);max-width:none}}   /* tablette : deux cartes par vue */
     .gain h3{min-height:2.3em}
     .gain>p:not(.k){min-height:3em}
     .gain .stack{margin-top:18px;flex:1}
@@ -970,6 +973,9 @@
     .feed{left:0;bottom:-34px;width:min(340px,88vw)}
   }
   @media (max-width:520px){
+    .dock{gap:10px;padding-left:max(16px,env(safe-area-inset-left))}
+    .dock a.go2{height:40px;padding:0 13px;font-size:14px;gap:6px}
+    @media (max-width:360px){.dock a.go2 .lg{display:none}.dock a.go2{text-transform:capitalize}}   /* petit iPhone : « Démo » */
     .pp .say a{width:100%;justify-content:center}
     .how .after a{width:100%;justify-content:center;white-space:nowrap;padding:0 16px;font-size:15.5px}
     .ui .bar span:not(.pill){display:none}   /* le titre du fragment suffit sur un petit écran */
@@ -1019,7 +1025,7 @@
     <a href="#comment">Mise en place</a>
     <a href="#tarif">Tarif</a>
   </nav>
-  <a class="go2" href="#reserver">Demander une démo <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  <a class="go2" href="#reserver"><span class="lg">Demander une </span>démo <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
 </header>
 
 <main>
@@ -1286,7 +1292,7 @@
             <label class="row" data-r="400 à 699 lots"><input type="radio" name="lots" value="2"><span class="rn">400<i>à</i>699</span><span class="rt">lots</span><span class="t-go"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
             <label class="row" data-r="700 à 999 lots"><input type="radio" name="lots" value="3"><span class="rn">700<i>à</i>999</span><span class="rt">lots</span><span class="t-go"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
             <label class="row" data-r="1 000 à 1 499 lots"><input type="radio" name="lots" value="4"><span class="rn">1 000<i>à</i>1 499</span><span class="rt">lots</span><span class="t-go"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
-            <label class="row" data-r="1 500 lots et plus"><input type="radio" name="lots" value="5"><span class="rn">1 500<i>et</i>plus</span><span class="rt">lots, sur devis</span><span class="t-go"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
+            <label class="row" data-r="1 500 lots et plus"><input type="radio" name="lots" value="5"><span class="rn">1 500<i>et</i>plus</span><span class="rt"><span class="d">lots, </span>sur devis</span><span class="t-go"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
           </div>
           <p class="t-note">Tarifs de lancement, hors taxes.</p>
         </div>
