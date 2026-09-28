@@ -986,6 +986,21 @@
     .ui .doc{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
     .cta{width:100%;justify-content:center}
   }
+  /* Téléphone : des apparitions courtes et légères. Un seul fondu par élément, sans découpe, sans zoom, sans lettres
+     qui montent, et des délais très courts : rien ne reste vide pendant qu'on défile, rien ne saccade. */
+  @media (max-width:960px){
+    html.js .reveal [data-r],html.js .reveal .plate,html.js .reveal .gain,html.js .reveal .qa,html.js .reveal .calbox,html.js .reveal .portrait,html.js .reveal .seam{opacity:0;transform:none;clip-path:none;scale:1;translate:0 0}
+    html.js .reveal.in [data-r],html.js .reveal.in .plate,html.js .reveal.in .gain,html.js .reveal.in .qa,html.js .reveal.in .calbox,html.js .reveal.in .portrait,html.js .reveal.in .seam{opacity:1;transform:none;clip-path:none;scale:1;translate:0 0;animation:none;transition:opacity .55s var(--ease) var(--md,0ms)}
+    html.js .reveal.in [data-r]{--md:calc(var(--r,0) * 60ms)}
+    html.js .reveal.in .gain{--md:calc(var(--n,0) * 80ms)}
+    html.js .reveal.in .qa{--md:calc(var(--n,0) * 50ms)}
+    html.js .reveal.in .plate{--md:calc(var(--t,0ms) / 6)}
+    html.js .reveal.in .calbox{--md:120ms}
+    /* ce qui est dans une carte apparaît avec elle, pas ligne par ligne */
+    html.js .reveal .ui>*,html.js .reveal.in .ui>*,html.js .reveal .plate li,html.js .reveal.in .plate li,html.js .reveal .plate h3,html.js .reveal.in .plate h3{opacity:1;transform:none;transition:none}
+    html.js .reveal h2 .w>span,html.js .reveal.in h2 .w>span{transform:none;transition:none}
+    html.js .reveal .plate>img,html.js .reveal.in .plate>img,html.js .reveal .portrait img,html.js .reveal.in .portrait img{transform:none;transition:none}
+  }
   @media (prefers-reduced-motion:reduce){
     .tarif>.t-ask,.tarif>.t-res{transition:none!important}
     html{scroll-behavior:auto}
@@ -1530,7 +1545,7 @@
   document.querySelectorAll('.reveal').forEach((sec) => {
     if (still || !('IntersectionObserver' in window)) return sec.classList.add('in');
     new IntersectionObserver((es, io) => es.forEach((e) => { if (e.isIntersecting) { io.disconnect(); sec.classList.add('in'); } }),
-      {threshold:0, rootMargin:'0px 0px -12% 0px'}).observe(sec);   /* dès que le haut entre dans l'écran : les sections hautes ne restent jamais vides à l'écran */
+      {threshold:0, rootMargin: matchMedia('(max-width:960px)').matches ? '0px 0px -6% 0px' : '0px 0px -12% 0px'}).observe(sec);   /* dès que le haut entre dans l'écran : les sections hautes ne restent jamais vides à l'écran */
   });
 
   /* La barre se densifie dès qu'on quitte le haut du héros. */
