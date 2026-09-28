@@ -1,0 +1,8 @@
+# anciennes pages du site Framer : redirection définitive vers le nouveau site
+/a-propos            /#nacim        301
+/tarifs              /#tarif        301
+/contact             /#reserver     301
+/secteurs/*          /              301
+/services/*          /#benefices    301
+/etudes-de-cas/*     /              301
+/blog/*              /              301
