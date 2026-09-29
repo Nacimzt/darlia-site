@@ -393,13 +393,34 @@
   .ui .acts u{display:grid;place-items:center;white-space:nowrap;height:32px;padding:0 16px;border-radius:8px;text-decoration:none;font-size:12.5px;font-weight:600;background:#fff;box-shadow:inset 0 0 0 1px rgba(26,26,24,.08)}
   .ui .acts u:first-child{background:#1A1A18;color:#fff}
   /* les quatre moments : un échange, un document prêt, une décision, une frise de relance */
-  .ui.chat{display:flex;flex-direction:column;align-items:flex-start}   /* chaque bulle prend la largeur de son texte */
-  .ui .msg{display:flex;flex-direction:column;gap:3px;max-width:88%;margin-top:9px}
-  .ui .msg p{margin:0;padding:9px 12px;border-radius:14px 14px 14px 4px;background:#fff;font-size:13px;line-height:1.4;box-shadow:inset 0 0 0 1px rgba(26,26,24,.06)}
-  .ui .msg time{padding-left:4px;font-size:12px;color:#8A8983}
+  /* l'échange : les bulles arrivent l'une après l'autre quand la carte apparaît, Dali « écrit » avant de répondre */
+  .ui.chat{display:flex;flex-direction:column;align-items:flex-start;padding-bottom:16px}
+  .ui .bar .wa{display:inline-block;width:8px;height:8px;margin:0 7px 1px 0;border-radius:50%;background:#25D366;vertical-align:middle}
+  .ui .msg{position:relative;display:flex;flex-direction:column;gap:4px;max-width:88%;margin-top:10px}
+  .ui .msg p{margin:0;padding:9px 13px;border-radius:16px 16px 16px 5px;background:#fff;font-size:13.5px;line-height:1.42;box-shadow:0 1px 2px rgba(26,26,24,.06),0 0 0 .5px rgba(26,26,24,.06)}
+  .ui .msg time{display:flex;align-items:center;gap:6px;padding-left:5px;font-size:12px;color:#8A8983}
   .ui .msg.dali{align-self:flex-end;align-items:flex-end}
-  .ui .msg.dali p{border-radius:14px 14px 4px 14px;background:#E6F1EA;color:#1F3D2E}
-  .ui .msg.dali time{padding:0 4px 0 0}
+  .ui .msg.dali p{border-radius:16px 16px 5px 16px;background:linear-gradient(180deg,#E9F3EC,#DFEDE4);color:#1F3D2E}
+  .ui .msg.dali time{padding:0 3px 0 0}
+  .ui .msg time .ck{width:15px;height:9px;color:#2F6B4C}
+  .ui .msg time img{width:20px;height:20px;border-radius:50%;background:#EEF5F1;object-fit:cover}
+  /* les trois points, à la place de la bulle de Dali, puis la bulle */
+  .ui .typing{position:absolute;right:0;top:0;display:flex;gap:4px;align-items:center;height:36px;padding:0 14px;border-radius:16px 16px 5px 16px;background:#E9F3EC;opacity:0}
+  .ui .typing i{width:6px;height:6px;border-radius:50%;background:#2F6B4C;opacity:.35}
+  .js .reveal .ui.chat .msg{opacity:0}
+  .js .reveal.in .ui.chat .msg{animation:bubble .55s var(--out) .35s both}   /* la première bulle attend la fin du fondu de la carte */
+  .js .reveal.in .ui.chat .msg.them:nth-of-type(2){animation-delay:.7s}
+  .js .reveal.in .ui.chat .msg.dali{animation-delay:2.2s}
+  .js .reveal.in .ui.chat .msg.dali p,.js .reveal.in .ui.chat .msg.dali time{animation:bubble .5s var(--out) 2.2s both}
+  .js .reveal.in .ui.chat .msg.dali{animation:none;opacity:1}
+  .js .reveal.in .ui.chat .typing{animation:typing 1.5s var(--ease) 1.2s both}
+  .js .reveal.in .ui.chat .typing i{animation:dot 1s ease-in-out infinite}
+  .js .reveal.in .ui.chat .typing i:nth-child(2){animation-delay:.15s}
+  .js .reveal.in .ui.chat .typing i:nth-child(3){animation-delay:.3s}
+  .js .reveal.in .ui.chat .msg.them:last-child{animation-delay:3.1s}
+  @keyframes bubble{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
+  @keyframes typing{0%{opacity:0;transform:translateY(6px)}12%,80%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-4px)}}
+  @keyframes dot{0%,60%,100%{transform:translateY(0);opacity:.35}30%{transform:translateY(-3px);opacity:1}}
   .ui .why{margin:8px 0 0;font-size:13px;line-height:1.45;color:#4F4D45}
   .ui .tl{position:relative;display:flex;gap:12px;align-items:flex-start;padding:7px 0}
   .ui .tl i{flex:none;width:10px;height:10px;margin:5px 0 0 1px;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 2px #C9C6BB}
@@ -1022,6 +1043,7 @@
     .tarif>.t-ask,.tarif>.t-res{transition:none!important}
     html{scroll-behavior:auto}
     .js .reveal .calbox{opacity:1;transform:none;transition:none}
+    .js .reveal .ui.chat .msg,.js .reveal.in .ui.chat .msg,.js .reveal.in .ui.chat .msg.dali p,.js .reveal.in .ui.chat .msg.dali time{opacity:1;animation:none}.js .reveal.in .ui.chat .typing,.js .reveal.in .ui.chat .typing i{animation:none;opacity:0}
     .js .reveal .qa{opacity:1;transform:none;transition:none}
     .qa .ans,.qa .ans p,.qa button i,.qa button i::before,.qa button i::after{transition:none}
     .js .reveal .portrait,.js .reveal .portrait img{clip-path:none;transform:none;transition:none}
@@ -1177,9 +1199,9 @@
           <h3>Les demandes des locataires</h3>
           <p><span class="d">Chaque demande est prise en charge et suivie jusqu’au bout, par email, téléphone ou WhatsApp.</span><span class="m">Chaque demande prise en charge, jusqu’au bout.</span></p>
           <div class="stack"><div class="ui chat" aria-hidden="true">
-            <div style="--q:0" class="bar"><b>WhatsApp · Thomas Martin</b><span>24 rue de Rivoli · Apt 3B</span></div>
+            <div style="--q:0" class="bar"><b><i class="wa"></i>WhatsApp · Thomas Martin</b><span>24 rue de Rivoli · Apt 3B</span></div>
             <div style="--q:1" class="msg them"><p>Bonsoir, il y a une fuite sous l’évier de la cuisine, ça coule pas mal…</p><time>22:41</time></div>
-            <div style="--q:2" class="msg dali"><p>Bonsoir Thomas, je m’en occupe. Un plombier peut passer samedi entre 9 h et 11 h, ça vous convient ?</p><time>22:43 · Dali</time></div>
+            <div style="--q:2" class="msg dali"><span class="typing"><i></i><i></i><i></i></span><p>Bonsoir Thomas, je m’en occupe. Un plombier peut passer samedi entre 9 h et 11 h, ça vous convient ?</p><time>22:43 · Dali <svg class="ck" viewBox="0 0 20 12" fill="none" aria-hidden="true"><path d="M1 6.5l3.5 3.5L11 3M7.5 10l1.5 1.5L17 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><img src="assets/dali-avatar.webp" alt="" width="96" height="96" loading="lazy"></time></div>
             <div style="--q:3" class="msg them"><p>Parfait, merci !</p><time>22:44</time></div>
           </div></div>
         </li>
