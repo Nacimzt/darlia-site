@@ -389,9 +389,26 @@
   .ui .doc div{padding:12px 14px;border-radius:10px;background:#fff}
   .ui .doc dt{font-size:12px;color:#8A8983}
   .ui .doc dd{margin:4px 0 0;font-size:clamp(18px,1rem + .5vw,24px);font-weight:620;letter-spacing:-.03em}
-  .ui .acts{display:flex;gap:8px;margin-top:12px}
-  .ui .acts u{display:grid;place-items:center;height:32px;padding:0 16px;border-radius:8px;text-decoration:none;font-size:12.5px;font-weight:600;background:#fff;box-shadow:inset 0 0 0 1px rgba(26,26,24,.08)}
+  .ui .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .ui .acts u{display:grid;place-items:center;white-space:nowrap;height:32px;padding:0 16px;border-radius:8px;text-decoration:none;font-size:12.5px;font-weight:600;background:#fff;box-shadow:inset 0 0 0 1px rgba(26,26,24,.08)}
   .ui .acts u:first-child{background:#1A1A18;color:#fff}
+  /* les quatre moments : un échange, un document prêt, une décision, une frise de relance */
+  .ui.chat{display:flex;flex-direction:column;align-items:flex-start}   /* chaque bulle prend la largeur de son texte */
+  .ui .msg{display:flex;flex-direction:column;gap:3px;max-width:88%;margin-top:9px}
+  .ui .msg p{margin:0;padding:9px 12px;border-radius:14px 14px 14px 4px;background:#fff;font-size:13px;line-height:1.4;box-shadow:inset 0 0 0 1px rgba(26,26,24,.06)}
+  .ui .msg time{padding-left:4px;font-size:12px;color:#8A8983}
+  .ui .msg.dali{align-self:flex-end;align-items:flex-end}
+  .ui .msg.dali p{border-radius:14px 14px 4px 14px;background:#E6F1EA;color:#1F3D2E}
+  .ui .msg.dali time{padding:0 4px 0 0}
+  .ui .why{margin:8px 0 0;font-size:13px;line-height:1.45;color:#4F4D45}
+  .ui .tl{position:relative;display:flex;gap:12px;align-items:flex-start;padding:7px 0}
+  .ui .tl i{flex:none;width:10px;height:10px;margin:5px 0 0 1px;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 2px #C9C6BB}
+  .ui .tl::before{content:"";position:absolute;left:5px;top:24px;bottom:-9px;width:2px;background:#E4E2DA}
+  .ui .tl:last-child::before{display:none}
+  .ui .tl b{display:block;font-size:12.5px;font-weight:590;color:#8A8983}
+  .ui .tl small{display:block;font-size:13.5px;line-height:1.35;color:#1A1A18}
+  .ui .tl.ok i{background:#2F6B4C;box-shadow:none}
+  .ui .tl.ok small{color:#2F6B4C;font-weight:600}
   .ui .lead{margin:12px 0 4px;font-size:clamp(17px,1rem + .4vw,21px);font-weight:620;letter-spacing:-.028em;line-height:1.2}
   .ui .lead span{color:#8A8983;font-weight:500}
 
@@ -947,8 +964,8 @@
     .gain h3{font-size:clamp(24px,6.6vw,30px)}
     /* téléphone : le fragment d'app montre trois lignes au plus, le reste est coupé par un fondu */
     /* le fragment d'app : la barre et deux lignes, rien d'autre */
-    .gain .ui .row:nth-child(n+4),.gain .ui .tl:nth-child(n+4),.gain .ui .doc,.gain .ui .acts{display:none}
-    .gain .ui .doc + .row{display:grid}   /* la carte « mandats » : la ligne des pièces jointes remplace la grille de chiffres */
+    .gain .ui .doc{display:none}   /* téléphone : la grille de chiffres s'efface, le reste du moment reste entier */
+    .gain .ui .msg p{font-size:13.5px}
     .gain .ui .lead{font-size:15px;margin:10px 0 2px}
     .gain .ui .row .pill{grid-column:1 / -1;justify-self:start}
     .gain>p:not(.k){font-size:15.5px}
@@ -1159,27 +1176,25 @@
         <li class="gain" style="--n:0">
           <h3>Les demandes des locataires</h3>
           <p><span class="d">Chaque demande est prise en charge et suivie jusqu’au bout, par email, téléphone ou WhatsApp.</span><span class="m">Chaque demande prise en charge, jusqu’au bout.</span></p>
-          <div class="stack"><div class="ui" aria-hidden="true">
-            <div style="--q:0" class="bar"><b>Portefeuille · Sophie Martin</b><span>Demandes en cours</span></div>
-            <div style="--q:1" class="row"><div><b>24 rue de Rivoli</b><small>SCI Rivoli Patrimoine · 12 lots · 12 / 12 loués</small></div><span class="num">3</span><span class="pill"><i></i>Suivies par Dali</span></div>
-            <div style="--q:2" class="row"><div><b>17 avenue Parmentier</b><small>SCI Parmentier Invest · 14 lots · 14 / 14 loués</small></div><span class="num">4</span><span class="pill"><i></i>Suivies par Dali</span></div>
-            <div style="--q:3" class="row"><div><b>8 rue Oberkampf</b><small>Claire Fontaine · 8 lots · 8 / 8 loués</small></div><span class="num">2</span><span class="pill"><i></i>Suivies par Dali</span></div>
-            <div style="--q:4" class="row"><div><b>52 rue du Faubourg Saint-Antoine</b><small>Henri Lasalle · 9 lots · 9 / 9 loués</small></div><span class="num">1</span><span class="pill warn"><i></i>Votre décision</span></div>
-            <div style="--q:5" class="row"><div><b>11 rue de Charonne</b><small>Nathalie Ferrand · 1 lot · loué</small></div><span class="num">0</span><span class="pill calm">À jour</span></div>
+          <div class="stack"><div class="ui chat" aria-hidden="true">
+            <div style="--q:0" class="bar"><b>WhatsApp · Thomas Martin</b><span>24 rue de Rivoli · Apt 3B</span></div>
+            <div style="--q:1" class="msg them"><p>Bonsoir, il y a une fuite sous l’évier de la cuisine, ça coule pas mal…</p><time>22:41</time></div>
+            <div style="--q:2" class="msg dali"><p>Bonsoir Thomas, je m’en occupe. Un plombier peut passer samedi entre 9 h et 11 h, ça vous convient ?</p><time>22:43 · Dali</time></div>
+            <div style="--q:3" class="msg them"><p>Parfait, merci !</p><time>22:44</time></div>
           </div></div>
         </li>
         <li class="gain" style="--n:1">
           <h3>Les comptes rendus et les documents</h3>
-          <p><span class="d">Comptes rendus de gérance, attestations, pièces à classer : préparés par Dali, relus par vous avant envoi.</span><span class="m">Préparés par Dali, relus par vous avant envoi.</span></p>
+          <p><span class="d">Comptes rendus de gérance, attestations, pièces à classer : préparés par Dali, relus par vous avant envoi.</span><span class="m">Préparés par Dali, relus par vous avant envoi.</span></p>
           <div class="stack"><div class="ui" aria-hidden="true">
-            <div style="--q:0" class="bar"><b>Compte rendu de gérance</b><span class="pill warn"><i></i>À relire</span></div>
+            <div style="--q:0" class="bar"><b>Compte rendu de gérance</b><span class="pill warn"><i></i>Prêt à relire</span></div>
             <p style="--q:1" class="lead">SCI Rivoli Patrimoine <span>· août 2026</span></p>
             <dl style="--q:2" class="doc">
-              <div><dt>Loyers encaissés</dt><dd>18 400 €</dd></div>
-              <div><dt>Impayés</dt><dd>0 €</dd></div>
+              <div><dt>Loyers encaissés</dt><dd>18 400 €</dd></div>
+              <div><dt>Impayés</dt><dd>0 €</dd></div>
               <div><dt>Interventions</dt><dd>3</dd></div>
             </dl>
-            <div style="--q:3" class="row"><div><b>Pièces jointes</b><small>Relevé de compte propriétaire · 3 factures d’intervention</small></div><span></span><span class="pill calm">4 documents</span></div>
+            <p style="--q:3" class="why">Relevé propriétaire et trois factures joints. Rien ne part sans votre relecture.</p>
             <div style="--q:4" class="acts"><u>Relire et envoyer</u><u>Modifier</u></div>
           </div></div>
         </li>
@@ -1187,22 +1202,21 @@
           <h3>Les interventions et les prestataires</h3>
           <p><span class="d">Ouverture de l’intervention, contact du prestataire, suivi des devis. Au-delà de vos seuils, la décision vous revient.</span><span class="m">Devis et prestataires suivis. Au-delà de vos seuils, vous décidez.</span></p>
           <div class="stack"><div class="ui" aria-hidden="true">
-            <div style="--q:0" class="bar"><b>À valider</b><span>4 décisions</span></div>
-            <p style="--q:1" class="lead">14 demandes traitées ce matin. <span>Il vous en reste quatre.</span></p>
-            <div style="--q:2" class="row"><div><b>Devis chauffage, 640 € TTC</b><small>Au-dessus de votre seuil de 300 €</small></div><span></span><span class="pill warn"><i></i>Validation</span></div>
-            <div style="--q:3" class="row"><div><b>Rapport mensuel, SCI Rivoli Patrimoine</b><small>Prêt à être relu</small></div><span></span><span class="pill warn"><i></i>À relire</span></div>
-            <div style="--q:4" class="row"><div><b>Résiliation, Julie Moreau</b><small>Intervention humaine requise</small></div><span></span><span class="pill alert"><i></i>Escalade</span></div>
+            <div style="--q:0" class="bar"><b>Votre décision</b><span class="pill warn"><i></i>En attente</span></div>
+            <p style="--q:1" class="lead">Devis chauffage, 640 € TTC <span>· Plomberie Dupont</span></p>
+            <p style="--q:2" class="why">Au-dessus de votre seuil de 300 €. Dali a comparé deux devis et préparé le bon de commande.</p>
+            <div style="--q:3" class="acts"><u>Valider</u><u>Voir le devis</u></div>
           </div></div>
         </li>
         <li class="gain" style="--n:3">
           <h3>Les relances de loyers</h3>
           <p><span class="d">Chaque retard est relancé au bon moment et sur le bon ton, jusqu’à l’encaissement.</span><span class="m">Chaque retard relancé au bon moment.</span></p>
           <div class="stack"><div class="ui" aria-hidden="true">
-            <div style="--q:0" class="bar"><b>Loyers · septembre</b><span>Relances gérées par Dali</span></div>
-            <div style="--q:1" class="row"><div><b>Thomas Martin</b><small>24 rue de Rivoli · Apt 3B</small></div><span class="num">1 480 €</span><span class="pill"><i></i>Encaissé le 3</span></div>
-            <div style="--q:2" class="row"><div><b>Sarah Benali</b><small>8 rue Oberkampf · Apt 12</small></div><span class="num">1 120 €</span><span class="pill"><i></i>Encaissé le 2</span></div>
-            <div style="--q:3" class="row"><div><b>Marc Bernard</b><small>17 avenue Parmentier · 14 jours de retard</small></div><span class="num">1 340 €</span><span class="pill alert"><i></i>2e relance envoyée</span></div>
-            <div style="--q:4" class="row"><div><b>Julie Moreau</b><small>52 rue du Faubourg Saint-Antoine · Studio 2C</small></div><span class="num">890 €</span><span class="pill"><i></i>Encaissé le 1er</span></div>
+            <div style="--q:0" class="bar"><b>Loyer · Marc Bernard</b><span>17 avenue Parmentier · 1 340 €</span></div>
+            <div style="--q:1" class="tl"><i></i><div><b>5 sept.</b><small>Loyer attendu, non reçu</small></div></div>
+            <div style="--q:2" class="tl"><i></i><div><b>8 sept.</b><small>Première relance envoyée par Dali</small></div></div>
+            <div style="--q:3" class="tl"><i></i><div><b>15 sept.</b><small>Deuxième relance, appel proposé</small></div></div>
+            <div style="--q:4" class="tl ok"><i></i><div><b>18 sept.</b><small>Loyer encaissé</small></div></div>
           </div></div>
         </li>
       </ol>
