@@ -1020,9 +1020,7 @@
     .gains ol{align-items:stretch}
     .gain,.gain:nth-child(2),.gain:nth-child(3){grid-column:auto;flex:0 0 78vw;max-width:400px;scroll-snap-align:start;padding-bottom:22px}
     @media (min-width:600px){.gain,.gain:nth-child(2),.gain:nth-child(3){flex:0 0 calc(50% - 7px);max-width:none}}   /* tablette : deux cartes par vue */
-    .gain h3{min-height:2.3em}
-    .gain>p:not(.k){min-height:3em}
-    .gain .stack{margin-top:18px;flex:1}
+    .gain .stack{margin-top:18px;padding-top:0;flex:1}   /* plus de hauteur réservée sous le titre : le fragment prend la place et remplit la carte */
     .gain .ui{display:flex;flex-direction:column;height:100%;min-height:172px}
     .gain .ui .row{padding:8px 0}
     .gains .dots{display:flex;justify-content:center;gap:7px;margin-top:16px}
@@ -1033,7 +1031,6 @@
     /* le fragment d'app : la barre et deux lignes, rien d'autre */
     .gain .ui .doc{display:none}   /* téléphone : la grille de chiffres s'efface, le reste du moment reste entier */
     .gain .ui .msg p{font-size:13.5px}
-    .gain .ui.chat{min-height:404px}
     .gain .ui .lead{font-size:15px;margin:10px 0 2px}
     .gain .ui .row .pill{grid-column:1 / -1;justify-self:start}
     .gain>p:not(.k){font-size:15.5px}
