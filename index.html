@@ -1029,7 +1029,13 @@
     .gain h3{font-size:clamp(24px,6.6vw,30px)}
     /* téléphone : le fragment d'app montre trois lignes au plus, le reste est coupé par un fondu */
     /* le fragment d'app : la barre et deux lignes, rien d'autre */
-    .gain .ui .doc{display:none}   /* téléphone : la grille de chiffres s'efface, le reste du moment reste entier */
+    /* téléphone : les repères en lignes (libellé à gauche, valeur à droite), rien ne se coupe */
+    .gain .ui .doc{grid-template-columns:minmax(0,1fr);gap:6px;margin:12px 0 0}
+    .gain .ui .doc div{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:8px 12px}
+    .gain .ui .doc dt{font-size:12.5px}
+    .gain .ui .doc dd{margin:0;font-size:15px;white-space:nowrap}
+    .gain .ui .acts u{flex:1 1 auto}
+    .gain .ui .why{margin-top:12px}
     .gain .ui .msg p{font-size:13.5px}
     .gain .ui .lead{font-size:15px;margin:10px 0 2px}
     .gain .ui .row .pill{grid-column:1 / -1;justify-self:start}
@@ -1294,8 +1300,9 @@
           <div class="stack"><div class="ui" aria-hidden="true">
             <div style="--q:0" class="bar"><b>Votre décision</b><span class="pill warn"><i></i>En attente</span></div>
             <p style="--q:1" class="lead">Devis chauffage, 640 € TTC<span class="sub">Plomberie Dupont · reçu ce matin</span></p>
-            <p style="--q:2" class="why">Au-dessus de votre seuil de 300 €. Dali a comparé deux devis et préparé le bon de commande.</p>
-            <div style="--q:3" class="acts"><u>Valider</u><u>Voir le devis</u></div>
+            <dl style="--q:2" class="doc"><div><dt>Votre seuil</dt><dd>300 €</dd></div><div><dt>Devis comparés</dt><dd>2</dd></div><div><dt>Passage</dt><dd>sam. 9 h</dd></div></dl>
+            <p style="--q:3" class="why">Dali a comparé les devis et préparé le bon de commande. Il attend votre feu vert.</p>
+            <div style="--q:4" class="acts"><u>Valider</u><u>Voir le devis</u></div>
           </div></div>
         </li>
         <li class="gain" style="--n:3">
