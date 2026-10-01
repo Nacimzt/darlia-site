@@ -397,7 +397,7 @@
   /* l'échange : les bulles arrivent l'une après l'autre quand la carte apparaît, Dali « écrit » avant de répondre */
   .ui .bar .ch{display:inline-block;width:8px;height:8px;margin:0 7px 1px 0;border-radius:50%;vertical-align:middle}
   .ui .bar .wa{background:#25D366}.ui .bar .em{background:#1A1A18}.ui .bar .tel{background:#2F6B4C}
-  .ui.chat{position:relative;display:flex;flex-direction:column;padding:0;min-height:344px;contain:layout paint}   /* les bulles qui bougent ne font pas repeindre la section */
+  .ui.chat{position:relative;display:flex;flex-direction:column;padding:0;min-height:260px;contain:layout paint}   /* les bulles qui bougent ne font pas repeindre la section */
   /* les onglets : trois conversations, celle qui joue est soulignée ; on peut en rejouer une */
   .ui .tabs{display:flex;gap:2px;padding:8px 10px 0;border-bottom:1px solid #E8E7E1}
   .ui .tabs button{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;height:36px;padding:0 10px;margin-bottom:-1px;border-bottom:2px solid transparent;font-size:12.5px;font-weight:600;letter-spacing:-.005em;color:#8A8983;cursor:pointer;transition:color .25s var(--ease),border-color .25s var(--ease)}
@@ -1658,6 +1658,10 @@
       ms.forEach((m, i) => setTimeout(() => { if (cur !== n) return; shift -= hs[i]; th.style.transform = 'translateY(' + Math.max(0, shift) + 'px)'; }, T[i] || 300 + i * 900));
     };
     tabs.forEach((t, i) => t.addEventListener('click', () => { clearInterval(auto); show(i); }));
+    /* la scène prend la hauteur de la plus longue conversation : rien n'est jamais coupé, quelle que soit la largeur */
+    const stage = $('.stage', chat);
+    const fit = () => { let h = 0; convos.forEach((c) => { h = Math.max(h, $('.bar', c).offsetHeight + $('.thread', c).scrollHeight + 40); }); stage.style.minHeight = h + 'px'; };
+    fit(); addEventListener('resize', fit); if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
     const forced = new URLSearchParams(location.search).get('convo');   /* ?convo=n : une seule conversation, pour les captures */
     if (forced !== null) show(+forced);
     else if (still || !('IntersectionObserver' in window)) show(0);
