@@ -1663,7 +1663,7 @@
     tabs.forEach((t, i) => t.addEventListener('click', () => { clearInterval(auto); show(i); }));
     /* la scène prend la hauteur de la plus longue conversation : rien n'est jamais coupé, quelle que soit la largeur */
     const stage = $('.stage', chat);
-    const fit = () => { chat.classList.add('measure'); let h = 1e9; convos.forEach((c) => { h = Math.min(h, $('.bar', c).offsetHeight + $('.thread', c).scrollHeight + 32); }); chat.classList.remove('measure'); stage.style.height = h + 'px'; };   /* la plus courte fait la hauteur ; les autres se coupent en haut, le fil étant ancré en bas */
+    const fit = () => { chat.classList.add('measure'); const phone = matchMedia('(max-width:960px)').matches; let h = phone ? 0 : 1e9; convos.forEach((c) => { const v = $('.bar', c).offsetHeight + $('.thread', c).scrollHeight + 32; h = phone ? Math.max(h, v) : Math.min(h, v); });   /* téléphone : la plus longue (rien de coupé) ; ordinateur : la plus courte (pas de vide) */ chat.classList.remove('measure'); stage.style.height = h + 'px'; };   /* la plus courte fait la hauteur ; les autres se coupent en haut, le fil étant ancré en bas */
     fit(); addEventListener('resize', fit); if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
     const forced = new URLSearchParams(location.search).get('convo');   /* ?convo=n : une seule conversation, pour les captures */
     if (forced !== null) show(+forced);
