@@ -410,11 +410,15 @@
   .ui .convo.out{opacity:0;transform:translateY(-16px)}   /* l'ancienne monte, la nouvelle arrive par le bas */
   .ui .convo .bar{width:100%;flex:none}
   /* le fil : ancré en bas, chaque message pousse les précédents vers le haut (décalage posé par le script) */
-  .ui .thread{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;flex:1;min-height:0;overflow:hidden;will-change:transform;transition:transform .55s var(--out)}   /* la barre reste visible, le haut du fil se coupe si besoin */
-  .ui .msg{position:relative;display:flex;flex-direction:column;gap:4px;max-width:88%;margin-top:10px}
+  .ui .thread{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;flex:1;min-height:0;overflow:hidden}
+  /* chaque message est une ligne de grille fermée (0fr) qui s'ouvre à son heure : les précédents remontent, comme dans une messagerie */
+  .ui .msg{position:relative;display:grid;grid-template-rows:0fr;max-width:88%;margin-top:0;opacity:0}
+  .ui .msg .in{min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:4px;padding-bottom:2px}
+  .ui.chat.measure .msg{grid-template-rows:1fr;margin-top:10px}
   .ui .msg p{margin:0;padding:9px 13px;border-radius:16px 16px 16px 5px;background:#fff;font-size:13.5px;line-height:1.42;box-shadow:0 1px 2px rgba(26,26,24,.06),0 0 0 .5px rgba(26,26,24,.06)}
   .ui .msg time{display:flex;align-items:center;gap:6px;padding-left:5px;font-size:12px;color:#8A8983}
-  .ui .msg.dali{align-self:flex-end;align-items:flex-end}
+  .ui .msg.dali{align-self:flex-end}
+  .ui .msg.dali .in{align-items:flex-end}
   .ui .msg.dali p{border-radius:16px 16px 5px 16px;background:linear-gradient(180deg,#E9F3EC,#DFEDE4);color:#1F3D2E}
   .ui .msg.dali time{padding:0 3px 0 0}
   .ui .msg time .ck{width:15px;height:9px;color:#2F6B4C}
@@ -422,14 +426,16 @@
   /* l'email : des feuilles pleine largeur plutôt que des bulles, avec l'objet en tête */
   .ui .convo.mail .msg{max-width:100%;width:100%}
   .ui .convo.mail .thread{align-items:stretch}
+  .ui .convo.mail .msg .in{align-items:stretch}
+  .ui .convo.mail .msg.dali time{justify-content:flex-end}
   .ui .convo.mail .msg p{border-radius:10px;padding:11px 14px}
   .ui .convo.mail .msg p b{display:block;margin-bottom:4px;font-weight:620;color:#1A1A18}
   /* les trois points, à la place de la bulle de Dali, puis la bulle */
   .ui .typing{position:absolute;right:0;top:0;display:flex;gap:4px;align-items:center;height:36px;padding:0 14px;border-radius:16px 16px 5px 16px;background:#E9F3EC;opacity:0}
   .ui .typing i{width:6px;height:6px;border-radius:50%;background:#2F6B4C;opacity:.35}
-  .ui .convo .msg,.ui .convo .msg.dali p,.ui .convo .msg.dali time{opacity:0}
-  .ui .convo.on .msg{animation:bubble .55s var(--out) .35s both}
-  .ui .convo.on .msg.dali{animation:none;opacity:1}
+  .ui .convo .msg.dali p,.ui .convo .msg.dali time{opacity:0}
+  .ui .convo.on .msg{animation:grow-msg .55s var(--out) .35s both}
+  .ui .convo.on .msg.dali{animation-delay:1.15s}   /* la ligne de Dali s'ouvre quand il commence à écrire */
   .ui .convo.on .msg.dali p,.ui .convo.on .msg.dali time{animation:bubble .5s var(--out) 2.2s both}
   .ui .convo.on .typing{animation:typing 1.5s var(--ease) 1.2s both}
   .ui .convo.on .typing i{animation:dot 1s ease-in-out 1.2s 2}   /* deux cycles pendant la saisie, puis plus rien ne tourne */
@@ -454,6 +460,7 @@
   @keyframes step{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
   @keyframes grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
   @keyframes pop{0%{transform:scale(.3);background:#fff;box-shadow:inset 0 0 0 2px #C9C6BB}60%{transform:scale(1.35)}100%{transform:scale(1);background:#2F6B4C;box-shadow:none}}
+  @keyframes grow-msg{from{grid-template-rows:0fr;margin-top:0;opacity:0}to{grid-template-rows:1fr;margin-top:10px;opacity:1}}
   @keyframes bubble{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
   @keyframes typing{0%{opacity:0;transform:translateY(6px)}12%,80%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-4px)}}
   @keyframes dot{0%,60%,100%{transform:translateY(0);opacity:.35}30%{transform:translateY(-3px);opacity:1}}
@@ -1081,8 +1088,8 @@
     .tarif>.t-ask,.tarif>.t-res{transition:none!important}
     html{scroll-behavior:auto}
     .js .reveal .calbox{opacity:1;transform:none;transition:none}
-    .js .reveal .ui.tlbox .tl,.js .reveal.in .ui.tlbox .tl,.ui.tlbox.on .tl,.ui.tlbox.on .tl.ok i{opacity:1;animation:none}.ui.tlbox.on .amt,.ui.tlbox.on .amt::after{animation:none;background:#EEF5F1;color:#2F6B4C;font-weight:600}.ui .convo,.ui .convo.on,.ui .thread{transition:none;transform:none}.ui.tlbox .tl::before,.ui.tlbox.on .tl::before{transform:none;animation:none}
-    .ui .convo .msg,.ui .convo .msg.dali p,.ui .convo .msg.dali time,.ui .convo.on .msg,.ui .convo.on .msg.dali p,.ui .convo.on .msg.dali time{opacity:1;animation:none}.ui .typing,.ui .convo.on .typing i{animation:none;opacity:0}
+    .js .reveal .ui.tlbox .tl,.js .reveal.in .ui.tlbox .tl,.ui.tlbox.on .tl,.ui.tlbox.on .tl.ok i{opacity:1;animation:none}.ui.tlbox.on .amt,.ui.tlbox.on .amt::after{animation:none;background:#EEF5F1;color:#2F6B4C;font-weight:600}.ui .convo,.ui .convo.on{transition:none;transform:none}.ui .msg,.ui .convo.on .msg{grid-template-rows:1fr;margin-top:10px;opacity:1;animation:none}.ui.tlbox .tl::before,.ui.tlbox.on .tl::before{transform:none;animation:none}
+    .ui .convo .msg.dali p,.ui .convo .msg.dali time,.ui .convo.on .msg.dali p,.ui .convo.on .msg.dali time{opacity:1;animation:none}.ui .typing,.ui .convo.on .typing i{animation:none;opacity:0}
     .js .reveal .qa{opacity:1;transform:none;transition:none}
     .qa .ans,.qa .ans p,.qa button i,.qa button i::before,.qa button i::after{transition:none}
     .js .reveal .portrait,.js .reveal .portrait img{clip-path:none;transform:none;transition:none}
@@ -1243,25 +1250,25 @@
             <div class="convo">
               <div class="bar"><b><i class="ch wa"></i>WhatsApp · Thomas Martin</b><span>Locataire · 24 rue de Rivoli</span></div>
               <div class="thread">
-              <div class="msg them"><p>Bonsoir, il y a une fuite sous l’évier de la cuisine, ça coule pas mal…</p><time>Dimanche · 22:41</time></div>
-              <div class="msg dali"><span class="typing"><i></i><i></i><i></i></span><p>Bonsoir Thomas, je m’en occupe. Un plombier peut passer samedi entre 9 h et 11 h, ça vous convient ?</p><time>22:43 · Dali <svg class="ck" viewBox="0 0 20 12" fill="none" aria-hidden="true"><path d="M1 6.5l3.5 3.5L11 3M7.5 10l1.5 1.5L17 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><img src="assets/dali-avatar.webp" alt="" width="128" height="128" loading="lazy"></time></div>
-              <div class="msg them"><p>Parfait, merci !</p><time>22:44</time></div>
+              <div class="msg them"><div class="in"><p>Bonsoir, il y a une fuite sous l’évier de la cuisine, ça coule pas mal…</p><time>Dimanche · 22:41</time></div></div>
+              <div class="msg dali"><span class="typing"><i></i><i></i><i></i></span><div class="in"><p>Bonsoir Thomas, je m’en occupe. Un plombier peut passer samedi entre 9 h et 11 h, ça vous convient ?</p><time>22:43 · Dali <svg class="ck" viewBox="0 0 20 12" fill="none" aria-hidden="true"><path d="M1 6.5l3.5 3.5L11 3M7.5 10l1.5 1.5L17 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><img src="assets/dali-avatar.webp" alt="" width="128" height="128" loading="lazy"></time></div></div>
+              <div class="msg them"><div class="in"><p>Parfait, merci !</p><time>22:44</time></div></div>
               </div>
             </div>
             <div class="convo mail">
               <div class="bar"><b><i class="ch em"></i>Email · Henri Lasalle</b><span>Propriétaire · 52 rue du Faubourg Saint-Antoine</span></div>
               <div class="thread">
-              <div class="msg them"><p><b>Objet : loyer de septembre</b>Bonjour, où en est le loyer de M. Bernard ?<span class="d"> Je n’ai rien vu passer sur mon relevé.</span></p><time>08:52</time></div>
-              <div class="msg dali"><span class="typing"><i></i><i></i><i></i></span><p>Bonjour Monsieur Lasalle, le loyer de septembre a été encaissé le 18, après deux relances. Votre relevé est à jour, il est joint.</p><time>08:55 · Dali <svg class="ck" viewBox="0 0 20 12" fill="none" aria-hidden="true"><path d="M1 6.5l3.5 3.5L11 3M7.5 10l1.5 1.5L17 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><img src="assets/dali-avatar.webp" alt="" width="128" height="128" loading="lazy"></time></div>
-              <div class="msg them"><p>Merci, c’est parfait.</p><time>09:10</time></div>
+              <div class="msg them"><div class="in"><p><b>Objet : loyer de septembre</b>Bonjour, où en est le loyer de M. Bernard ?<span class="d"> Je n’ai rien vu passer sur mon relevé.</span></p><time>08:52</time></div></div>
+              <div class="msg dali"><span class="typing"><i></i><i></i><i></i></span><div class="in"><p>Bonjour Monsieur Lasalle, le loyer de septembre a été encaissé le 18, après deux relances. Votre relevé est à jour, il est joint.</p><time>08:55 · Dali <svg class="ck" viewBox="0 0 20 12" fill="none" aria-hidden="true"><path d="M1 6.5l3.5 3.5L11 3M7.5 10l1.5 1.5L17 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><img src="assets/dali-avatar.webp" alt="" width="128" height="128" loading="lazy"></time></div></div>
+              <div class="msg them"><div class="in"><p>Merci, c’est parfait.</p><time>09:10</time></div></div>
               </div>
             </div>
             <div class="convo">
               <div class="bar"><b><i class="ch tel"></i>Téléphone · Nathalie Ferrand</b><span>Locataire · 11 rue de Charonne</span></div>
               <div class="thread">
-              <div class="msg them"><p>Bonjour, je n’ai toujours pas reçu ma quittance de septembre, j’en ai besoin pour la CAF.</p><time>Message vocal · 09:12</time></div>
-              <div class="msg dali"><span class="typing"><i></i><i></i><i></i></span><p>Bonjour Madame Ferrand, votre quittance de septembre vient de vous être envoyée par email. Bonne journée.</p><time>SMS · 09:14 · Dali <svg class="ck" viewBox="0 0 20 12" fill="none" aria-hidden="true"><path d="M1 6.5l3.5 3.5L11 3M7.5 10l1.5 1.5L17 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><img src="assets/dali-avatar.webp" alt="" width="128" height="128" loading="lazy"></time></div>
-              <div class="msg them"><p>Reçue, merci beaucoup.</p><time>09:20</time></div>
+              <div class="msg them"><div class="in"><p>Bonjour, je n’ai toujours pas reçu ma quittance de septembre, j’en ai besoin pour la CAF.</p><time>Message vocal · 09:12</time></div></div>
+              <div class="msg dali"><span class="typing"><i></i><i></i><i></i></span><div class="in"><p>Bonjour Madame Ferrand, votre quittance de septembre vient de vous être envoyée par email. Bonne journée.</p><time>SMS · 09:14 · Dali <svg class="ck" viewBox="0 0 20 12" fill="none" aria-hidden="true"><path d="M1 6.5l3.5 3.5L11 3M7.5 10l1.5 1.5L17 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><img src="assets/dali-avatar.webp" alt="" width="128" height="128" loading="lazy"></time></div></div>
+              <div class="msg them"><div class="in"><p>Reçue, merci beaucoup.</p><time>09:20</time></div></div>
               </div>
             </div>
             </div>
@@ -1639,28 +1646,21 @@
     proofs.querySelectorAll('[data-count]').forEach((el, n) => setTimeout(() => count(el), n * 110));
   }), {threshold:.35}).observe(proofs);
 
-  /* Les conversations de la première carte : WhatsApp, email, téléphone, une fois chacune ; les onglets permettent d'en rejouer une.
-     Le fil est ancré en bas : avant qu'un message n'apparaisse, le fil est décalé vers le bas de sa hauteur, puis il remonte. */
+  /* Les conversations de la première carte : WhatsApp, email, téléphone, une fois chacune ; les onglets permettent d'en rejouer une. */
   const chat = $('.ui.chat');
   if (chat) {
     const convos = [...chat.querySelectorAll('.convo')], tabs = [...chat.querySelectorAll('.tabs button')];
     let cur = -1, auto = null;
-    const T = [300, 1150, 3050];   /* instants où chaque message pousse le fil (même rythme que les bulles) */
     const show = (n) => {
       cur = n;
       convos.forEach((c, i) => { c.classList.toggle('out', c.classList.contains('on') && i !== n); c.classList.toggle('on', i === n); });
       tabs.forEach((t, i) => t.setAttribute('aria-pressed', String(i === n)));
       setTimeout(() => convos.forEach((c) => c.classList.remove('out')), 650);
-      const th = $('.thread', convos[n]), ms = [...th.children], hs = ms.map((m) => m.offsetHeight + 10);
-      let shift = hs.reduce((a, b) => a + b, 0);
-      if (still) { th.style.transform = ''; return; }
-      th.style.transition = 'none'; th.style.transform = 'translateY(' + shift + 'px)'; void th.offsetWidth; th.style.transition = '';
-      ms.forEach((m, i) => setTimeout(() => { if (cur !== n) return; shift -= hs[i]; th.style.transform = 'translateY(' + Math.max(0, shift) + 'px)'; }, T[i] || 300 + i * 900));
     };
     tabs.forEach((t, i) => t.addEventListener('click', () => { clearInterval(auto); show(i); }));
     /* la scène prend la hauteur de la plus longue conversation : rien n'est jamais coupé, quelle que soit la largeur */
     const stage = $('.stage', chat);
-    const fit = () => { let h = 0; convos.forEach((c) => { h = Math.max(h, $('.bar', c).offsetHeight + $('.thread', c).scrollHeight + 40); }); stage.style.minHeight = h + 'px'; };
+    const fit = () => { chat.classList.add('measure'); let h = 0; convos.forEach((c) => { h = Math.max(h, $('.bar', c).offsetHeight + $('.thread', c).scrollHeight + 40); }); chat.classList.remove('measure'); stage.style.minHeight = h + 'px'; };
     fit(); addEventListener('resize', fit); if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
     const forced = new URLSearchParams(location.search).get('convo');   /* ?convo=n : une seule conversation, pour les captures */
     if (forced !== null) show(+forced);
