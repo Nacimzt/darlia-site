@@ -428,6 +428,18 @@
   /* la carte se révèle comme les autres ; à l'intérieur, ce sont les conversations qui gèrent leur apparition */
   .js .reveal .ui.chat>*,.js .reveal.in .ui.chat>*{opacity:0;transform:none;transition:opacity .45s var(--ease)}
   .js .reveal .ui.chat>.on,.js .reveal.in .ui.chat>.on{opacity:1}
+  /* la frise de relance : les étapes arrivent une à une, le fil se trace, le dernier point se remplit */
+  .js .reveal .ui.tlbox .tl,.js .reveal.in .ui.tlbox .tl{opacity:0;transform:none;transition:none}
+  .ui.tlbox .tl::before{transform:scaleY(0);transform-origin:top}
+  .ui.tlbox.on .tl{animation:step .5s var(--out) both}
+  /* la barre est le premier enfant : les étapes sont les 2e à 5e */
+  .ui.tlbox.on .tl:nth-child(2){animation-delay:.3s}.ui.tlbox.on .tl:nth-child(3){animation-delay:1.1s}.ui.tlbox.on .tl:nth-child(4){animation-delay:1.9s}.ui.tlbox.on .tl:nth-child(5){animation-delay:2.8s}
+  .ui.tlbox.on .tl::before{animation:grow .7s var(--out) both}
+  .ui.tlbox.on .tl:nth-child(2)::before{animation-delay:.6s}.ui.tlbox.on .tl:nth-child(3)::before{animation-delay:1.4s}.ui.tlbox.on .tl:nth-child(4)::before{animation-delay:2.2s}
+  .ui.tlbox.on .tl.ok i{animation:pop .6s cubic-bezier(.2,1.5,.4,1) 3.1s both}
+  @keyframes step{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @keyframes grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+  @keyframes pop{0%{transform:scale(.3);background:#fff;box-shadow:inset 0 0 0 2px #C9C6BB}60%{transform:scale(1.35)}100%{transform:scale(1);background:#2F6B4C;box-shadow:none}}
   @keyframes bubble{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
   @keyframes typing{0%{opacity:0;transform:translateY(6px)}12%,80%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-4px)}}
   @keyframes dot{0%,60%,100%{transform:translateY(0);opacity:.35}30%{transform:translateY(-3px);opacity:1}}
@@ -1054,6 +1066,7 @@
     .tarif>.t-ask,.tarif>.t-res{transition:none!important}
     html{scroll-behavior:auto}
     .js .reveal .calbox{opacity:1;transform:none;transition:none}
+    .js .reveal .ui.tlbox .tl,.js .reveal.in .ui.tlbox .tl,.ui.tlbox.on .tl,.ui.tlbox.on .tl.ok i{opacity:1;animation:none}.ui.tlbox .tl::before,.ui.tlbox.on .tl::before{transform:none;animation:none}
     .ui .convo .msg,.ui .convo .msg.dali p,.ui .convo .msg.dali time,.ui .convo.on .msg,.ui .convo.on .msg.dali p,.ui .convo.on .msg.dali time{opacity:1;animation:none}.ui .typing,.ui .convo.on .typing i{animation:none;opacity:0}
     .js .reveal .qa{opacity:1;transform:none;transition:none}
     .qa .ans,.qa .ans p,.qa button i,.qa button i::before,.qa button i::after{transition:none}
@@ -1258,7 +1271,7 @@
         <li class="gain" style="--n:3">
           <h3>Les relances de loyers</h3>
           <p><span class="d">Chaque retard est relancé au bon moment et sur le bon ton, jusqu’à l’encaissement.</span><span class="m">Chaque retard relancé au bon moment.</span></p>
-          <div class="stack"><div class="ui" aria-hidden="true">
+          <div class="stack"><div class="ui tlbox" aria-hidden="true">
             <div style="--q:0" class="bar"><b>Loyer · Marc Bernard</b><span>17 avenue Parmentier · 1 340 €</span></div>
             <div style="--q:1" class="tl"><i></i><div><b>5 sept.</b><small>Loyer attendu, non reçu</small></div></div>
             <div style="--q:2" class="tl"><i></i><div><b>8 sept.</b><small>Première relance envoyée par Dali</small></div></div>
@@ -1611,6 +1624,14 @@
     if (forced !== null) { k = +forced; show(); }
     else if (still || !('IntersectionObserver' in window)) show();
     else new IntersectionObserver((es, io) => { if (!es[0].isIntersecting) return; io.disconnect(); setTimeout(() => { show(); setInterval(show, 7600); }, 500); }, {threshold:.4}).observe(chat);
+  }
+
+  /* La frise de relance rejoue au même rythme que les conversations. */
+  const tlbox = $('.ui.tlbox');
+  if (tlbox) {
+    const play = () => { tlbox.classList.remove('on'); void tlbox.offsetWidth; tlbox.classList.add('on'); };
+    if (still || !('IntersectionObserver' in window) || new URLSearchParams(location.search).has('convo')) tlbox.classList.add('on');
+    else new IntersectionObserver((es, io) => { if (!es[0].isIntersecting) return; io.disconnect(); setTimeout(() => { play(); setInterval(play, 7600); }, 500); }, {threshold:.4}).observe(tlbox);
   }
 
   /* Les sections suivantes montent à l'entrée dans l'écran. */
