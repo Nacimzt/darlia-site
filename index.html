@@ -397,7 +397,7 @@
   /* l'échange : les bulles arrivent l'une après l'autre quand la carte apparaît, Dali « écrit » avant de répondre */
   .ui .bar .ch{display:inline-block;width:8px;height:8px;margin:0 7px 1px 0;border-radius:50%;vertical-align:middle}
   .ui .bar .wa{background:#25D366}.ui .bar .em{background:#1A1A18}.ui .bar .tel{background:#2F6B4C}
-  .ui.chat{position:relative;display:flex;flex-direction:column;padding:0;min-height:260px;contain:layout paint}   /* les bulles qui bougent ne font pas repeindre la section */
+  .ui.chat{position:relative;display:flex;flex-direction:column;padding:0;min-height:260px;contain:layout paint;background:#F8F7F3}   /* les bulles qui bougent ne font pas repeindre la section */
   /* les onglets : trois conversations, celle qui joue est soulignée ; on peut en rejouer une */
   .ui .tabs{display:flex;gap:2px;padding:8px 10px 0;border-bottom:1px solid #E8E7E1}
   .ui .tabs button{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;height:36px;padding:0 10px;margin-bottom:-1px;border-bottom:2px solid transparent;font-size:12.5px;font-weight:600;letter-spacing:-.005em;color:#8A8983;cursor:pointer;transition:color .25s var(--ease),border-color .25s var(--ease)}
@@ -405,12 +405,12 @@
   .ui .tabs button[aria-pressed="true"]{color:#1A1A18;border-bottom-color:#2F6B4C}
   .ui .tabs button:focus-visible{outline:2px solid #2F6B4C;outline-offset:-2px;border-radius:6px}
   .ui .stage{position:relative;flex:1;min-height:0}
-  .ui .convo{position:absolute;inset:0;display:flex;flex-direction:column;padding:14px 18px 16px;overflow:hidden;opacity:0;transform:translateY(18px);transition:opacity .45s var(--ease),transform .6s var(--out)}
+  .ui .convo{position:absolute;inset:0;display:flex;flex-direction:column;padding:14px 18px 14px;overflow:hidden;opacity:0;transform:translateY(18px);transition:opacity .45s var(--ease),transform .6s var(--out)}
   .ui .convo.on{opacity:1;transform:none}
   .ui .convo.out{opacity:0;transform:translateY(-16px)}   /* l'ancienne monte, la nouvelle arrive par le bas */
   .ui .convo .bar{width:100%;flex:none}
   /* le fil : ancré en bas, chaque message pousse les précédents vers le haut (décalage posé par le script) */
-  .ui .thread{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;flex:1;min-height:0;overflow:hidden}
+  .ui .thread{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;flex:1;min-height:0;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 22px);mask-image:linear-gradient(180deg,transparent 0,#000 22px)}
   /* chaque message est une ligne de grille fermée (0fr) qui s'ouvre à son heure : les précédents remontent, comme dans une messagerie */
   .ui .msg{position:relative;display:grid;grid-template-rows:0fr;max-width:88%;margin-top:0;opacity:0}
   .ui .msg .in{min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:4px;padding-bottom:2px}
@@ -476,6 +476,9 @@
   .ui .tl.ok small{color:#2F6B4C;font-weight:600}
   .ui .lead{margin:12px 0 4px;font-size:clamp(17px,1rem + .4vw,21px);font-weight:620;letter-spacing:-.028em;line-height:1.2}
   .ui .lead span{color:#8A8983;font-weight:500}
+  .ui .lead .sub{display:block;margin-top:4px;font-size:13.5px;font-weight:500;letter-spacing:0}
+  .gain .ui:not(.chat):not(.tlbox){display:flex;flex-direction:column}
+  .gain .ui .acts{margin-top:auto;padding-top:14px}
 
   /* la plateforme : une dernière carte sur toute la largeur, sous les quatre autres, même matière qu'elles */
   .deck{position:relative;isolation:isolate;overflow:hidden;margin-top:clamp(14px,1.4vw,22px);display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);
@@ -1258,8 +1261,8 @@
             <div class="convo mail">
               <div class="bar"><b><i class="ch em"></i>Email · Henri Lasalle</b><span>Propriétaire · 52 rue du Faubourg Saint-Antoine</span></div>
               <div class="thread">
-              <div class="msg them"><div class="in"><p><b>Objet : loyer de septembre</b>Bonjour, où en est le loyer de M. Bernard ?<span class="d"> Je n’ai rien vu passer sur mon relevé.</span></p><time>08:52</time></div></div>
-              <div class="msg dali"><span class="typing"><i></i><i></i><i></i></span><div class="in"><p>Bonjour Monsieur Lasalle, le loyer de septembre a été encaissé le 18, après deux relances. Votre relevé est à jour, il est joint.</p><time>08:55 · Dali <svg class="ck" viewBox="0 0 20 12" fill="none" aria-hidden="true"><path d="M1 6.5l3.5 3.5L11 3M7.5 10l1.5 1.5L17 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><img src="assets/dali-avatar.webp" alt="" width="128" height="128" loading="lazy"></time></div></div>
+              <div class="msg them"><div class="in"><p><b>Objet : loyer de septembre</b>Bonjour, où en est le loyer de M. Bernard ? Rien sur mon relevé.</p><time>08:52</time></div></div>
+              <div class="msg dali"><span class="typing"><i></i><i></i><i></i></span><div class="in"><p>Bonjour Monsieur Lasalle, le loyer a été encaissé le 18, après deux relances. Votre relevé à jour est joint.</p><time>08:55 · Dali <svg class="ck" viewBox="0 0 20 12" fill="none" aria-hidden="true"><path d="M1 6.5l3.5 3.5L11 3M7.5 10l1.5 1.5L17 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><img src="assets/dali-avatar.webp" alt="" width="128" height="128" loading="lazy"></time></div></div>
               <div class="msg them"><div class="in"><p>Merci, c’est parfait.</p><time>09:10</time></div></div>
               </div>
             </div>
@@ -1294,7 +1297,7 @@
           <p><span class="d">Ouverture de l’intervention, contact du prestataire, suivi des devis. Au-delà de vos seuils, la décision vous revient.</span><span class="m">Devis et prestataires suivis. Au-delà de vos seuils, vous décidez.</span></p>
           <div class="stack"><div class="ui" aria-hidden="true">
             <div style="--q:0" class="bar"><b>Votre décision</b><span class="pill warn"><i></i>En attente</span></div>
-            <p style="--q:1" class="lead">Devis chauffage, 640 € TTC <span>· Plomberie Dupont</span></p>
+            <p style="--q:1" class="lead">Devis chauffage, 640 € TTC<span class="sub">Plomberie Dupont · reçu ce matin</span></p>
             <p style="--q:2" class="why">Au-dessus de votre seuil de 300 €. Dali a comparé deux devis et préparé le bon de commande.</p>
             <div style="--q:3" class="acts"><u>Valider</u><u>Voir le devis</u></div>
           </div></div>
@@ -1660,7 +1663,7 @@
     tabs.forEach((t, i) => t.addEventListener('click', () => { clearInterval(auto); show(i); }));
     /* la scène prend la hauteur de la plus longue conversation : rien n'est jamais coupé, quelle que soit la largeur */
     const stage = $('.stage', chat);
-    const fit = () => { chat.classList.add('measure'); let h = 0; convos.forEach((c) => { h = Math.max(h, $('.bar', c).offsetHeight + $('.thread', c).scrollHeight + 40); }); chat.classList.remove('measure'); stage.style.minHeight = h + 'px'; };
+    const fit = () => { chat.classList.add('measure'); let h = 1e9; convos.forEach((c) => { h = Math.min(h, $('.bar', c).offsetHeight + $('.thread', c).scrollHeight + 32); }); chat.classList.remove('measure'); stage.style.height = h + 'px'; };   /* la plus courte fait la hauteur ; les autres se coupent en haut, le fil étant ancré en bas */
     fit(); addEventListener('resize', fit); if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
     const forced = new URLSearchParams(location.search).get('convo');   /* ?convo=n : une seule conversation, pour les captures */
     if (forced !== null) show(+forced);
