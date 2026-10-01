@@ -1679,6 +1679,13 @@
     else new IntersectionObserver((es, io) => { if (!es[0].isIntersecting) return; io.disconnect(); setTimeout(play, 500); }, {threshold:.4}).observe(tlbox);   /* une seule fois */
   }
 
+  /* Les liens internes font défiler la page sans écrire « #section » dans la barre d'adresse. */
+  document.querySelectorAll('a[href^="#"]').forEach((a) => a.addEventListener('click', (e) => {
+    const t = document.querySelector(a.getAttribute('href')); if (!t) return;
+    e.preventDefault(); t.scrollIntoView({behavior: still ? 'auto' : 'smooth', block:'start'});
+    if (history.replaceState) history.replaceState(null, '', location.pathname + location.search);
+  }));
+
   /* Les sections suivantes montent à l'entrée dans l'écran. */
   document.querySelectorAll('.reveal').forEach((sec) => {
     if (still || !('IntersectionObserver' in window)) return sec.classList.add('in');
