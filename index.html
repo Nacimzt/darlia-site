@@ -1623,15 +1623,16 @@
     const forced = new URLSearchParams(location.search).get('convo');   /* ?convo=n : une seule conversation, pour les captures */
     if (forced !== null) { k = +forced; show(); }
     else if (still || !('IntersectionObserver' in window)) show();
-    else new IntersectionObserver((es, io) => { if (!es[0].isIntersecting) return; io.disconnect(); setTimeout(() => { show(); setInterval(show, 7600); }, 500); }, {threshold:.4}).observe(chat);
+    /* les trois conversations passent une fois chacune, puis la dernière reste affichée */
+    else new IntersectionObserver((es, io) => { if (!es[0].isIntersecting) return; io.disconnect(); setTimeout(() => { show(); const t = setInterval(() => { show(); if (k === 0) clearInterval(t); }, 7600); }, 500); }, {threshold:.4}).observe(chat);
   }
 
-  /* La frise de relance rejoue au même rythme que les conversations. */
+  /* La frise de relance se joue une fois, à l'arrivée dans l'écran. */
   const tlbox = $('.ui.tlbox');
   if (tlbox) {
     const play = () => { tlbox.classList.remove('on'); void tlbox.offsetWidth; tlbox.classList.add('on'); };
     if (still || !('IntersectionObserver' in window) || new URLSearchParams(location.search).has('convo')) tlbox.classList.add('on');
-    else new IntersectionObserver((es, io) => { if (!es[0].isIntersecting) return; io.disconnect(); setTimeout(() => { play(); setInterval(play, 7600); }, 500); }, {threshold:.4}).observe(tlbox);
+    else new IntersectionObserver((es, io) => { if (!es[0].isIntersecting) return; io.disconnect(); setTimeout(play, 500); }, {threshold:.4}).observe(tlbox);   /* une seule fois */
   }
 
   /* Les sections suivantes montent à l'entrée dans l'écran. */
