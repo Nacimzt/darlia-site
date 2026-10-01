@@ -414,7 +414,6 @@
   /* chaque message est une ligne de grille fermée (0fr) qui s'ouvre à son heure : les précédents remontent, comme dans une messagerie */
   .ui .msg{position:relative;display:grid;grid-template-rows:0fr;max-width:88%;margin-top:0;opacity:0}
   .ui .msg .in{min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:4px;padding-bottom:2px}
-  .ui.chat.measure .msg{grid-template-rows:1fr;margin-top:10px}
   .ui .msg p{margin:0;padding:9px 13px;border-radius:16px 16px 16px 5px;background:#fff;font-size:13.5px;line-height:1.42;box-shadow:0 1px 2px rgba(26,26,24,.06),0 0 0 .5px rgba(26,26,24,.06)}
   .ui .msg time{display:flex;align-items:center;gap:6px;padding-left:5px;font-size:12px;color:#8A8983}
   .ui .msg.dali{align-self:flex-end}
@@ -1663,7 +1662,7 @@
     tabs.forEach((t, i) => t.addEventListener('click', () => { clearInterval(auto); show(i); }));
     /* la scène prend la hauteur de la plus longue conversation : rien n'est jamais coupé, quelle que soit la largeur */
     const stage = $('.stage', chat);
-    const fit = () => { chat.classList.add('measure'); const phone = matchMedia('(max-width:960px)').matches; let h = phone ? 0 : 1e9; convos.forEach((c) => { const v = $('.bar', c).offsetHeight + [...$('.thread', c).children].reduce((t, m) => t + m.offsetHeight + 10, 0) + 30;   /* la somme des messages, pas scrollHeight (qui ne descend jamais sous la hauteur visible) */ h = phone ? Math.max(h, v) : Math.min(h, v); });   /* téléphone : la plus longue (rien de coupé) ; ordinateur : la plus courte (pas de vide) ; les textes sont écrits pour être proches */ chat.classList.remove('measure'); stage.style.height = h + 'px'; stage.style.flex = '0 0 auto'; chat.style.minHeight = (h + $('.tabs', chat).offsetHeight) + 'px'; };   /* la scène ne rétrécit jamais : la carte grandit avec elle */   /* la plus courte fait la hauteur ; les autres se coupent en haut, le fil étant ancré en bas */
+    const fit = () => { const phone = matchMedia('(max-width:960px)').matches; let h = phone ? 0 : 1e9; convos.forEach((c) => { const v = $('.bar', c).offsetHeight + [...$('.thread', c).children].reduce((t, m) => t + $('.in', m).scrollHeight + 10, 0) + 34;   /* le contenu de chaque message, même pendant qu'il est replié ou en train de s'ouvrir */ h = phone ? Math.max(h, v) : Math.min(h, v); });   /* téléphone : la plus longue (rien de coupé) ; ordinateur : la plus courte (pas de vide) ; les textes sont écrits pour être proches */ stage.style.height = h + 'px'; stage.style.flex = '0 0 auto'; chat.style.minHeight = (h + $('.tabs', chat).offsetHeight) + 'px'; };   /* la scène ne rétrécit jamais : la carte grandit avec elle */   /* la plus courte fait la hauteur ; les autres se coupent en haut, le fil étant ancré en bas */
     fit(); addEventListener('resize', fit); if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
     const forced = new URLSearchParams(location.search).get('convo');   /* ?convo=n : une seule conversation, pour les captures */
     if (forced !== null) show(+forced);
