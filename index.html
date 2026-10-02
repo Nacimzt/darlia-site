@@ -474,6 +474,15 @@
   .ui .tl small{display:block;font-size:13.5px;line-height:1.35;color:#1A1A18}
   .ui .tl.ok i{background:#2F6B4C;box-shadow:none}
   .ui .tl.ok small{color:#2F6B4C;font-weight:600}
+  /* ce que Dali a fait (liste cochée), puis la seule chose qui vous reste (encadré + boutons) */
+  .ui .lbl{margin:14px 0 0;font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#8A8983}
+  .ui .did{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px}
+  .ui .did li{display:flex;align-items:center;gap:10px;min-height:38px;padding:6px 12px 6px 9px;border-radius:10px;background:#fff;font-size:13.5px;line-height:1.3;color:#1A1A18}
+  .ui .did li svg{flex:none;width:20px;height:20px;padding:4px;box-sizing:border-box;border-radius:50%;background:#EEF5F1;color:#2F6B4C}
+  .ui .did li b{margin-left:auto;padding-left:8px;font-weight:620;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .ui .call{margin:12px 0 0;padding:10px 12px;border-radius:10px;background:#F6EFDF;color:#6F5722;font-size:13px;line-height:1.4}
+  .ui .call b{font-weight:650;color:#5A4518}
+  .ui .call.ok{background:#EEF5F1;color:#2F6B4C}
   .ui .lead{margin:12px 0 4px;font-size:clamp(17px,1rem + .4vw,21px);font-weight:620;letter-spacing:-.028em;line-height:1.2}
   .ui .lead span{color:#8A8983;font-weight:500}
   .ui .lead .sub{display:block;margin-top:4px;font-size:13.5px;font-weight:500;letter-spacing:0}
@@ -1315,24 +1324,22 @@
           <div class="stack"><div class="ui" aria-hidden="true">
             <div style="--q:0" class="bar"><b>Compte rendu de gérance</b><span class="pill warn"><i></i>Prêt à relire</span></div>
             <p style="--q:1" class="lead">SCI Rivoli Patrimoine <span>· août 2026</span></p>
-            <dl style="--q:2" class="doc">
-              <div><dt>Loyers encaissés</dt><dd>18 400 €</dd></div>
-              <div><dt>Impayés</dt><dd>0 €</dd></div>
-              <div><dt>Interventions</dt><dd>3</dd></div>
-            </dl>
-            <p style="--q:3" class="why">Relevé propriétaire et trois factures joints. Rien ne part sans votre relecture.</p>
-            <div style="--q:4" class="acts"><u>Relire et envoyer</u><u>Modifier</u></div>
+            <p style="--q:2" class="lbl">Dali a préparé</p>
+            <ul style="--q:3" class="did"><li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Loyers pointés</span><b>18 400 €</b></li><li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Impayés vérifiés</span><b>aucun</b></li><li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Pièces jointes</span><b>4</b></li></ul>
+            <p style="--q:4" class="call ok">Il ne vous reste qu’à relire. Rien ne part sans votre accord.</p>
+            <div style="--q:5" class="acts"><u>Relire et envoyer</u><u>Modifier</u></div>
           </div></div>
         </li>
         <li class="gain" style="--n:2">
           <h3>Les interventions et les prestataires</h3>
           <p><span class="d">Ouverture de l’intervention, contact du prestataire, suivi des devis. Au-delà de vos seuils, la décision vous revient.</span><span class="m">Devis et prestataires suivis. Au-delà de vos seuils, vous décidez.</span></p>
           <div class="stack"><div class="ui" aria-hidden="true">
-            <div style="--q:0" class="bar"><b>Votre décision</b><span class="pill warn"><i></i>En attente</span></div>
-            <p style="--q:1" class="lead">Devis chauffage, 640 € TTC<span class="sub">Plomberie Dupont · reçu ce matin</span></p>
-            <dl style="--q:2" class="doc"><div><dt>Votre seuil</dt><dd>300 €</dd></div><div><dt>Devis comparés</dt><dd>2</dd></div><div><dt>Passage</dt><dd>sam. 9 h</dd></div></dl>
-            <p style="--q:3" class="why">Dali a comparé les devis et préparé le bon de commande. Il attend votre feu vert.</p>
-            <div style="--q:4" class="acts"><u>Valider</u><u>Voir le devis</u></div>
+            <div style="--q:0" class="bar"><b>Intervention</b><span class="pill warn"><i></i>Votre décision</span></div>
+            <p style="--q:1" class="lead">Devis chauffage, 640 € TTC<span class="sub">17 avenue Parmentier · Plomberie Dupont</span></p>
+            <p style="--q:2" class="lbl">Dali a déjà fait</p>
+            <ul style="--q:3" class="did"><li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Devis demandés</span><b>2</b></li><li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Meilleur devis</span><b>640 €</b></li><li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Créneau</span><b>samedi 9 h</b></li></ul>
+            <p style="--q:4" class="call">640 € dépasse votre seuil de 300 € : <b>la décision vous revient.</b></p>
+            <div style="--q:5" class="acts"><u>Valider</u><u>Voir le devis</u></div>
           </div></div>
         </li>
         <li class="gain" style="--n:3">
