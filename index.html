@@ -655,23 +655,29 @@
   .tarif .rn i{font-family:var(--serif);font-style:italic;font-weight:400;font-size:1.08em;color:var(--ink-3);margin:0 .22em}
   .tarif .rt{min-width:0;margin-left:auto;overflow:hidden;text-overflow:ellipsis;font-size:13px;color:var(--ink-3);white-space:nowrap}
   .tarif .t-go{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#F4F3EF;color:var(--ink);transition:background .2s var(--ease),color .2s var(--ease),transform .3s var(--out)}
-  .tarif .t-go svg,.tarif .mod svg,.tarif .chip svg{width:14px;height:14px}
+  .tarif .t-go svg{width:14px;height:14px}
   .tarif .row:hover .t-go{background:var(--ink);color:#fff;transform:translateX(2px)}
   .tarif .t-note{margin:0;padding:18px clamp(22px,2.4vw,36px) 22px;font-size:12.5px;color:var(--ink-3)}
-  .tarif .bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px clamp(14px,2vw,28px) 18px clamp(22px,2.4vw,36px);border-bottom:1px solid var(--line)}
-  .tarif .chip{display:inline-flex;align-items:center;gap:8px;min-width:0;height:34px;padding:0 14px 0 12px;border-radius:99px;background:#EEF5F1;color:var(--accent);font-size:14px;font-weight:620;letter-spacing:-.01em;white-space:nowrap}
-  .tarif .mod{flex:none;display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border:0;border-radius:99px;background:none;font:inherit;font-size:14px;font-weight:600;color:var(--ink-2);cursor:pointer;transition:background .2s var(--ease),color .2s var(--ease)}
-  .tarif .mod:hover{background:#F4F3EF;color:var(--ink)}
   .tarif .t-price{padding:clamp(24px,2.6vw,32px) clamp(22px,2.4vw,36px) clamp(22px,2.4vw,28px)}
   .tarif .lab{margin:0;font-size:12px;font-weight:620;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
   .tarif .num{margin:16px 0 0;display:flex;align-items:baseline;flex-wrap:wrap;row-gap:6px;font-size:clamp(64px,6.4vw,100px);font-weight:700;line-height:.9;letter-spacing:-.055em;font-variant-numeric:tabular-nums;white-space:nowrap}
   .tarif .num em{margin-left:.06em;font-family:var(--serif);font-style:italic;font-weight:400;font-size:.8em;letter-spacing:-.02em;color:var(--accent)}
   .tarif .num small{margin-left:.55em;font-family:var(--serif);font-style:italic;font-weight:400;font-size:.26em;letter-spacing:0;color:var(--ink-2)}
-  .tarif .plus{margin:26px 0 0;padding-top:18px;border-top:1px solid var(--line);display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;font-size:15px;line-height:1.4;color:var(--ink-2)}
-  .tarif .plus b{font-size:28px;font-weight:700;letter-spacing:-.04em;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
-  .tarif .plus b em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--accent)}
   .tarif>.t-res{display:grid;grid-template-rows:auto 1fr auto}
   .tarif .t-price,.tarif .bquote{grid-area:2 / 1}   /* prix et « sur devis » dans la même case : la feuille ne change pas de hauteur */
+  /* le tarif, en deux temps lisibles : on coche sa tranche, puis les tranches restent en haut du prix pour comparer d'un clic */
+  .tarif .rd{flex:none;width:18px;height:18px;border-radius:50%;box-shadow:inset 0 0 0 1.5px #C9C6BB;transition:box-shadow .2s var(--ease)}
+  .tarif .row:hover .rd{box-shadow:inset 0 0 0 5px var(--ink)}
+  .tarif .bar{display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:18px clamp(22px,2.4vw,36px) 18px}
+  .tarif .tiers{display:flex;flex-wrap:wrap;gap:6px}
+  .tarif .tiers button{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;height:34px;padding:0 13px;border-radius:99px;background:#F4F3EF;font-size:13.5px;font-weight:600;letter-spacing:-.01em;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--ink-2);cursor:pointer;transition:background .2s var(--ease),color .2s var(--ease)}
+  .tarif .tiers button:hover{background:#E9E7E0;color:var(--ink)}
+  .tarif .tiers button[aria-pressed="true"]{background:var(--ink);color:#fff}
+  .tarif .tiers button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .tarif .t-price{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);align-items:end;align-content:center;padding-block:clamp(22px,2.4vw,30px);border-top:1px solid var(--line)}
+  .tarif .pcol+.pcol{padding-left:clamp(20px,2.2vw,32px);border-left:1px solid var(--line)}
+  .tarif .num.sm{font-size:clamp(38px,3.6vw,54px)}
+  .tarif .per{margin:10px 0 0;font-size:14.5px;color:var(--ink-2)}
   .tarif .bquote{visibility:hidden;padding:clamp(30px,3vw,40px) clamp(22px,2.4vw,36px) clamp(30px,3vw,40px)}
   .tarif .bquote .sf{margin:0;font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(56px,5.4vw,76px);line-height:1;letter-spacing:-.015em;color:var(--accent)}
   .tarif .bquote p:not(.sf){margin:16px 0 0;max-width:26em;font-size:16px;line-height:1.5;color:var(--ink-2)}
@@ -985,9 +991,12 @@
     .tarif .rn{font-size:16.5px}
     .tarif .bq{font-size:clamp(26px,7.4vw,30px)}
     .tarif .num{font-size:clamp(60px,19vw,80px)}
-    .tarif .num small{flex-basis:100%;margin:10px 0 0;font-size:.3em}   /* « HT par mois » toujours dessous : même hauteur quelle que soit la tranche */
-    .tarif .plus b{font-size:24px}
     .tarif .incl{grid-template-columns:minmax(0,1fr);gap:18px}
+    .tarif .tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%}
+    .tarif .tiers button{justify-content:center;height:40px;padding:0 4px;font-size:13px}
+    .tarif .t-price{grid-template-columns:minmax(0,1fr);row-gap:18px}
+    .tarif .pcol+.pcol{padding:18px 0 0;border-left:0;border-top:1px solid var(--line)}
+    .tarif .num.sm{font-size:40px}
     /* téléphone : le message remplace les montants au lieu de les recouvrir */
     /* téléphone : les capsules du bureau, empilées et toutes ouvertes. Le grand numéro fin passe au-dessus,
        tout le texte prend la pleine largeur (plus de retrait), les trois points gardent coches et filets. */
@@ -1413,21 +1422,20 @@
             <p class="bs">Votre tarif s’affiche aussitôt. Sans formulaire, sans adresse e-mail.</p>
           </div>
           <div class="list" id="seg" role="radiogroup" aria-labelledby="pick-l">
-            <label class="row" data-r="100 à 199 lots"><input type="radio" name="lots" value="0"><span class="rn">100<i>à</i>199</span><span class="rt">lots</span><span class="t-go"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
-            <label class="row" data-r="200 à 399 lots"><input type="radio" name="lots" value="1"><span class="rn">200<i>à</i>399</span><span class="rt">lots</span><span class="t-go"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
-            <label class="row" data-r="400 à 699 lots"><input type="radio" name="lots" value="2"><span class="rn">400<i>à</i>699</span><span class="rt">lots</span><span class="t-go"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
-            <label class="row" data-r="700 à 999 lots"><input type="radio" name="lots" value="3"><span class="rn">700<i>à</i>999</span><span class="rt">lots</span><span class="t-go"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
-            <label class="row" data-r="1 000 à 1 499 lots"><input type="radio" name="lots" value="4"><span class="rn">1 000<i>à</i>1 499</span><span class="rt">lots</span><span class="t-go"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
-            <label class="row" data-r="1 500 lots et plus"><input type="radio" name="lots" value="5"><span class="rn">1 500<i>et</i>plus</span><span class="rt"><span class="d">lots, </span>sur devis</span><span class="t-go"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
+            <label class="row" data-r="100 à 199 lots"><span class="rd" aria-hidden="true"></span><input type="radio" name="lots" value="0"><span class="rn">100<i>à</i>199</span><span class="rt">lots</span><span class="t-go"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
+            <label class="row" data-r="200 à 399 lots"><span class="rd" aria-hidden="true"></span><input type="radio" name="lots" value="1"><span class="rn">200<i>à</i>399</span><span class="rt">lots</span><span class="t-go"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
+            <label class="row" data-r="400 à 699 lots"><span class="rd" aria-hidden="true"></span><input type="radio" name="lots" value="2"><span class="rn">400<i>à</i>699</span><span class="rt">lots</span><span class="t-go"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
+            <label class="row" data-r="700 à 999 lots"><span class="rd" aria-hidden="true"></span><input type="radio" name="lots" value="3"><span class="rn">700<i>à</i>999</span><span class="rt">lots</span><span class="t-go"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
+            <label class="row" data-r="1 000 à 1 499 lots"><span class="rd" aria-hidden="true"></span><input type="radio" name="lots" value="4"><span class="rn">1 000<i>à</i>1 499</span><span class="rt">lots</span><span class="t-go"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
+            <label class="row" data-r="1 500 lots et plus"><span class="rd" aria-hidden="true"></span><input type="radio" name="lots" value="5"><span class="rn">1 500<i>et</i>plus</span><span class="rt"><span class="d">lots, </span>sur devis</span><span class="t-go"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
           </div>
           <p class="t-note">Tarifs de lancement, hors taxes.</p>
         </div>
         <div class="t-res" id="amounts" aria-live="polite">
-          <div class="bar"><span class="chip"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-k="range">200 à 399 lots</span></span><button type="button" class="mod" id="mod"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13 8H3M7 4L3 8l4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Modifier</button></div>
+          <div class="bar"><span class="lab">Vos lots</span><div class="tiers" id="tiers" role="group" aria-label="Changer de tranche"><button type="button" data-n="0" aria-pressed="false">100 à 199</button><button type="button" data-n="1" aria-pressed="false">200 à 399</button><button type="button" data-n="2" aria-pressed="false">400 à 699</button><button type="button" data-n="3" aria-pressed="false">700 à 999</button><button type="button" data-n="4" aria-pressed="false">1 000 à 1 499</button><button type="button" data-n="5" aria-pressed="false">1 500 et +</button></div></div>
           <div class="t-price">
-            <h3 class="lab">Exploitation Darlia</h3>
-            <p class="num"><span data-k="sub">590</span><em>€</em><small>HT par mois</small></p>
-            <p class="plus"><span>Et une seule fois,</span><b><span data-k="setup">3 500</span><em> €</em></b><span>HT pour le déploiement Darlia.</span></p>
+            <div class="pcol"><h3 class="lab">Exploitation Darlia</h3><p class="num"><span data-k="sub">590</span><em>€</em></p><p class="per">HT, chaque mois</p></div>
+            <div class="pcol"><h3 class="lab">Déploiement Darlia</h3><p class="num sm"><span data-k="setup">3 500</span><em>€</em></p><p class="per">HT, une seule fois</p></div>
           </div>
           <div class="bquote"><p class="sf">Sur devis</p><p>À cette taille, le prix se calcule ensemble, sur votre portefeuille réel. Parlons-en pendant la démonstration.</p></div>
           <div class="incl">
@@ -1759,8 +1767,8 @@
   if (seg) {
     /* tarifs de lancement (HT) : déploiement une fois, exploitation par mois ; null = sur devis. À modifier ici. */
     const GRID = [{setup:2500, sub:390}, {setup:3500, sub:590}, {setup:5000, sub:890}, {setup:7000, sub:1290}, {setup:9000, sub:1690}, null];
-    const sheet = seg.closest('.tarif'), v = (k) => $('[data-k="' + k + '"]', sheet), mod = $('#mod', sheet);
-    const radios = [...seg.querySelectorAll('input')];
+    const sheet = seg.closest('.tarif'), v = (k) => $('[data-k="' + k + '"]', sheet);
+    const radios = [...seg.querySelectorAll('input')], pills = [...sheet.querySelectorAll('#tiers button')];
     const fr = (n) => Math.round(n).toLocaleString('fr-FR').replace(/[\s\u00a0\u202f]/g, '\u00a0');
     const now = {setup:0, sub:0};
     const roll = (k, to) => { const el = v(k), from = now[k] || 0, t0 = performance.now(); now[k] = to;
@@ -1770,15 +1778,14 @@
       requestAnimationFrame(tick);
       /* filet de sécurité : onglet en arrière-plan ou animation bridée, la bonne valeur s'affiche quand même */
       setTimeout(() => { if (now[k] === to) el.textContent = fr(to); }, 760); };
-    const show = (n) => { const g = GRID[n];
-      v('range').textContent = radios[n].closest('label').dataset.r;
+    /* une tranche choisie : le prix s'affiche, et les six tranches restent au-dessus pour en changer d'un clic */
+    const show = (n, focus) => { const g = GRID[n];
+      radios[n].checked = true; pills.forEach((p, i) => p.setAttribute('aria-pressed', String(i === n)));
       sheet.classList.add('is-set'); sheet.classList.toggle('is-quote', !g);
       if (g) { roll('setup', g.setup); roll('sub', g.sub); }
-      mod.focus({preventScroll:true}); };
-    /* « click » plutôt que « change » : retoucher la tranche déjà cochée ramène aussi au prix */
-    seg.addEventListener('click', (e) => { const i = e.target.closest('input'); if (i) show(+i.value); });
-    mod.addEventListener('click', () => { sheet.classList.remove('is-set');
-      const c = radios.find((r) => r.checked) || radios[0]; c.focus({preventScroll:true}); });
+      if (focus) pills[n].focus({preventScroll:true}); };
+    seg.addEventListener('click', (e) => { const i = e.target.closest('input'); if (i) show(+i.value, true); });
+    pills.forEach((p, i) => p.addEventListener('click', () => show(i)));
   }
 
   /* Questions : une seule réponse ouverte à la fois. */
