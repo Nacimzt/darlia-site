@@ -456,6 +456,7 @@
   .ui.tlbox.on .amt{animation:paid .5s var(--ease) 3.25s both}
   .ui.tlbox.on .amt::after{content:" encaissé";animation:step .4s var(--out) 3.4s both}
   @keyframes paid{to{background:#EEF5F1;color:#2F6B4C;font-weight:600}}
+  .ui .tl-sum{display:none}
   @keyframes step{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
   @keyframes grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
   @keyframes pop{0%{transform:scale(.3);background:#fff;box-shadow:inset 0 0 0 2px #C9C6BB}60%{transform:scale(1.35)}100%{transform:scale(1);background:#2F6B4C;box-shadow:none}}
@@ -468,7 +469,7 @@
   .ui .tl{position:relative;display:flex;gap:12px;align-items:flex-start;padding:7px 0}
   .ui .tl i{flex:none;width:10px;height:10px;margin:5px 0 0 1px;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 2px #C9C6BB}
   .ui .tl::before{content:"";position:absolute;left:5px;top:24px;bottom:-9px;width:2px;background:#E4E2DA}
-  .ui .tl:last-child::before{display:none}
+  .ui .tl:last-child::before,.ui .tl.ok::before{display:none}
   .ui .tl b{display:block;font-size:12.5px;font-weight:590;color:#8A8983}
   .ui .tl small{display:block;font-size:13.5px;line-height:1.35;color:#1A1A18}
   .ui .tl.ok i{background:#2F6B4C;box-shadow:none}
@@ -1057,6 +1058,13 @@
     .gain .ui .doc dd{margin:0;font-size:15px;white-space:nowrap}
     .gain .ui .acts u{flex:1 1 auto}
     .gain .ui .why{margin-top:12px}
+    /* téléphone : la frise occupe toute la carte (les étapes s'espacent, le fil s'allonge) et se termine par le résultat */
+    .gain .ui.tlbox{display:flex;flex-direction:column}
+    .gain .ui.tlbox .tl{flex:1 1 auto}
+    .gain .ui.tlbox .tl.ok{flex:0 0 auto}
+    .ui .tl-sum{display:block;margin:14px 0 0;padding:11px 13px;border-radius:12px;background:#EEF5F1;font-size:13.5px;line-height:1.4;color:#2F6B4C;opacity:0}
+    .ui .tl-sum b{font-weight:650;white-space:nowrap}
+    .ui.tlbox.on .tl-sum{animation:step .5s var(--out) 3.3s both}
     .gain .ui .msg p{font-size:13.5px}
     .gain .ui .lead{font-size:15px;margin:10px 0 2px}
     .gain .ui .row .pill{grid-column:1 / -1;justify-self:start}
@@ -1114,7 +1122,7 @@
     .tarif>.t-ask,.tarif>.t-res{transition:none!important}
     html{scroll-behavior:auto}
     .js .reveal .calbox{opacity:1;transform:none;transition:none}
-    .js .reveal .ui.tlbox .tl,.js .reveal.in .ui.tlbox .tl,.ui.tlbox.on .tl,.ui.tlbox.on .tl.ok i{opacity:1;animation:none}.ui.tlbox.on .amt,.ui.tlbox.on .amt::after{animation:none;background:#EEF5F1;color:#2F6B4C;font-weight:600}.ui .convo,.ui .convo.on{transition:none;transform:none}.ui .msg,.ui .convo.on .msg{grid-template-rows:1fr;margin-top:10px;opacity:1;animation:none}.ui.tlbox .tl::before,.ui.tlbox.on .tl::before{transform:none;animation:none}
+    .js .reveal .ui.tlbox .tl,.js .reveal.in .ui.tlbox .tl,.ui.tlbox.on .tl,.ui.tlbox.on .tl.ok i{opacity:1;animation:none}.ui .tl-sum,.ui.tlbox.on .tl-sum{opacity:1;animation:none}.ui.tlbox.on .amt,.ui.tlbox.on .amt::after{animation:none;background:#EEF5F1;color:#2F6B4C;font-weight:600}.ui .convo,.ui .convo.on{transition:none;transform:none}.ui .msg,.ui .convo.on .msg{grid-template-rows:1fr;margin-top:10px;opacity:1;animation:none}.ui.tlbox .tl::before,.ui.tlbox.on .tl::before{transform:none;animation:none}
     .ui .convo .msg.dali p,.ui .convo .msg.dali time,.ui .convo.on .msg.dali p,.ui .convo.on .msg.dali time{opacity:1;animation:none}.ui .typing,.ui .convo.on .typing i{animation:none;opacity:0}
     .js .reveal .qa{opacity:1;transform:none;transition:none}
     .qa .ans,.qa .ans p,.qa button i,.qa button i::before,.qa button i::after{transition:none}
@@ -1335,6 +1343,7 @@
             <div style="--q:2" class="tl"><i></i><div><b>8 sept.</b><small>Première relance envoyée par Dali</small></div></div>
             <div style="--q:3" class="tl"><i></i><div><b>15 sept.</b><small>Deuxième relance, appel proposé</small></div></div>
             <div style="--q:4" class="tl ok"><i></i><div><b>18 sept.</b><small>Loyer encaissé</small></div></div>
+            <p class="tl-sum"><b>1 340 € encaissés</b> en 13 jours, sans que votre équipe intervienne.</p>
           </div></div>
         </li>
       </ol>
