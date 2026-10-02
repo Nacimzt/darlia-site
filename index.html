@@ -678,6 +678,17 @@
   .tarif .pcol+.pcol{padding-left:clamp(20px,2.2vw,32px);border-left:1px solid var(--line)}
   .tarif .num.sm{font-size:clamp(38px,3.6vw,54px)}
   .tarif .per{margin:10px 0 0;font-size:14.5px;color:var(--ink-2)}
+  .tarif .lot{margin:14px 0 0;display:inline-flex;align-items:baseline;gap:.35em;align-self:flex-start;padding:7px 12px;border-radius:10px;background:#EEF5F1;font-size:13.5px;color:#2F6B4C}
+  .tarif .lot b{font-weight:650;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .tarif .pcol{display:flex;flex-direction:column;align-items:flex-start}
+  @media (min-width:961px){
+    .tarif .list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:1fr;gap:10px;padding:4px clamp(22px,2.4vw,36px) 6px;border-top:0}
+    .tarif .row{flex:none;min-height:74px;padding:0 14px 0 18px;border:0;border-radius:16px;background:#fff;box-shadow:inset 0 0 0 1px #E6E3DB;transition:box-shadow .2s var(--ease),background .2s var(--ease),transform .25s var(--out)}
+    .tarif .row:hover{background:#FBFAF6;box-shadow:inset 0 0 0 1.5px var(--ink);transform:translateY(-1px)}
+    .tarif .rn{font-size:19px}
+    .tarif .rt{margin-left:0}
+    .tarif .t-go{margin-left:auto}
+  }
   .tarif .bquote{visibility:hidden;padding:clamp(30px,3vw,40px) clamp(22px,2.4vw,36px) clamp(30px,3vw,40px)}
   .tarif .bquote .sf{margin:0;font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(56px,5.4vw,76px);line-height:1;letter-spacing:-.015em;color:var(--accent)}
   .tarif .bquote p:not(.sf){margin:16px 0 0;max-width:26em;font-size:16px;line-height:1.5;color:var(--ink-2)}
@@ -997,6 +1008,7 @@
     .tarif .t-price{grid-template-columns:minmax(0,1fr);row-gap:18px}
     .tarif .pcol+.pcol{padding:18px 0 0;border-left:0;border-top:1px solid var(--line)}
     .tarif .num.sm{font-size:40px}
+    .tarif .lot{font-size:13px}
     /* téléphone : le message remplace les montants au lieu de les recouvrir */
     /* téléphone : les capsules du bureau, empilées et toutes ouvertes. Le grand numéro fin passe au-dessus,
        tout le texte prend la pleine largeur (plus de retrait), les trois points gardent coches et filets. */
@@ -1434,7 +1446,7 @@
         <div class="t-res" id="amounts" aria-live="polite">
           <div class="bar"><span class="lab">Vos lots</span><div class="tiers" id="tiers" role="group" aria-label="Changer de tranche"><button type="button" data-n="0" aria-pressed="false">100 à 199</button><button type="button" data-n="1" aria-pressed="false">200 à 399</button><button type="button" data-n="2" aria-pressed="false">400 à 699</button><button type="button" data-n="3" aria-pressed="false">700 à 999</button><button type="button" data-n="4" aria-pressed="false">1 000 à 1 499</button><button type="button" data-n="5" aria-pressed="false">1 500 et +</button></div></div>
           <div class="t-price">
-            <div class="pcol"><h3 class="lab">Exploitation Darlia</h3><p class="num"><span data-k="sub">590</span><em>€</em></p><p class="per">HT, chaque mois</p></div>
+            <div class="pcol"><h3 class="lab">Exploitation Darlia</h3><p class="num"><span data-k="sub">590</span><em>€</em></p><p class="per">HT, chaque mois</p><p class="lot">Soit <b data-k="lot">1,48 à 2,95 €</b> par lot et par mois</p></div>
             <div class="pcol"><h3 class="lab">Déploiement Darlia</h3><p class="num sm"><span data-k="setup">3 500</span><em>€</em></p><p class="per">HT, une seule fois</p></div>
           </div>
           <div class="bquote"><p class="sf">Sur devis</p><p>À cette taille, le prix se calcule ensemble, sur votre portefeuille réel. Parlons-en pendant la démonstration.</p></div>
@@ -1767,6 +1779,8 @@
   if (seg) {
     /* tarifs de lancement (HT) : déploiement une fois, exploitation par mois ; null = sur devis. À modifier ici. */
     const GRID = [{setup:2500, sub:390}, {setup:3500, sub:590}, {setup:5000, sub:890}, {setup:7000, sub:1290}, {setup:9000, sub:1690}, null];
+    const LOTS = [[100,199],[200,399],[400,699],[700,999],[1000,1499]];   /* bornes de chaque tranche, pour le prix par lot */
+    const eur = (x) => x.toLocaleString('fr-FR', {minimumFractionDigits:2, maximumFractionDigits:2});
     const sheet = seg.closest('.tarif'), v = (k) => $('[data-k="' + k + '"]', sheet);
     const radios = [...seg.querySelectorAll('input')], pills = [...sheet.querySelectorAll('#tiers button')];
     const fr = (n) => Math.round(n).toLocaleString('fr-FR').replace(/[\s\u00a0\u202f]/g, '\u00a0');
@@ -1782,7 +1796,7 @@
     const show = (n, focus) => { const g = GRID[n];
       radios[n].checked = true; pills.forEach((p, i) => p.setAttribute('aria-pressed', String(i === n)));
       sheet.classList.add('is-set'); sheet.classList.toggle('is-quote', !g);
-      if (g) { roll('setup', g.setup); roll('sub', g.sub); }
+      if (g) { roll('setup', g.setup); roll('sub', g.sub); v('lot').textContent = eur(g.sub / LOTS[n][1]) + ' à ' + eur(g.sub / LOTS[n][0]) + '\u00a0€'; }
       if (focus) pills[n].focus({preventScroll:true}); };
     seg.addEventListener('click', (e) => { const i = e.target.closest('input'); if (i) show(+i.value, true); });
     pills.forEach((p, i) => p.addEventListener('click', () => show(i)));
