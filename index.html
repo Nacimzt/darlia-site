@@ -1064,7 +1064,8 @@
     .gain .ui.tlbox .tl.ok{flex:0 0 auto}
     .ui .tl-sum{display:block;margin:14px 0 0;padding:11px 13px;border-radius:12px;background:#EEF5F1;font-size:13.5px;line-height:1.4;color:#2F6B4C;opacity:0}
     .ui .tl-sum b{font-weight:650;white-space:nowrap}
-    .ui.tlbox.on .tl-sum{animation:step .5s var(--out) 3.3s both}
+    html.js .reveal .ui.tlbox .tl-sum,html.js .reveal.in .ui.tlbox .tl-sum{opacity:0}   /* caché tant que la frise n'a pas joué (la règle générale des fragments le rendait visible) */
+    html.js .reveal .ui.tlbox.on .tl-sum{animation:step .5s var(--out) 3.3s both}
     .gain .ui .msg p{font-size:13.5px}
     .gain .ui .lead{font-size:15px;margin:10px 0 2px}
     .gain .ui .row .pill{grid-column:1 / -1;justify-self:start}
