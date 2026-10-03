@@ -1143,7 +1143,35 @@
     html.js .reveal h2 .w>span,html.js .reveal.in h2 .w>span{transform:none;transition:none}
     html.js .reveal .plate>img,html.js .reveal.in .plate>img,html.js .reveal .portrait img,html.js .reveal.in .portrait img{transform:none;transition:none}
   }
+  /* ── finitions de mouvement (2026-10-03) : peu d'effets, mais chacun raconte quelque chose ─────────────── */
+  /* 1. les listes « Ce que fait Dali » se cochent une ligne après l'autre, puis « Pour vous » arrive */
+  html.js .gain .ui .did li{opacity:.38;transition:opacity .4s var(--ease) calc(.2s + var(--j,0) * .5s)}
+  html.js .gain .ui .did li svg{transform:scale(0);transition:transform .5s cubic-bezier(.2,1.6,.4,1) calc(.2s + var(--j,0) * .5s)}
+  html.js .gain .ui .did li b{opacity:0;transition:opacity .4s var(--ease) calc(.4s + var(--j,0) * .5s)}
+  html.js .gain .ui.play .did li,html.js .gain .ui.play .did li b{opacity:1}
+  html.js .gain .ui.play .did li svg{transform:none}
+  html.js .gain .ui .did~.call,html.js .gain .ui .did~.acts{opacity:0;transform:translateY(6px);transition:opacity .5s var(--ease) 1.8s,transform .6s var(--out) 1.8s}
+  html.js .gain .ui .did~.acts{transition-delay:2.05s}
+  html.js .gain .ui.play .did~.call,html.js .gain .ui.play .did~.acts{opacity:1;transform:none}
+  /* 2. la carte « plateforme » : les outils arrivent un à un, l'écran monte (ordinateur) */
+  .js .deck .deck-tools li{opacity:0;transform:translateY(8px);transition:opacity .5s var(--ease) calc(.25s + var(--j,0) * 70ms),transform .6s var(--out) calc(.25s + var(--j,0) * 70ms)}
+  .js .deck.seen .deck-tools li{opacity:1;transform:none}
+  @media (min-width:961px){
+    .js .deck .deck-win{opacity:0;transform:translateY(56px);transition:opacity .7s var(--ease) .1s,transform 1.2s var(--out) .1s}
+    .js .deck.seen .deck-win{opacity:1;transform:none}
+    /* 3. chaque carte apparaît quand ELLE entre dans l'écran (avant : toutes ensemble, donc la 2e rangée jouait hors champ) */
+    .js .reveal.in .gain:not(.seen){opacity:0;transform:translateY(34px);transition:none}
+    .js .reveal.in .gain:not(.seen) .ui>*{opacity:0;transform:translateY(8px);transition:none}
+    .js .reveal.in .gain.seen{transition:opacity .9s var(--out) calc(var(--c,0) * 120ms),transform 1.1s var(--out) calc(var(--c,0) * 120ms)}
+    .js .reveal.in .gain.seen .ui>*{transition:opacity .6s var(--out) calc(350ms + var(--c,0) * 120ms + var(--q,0) * 80ms),transform .6s var(--out) calc(350ms + var(--c,0) * 120ms + var(--q,0) * 80ms)}
+  }
+  /* 4. le filet à côté de l'étiquette de section se trace (ordinateur seulement : pas de pseudo-élément animé dans un bloc en fondu sur iPhone) */
+  @media (min-width:961px) and (hover:hover){
+    .js .reveal .k::after{transform:scaleX(0);transform-origin:0 50%;transition:transform 1.2s var(--out) .35s}
+    .js .reveal.in .k::after{transform:scaleX(1)}
+  }
   @media (prefers-reduced-motion:reduce){
+    html.js .gain .ui .did li,html.js .gain .ui .did li b,html.js .gain .ui .did li svg,html.js .gain .ui .did~.call,html.js .gain .ui .did~.acts,.js .deck .deck-tools li,.js .deck .deck-win,.js .reveal.in .gain:not(.seen),.js .reveal.in .gain:not(.seen) .ui>*,.js .reveal .k::after{opacity:1;transform:none;transition:none}
     html.js .reveal .ui.tlbox .tl-sum,html.js .reveal .ui.tlbox.on .tl-sum{opacity:1;animation:none}
     .tarif>.t-ask,.tarif>.t-res{transition:none!important}
     html{scroll-behavior:auto}
@@ -1745,6 +1773,20 @@
     e.preventDefault(); t.scrollIntoView({behavior: still ? 'auto' : 'smooth', block:'start'});
     if (history.replaceState) history.replaceState(null, '', location.pathname + location.search);
   }));
+
+  /* Finitions : chaque carte, la carte plateforme et les listes cochées jouent quand elles entrent dans l'écran, une seule fois. */
+  (() => {
+    const forced = still || !('IntersectionObserver' in window) || new URLSearchParams(location.search).has('convo');
+    const once = (els, cls, opt) => { if (forced) return els.forEach((e) => e.classList.add(cls));
+      const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add(cls); io.unobserve(e.target); } }), opt);
+      els.forEach((e) => io.observe(e)); };
+    const gains = [...document.querySelectorAll('.gain')]; gains.forEach((g, n) => g.style.setProperty('--c', n % 2));
+    once(gains, 'seen', {threshold:.12});
+    const deck = $('.deck'); if (deck) { deck.querySelectorAll('.deck-tools li').forEach((li, j) => li.style.setProperty('--j', j)); once([deck], 'seen', {threshold:.2}); }
+    const lists = [...document.querySelectorAll('.gain .ui')].filter((u) => $('.did', u));
+    lists.forEach((u) => u.querySelectorAll('.did li').forEach((li, j) => li.style.setProperty('--j', j)));
+    once(lists, 'play', {threshold:.55});
+  })();
 
   /* Les sections suivantes montent à l'entrée dans l'écran. */
   document.querySelectorAll('.reveal').forEach((sec) => {
