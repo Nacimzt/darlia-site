@@ -1008,33 +1008,7 @@
       -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 38%);mask-image:linear-gradient(180deg,transparent 0,#000 38%)}
     .plate li{padding:9px 0;font-size:16px;grid-template-columns:20px minmax(0,1fr);gap:12px}
     .plate li svg{width:18px;height:18px}
-    /* avant / après sur téléphone (v2) : une vraie comparaison, visible d'un coup.
-       Les deux scènes côte à côte, puis une seule liste : chaque problème barré, et dessous ce que fait Dali.
-       Les cartes deviennent « transparentes » (display:contents) : leurs enfants se rangent dans une grille commune. */
-    .diptych{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 10px}
-    .shift{padding-bottom:44px}   /* la liste ferme la section : pas de grand vide dessous */
-    .plate,.plate ul{display:contents}
-    .plate::before,.plate ul::before{content:none;display:none}
-    .plate .glow{display:none}
-    .plate>img,.js .reveal .plate>img,.js .reveal.in .plate>img{grid-row:1;position:relative;z-index:0;width:100%;margin:0;aspect-ratio:4/5;object-fit:cover;border-radius:20px;-webkit-mask-image:none;mask-image:none;box-shadow:0 0 0 .5px rgba(26,26,24,.14),0 22px 40px -24px rgba(30,40,30,.6)}
-    .plate.was>img{grid-column:1}.plate.now>img{grid-column:2}
-    .plate h3{grid-row:1;position:relative;left:auto;right:auto;top:auto;z-index:1;align-self:end;flex-direction:column;align-items:flex-start;gap:3px;margin:0;padding:34px 12px 12px;border-radius:0 0 20px 20px;font-size:19px;line-height:1.05;color:#fff;background:linear-gradient(180deg,transparent 0,rgba(14,20,16,.78) 100%)}
-    .plate.was h3{grid-column:1}.plate.now h3{grid-column:2}
-    .plate .state{font-size:12px}
-    .seam{display:grid;grid-row:1;grid-column:1 / -1;position:relative;left:auto;top:auto;translate:none;justify-self:center;align-self:center;width:38px;height:38px}
-    .seam svg{width:16px;height:16px}
-    .plate li,.js .reveal .plate li,.js .reveal.in .plate li{grid-column:1 / -1;grid-row:calc(var(--k) * 2 + var(--o));grid-template-columns:20px minmax(0,1fr);gap:12px;align-items:center;margin:0;border:0;border-bottom:calc(var(--o) * 1px) solid rgba(26,26,24,.09);background:#FEFDFB;cursor:default}
-    .plate.was li{--o:0;padding:13px 16px 1px;font-size:13.5px;color:#8A8983}
-    .plate.now li{--o:1;padding:3px 16px 13px;font-size:16px;font-weight:600;color:var(--ink);border-bottom:1px solid rgba(26,26,24,.09)}
-    .plate.was li:first-child{margin-top:12px;border-radius:20px 20px 0 0;padding-top:16px}
-    .plate.now li:last-child{border-bottom:0;border-radius:0 0 20px 20px;padding-bottom:16px}
-    .plate li svg{width:18px;height:18px}
-    .plate.was li svg{width:11px;height:11px;color:#D39A86}
-    .plate.now li svg{color:var(--accent)}
-    .plate.was li span,.plate.was li.lit span{color:#8A8983;background:linear-gradient(#D9B5A8,#D9B5A8) 0 56%/100% 1.5px no-repeat}
-    .plate.was li.lit svg{transform:none;color:#D39A86}
-    .plate.now li.lit span{transform:none;color:var(--accent)}
-    .plate.now li.lit svg{transform:scale(1.15);color:var(--accent)}
+    .seam{display:none}
     .gains .head,.shift .head{grid-template-columns:minmax(0,1fr);gap:22px}
     .book .say h2{font-size:clamp(30px,8.4vw,40px)}
     .book .say>p:not(.k){font-size:16px;line-height:1.5}
