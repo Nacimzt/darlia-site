@@ -944,7 +944,8 @@
     .proofs{padding-block:40px}
     .outro h2{font-size:clamp(30px,8.6vw,40px);line-height:1.08}
     .outro .go-end .cta{width:100%;justify-content:center}
-    .outro h2.rebus{font-size:clamp(34px,10.4vw,46px)!important;line-height:1.2}
+    .outro h2.rebus{font-size:clamp(25px,8.3vw,40px)!important;line-height:1.24}   /* chaque ligne tient sur une seule ligne, même à 320 px */
+    .outro .ln{white-space:nowrap}
     .outro{margin-inline:0;border-radius:0}
     .say-big{padding-block:calc(var(--sec) * .8)}
     .say-big p{font-size:clamp(30px,8.6vw,40px);line-height:1.1}
@@ -964,9 +965,13 @@
     .site-foot .cols{padding-top:0}
     .site-foot .bottom{flex-direction:column;gap:10px;margin-top:40px;font-size:12.5px}
     .site-foot ul{gap:4px}
-    .site-foot ul a,.site-foot .bottom a{display:inline-block;padding:11px 0}   /* zones de tap de 44 px */
+    .site-foot ul a,.site-foot .bottom a{display:inline-block;padding:13px 0}   /* zones de tap de 44 px */
     .site-foot .mail{padding-block:6px 8px}
-    .book .alt a{display:inline-block;padding:10px 0}
+    /* zones de tap de 44 px : onglets des conversations, logo, lien de secours du calendrier */
+    .ui .tabs button{height:44px;padding:0 12px}
+    .dock .home{padding-block:9px;margin-block:-9px}
+    .site-foot .top>div>a:first-child{display:inline-block;padding-block:6px}
+    .book .alt a{display:inline-block;padding:13px 0}
     .site-foot .bottom span+span{gap:14px}
     .hero{min-height:0;padding-block:clamp(92px,13vh,112px) clamp(84px,20vw,110px)}
     /* premier écran sur téléphone : le titre a plus de présence, le texte respire, la fenêtre remonte */
@@ -1033,7 +1038,7 @@
     .tarif .num{font-size:clamp(60px,19vw,80px)}
     .tarif .incl{grid-template-columns:minmax(0,1fr);gap:18px}
     .tarif .tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%}
-    .tarif .tiers button{justify-content:center;height:40px;padding:0 4px;font-size:13px}
+    .tarif .tiers button{justify-content:center;height:44px;padding:0 4px;font-size:13px}
     .tarif .t-price{grid-template-columns:minmax(0,1fr);row-gap:18px}
     .tarif .pcol+.pcol{padding:18px 0 0;border-left:0;border-top:1px solid var(--line)}
     .tarif .num.sm{font-size:40px}
@@ -1116,8 +1121,9 @@
   }
   @media (max-width:520px){
     .dock{gap:10px;padding-left:max(16px,env(safe-area-inset-left))}
-    .dock a.go2{height:40px;padding:0 13px;font-size:14px;gap:6px}
-    @media (max-width:360px){.dock a.go2 .lg{display:none}.dock a.go2{text-transform:capitalize}}   /* petit iPhone : « Démo » */
+    .dock a.go2{height:44px;padding:0 14px;font-size:14px;gap:6px}
+    @media (max-width:360px){.dock a.go2 .lg{display:none}.dock a.go2{text-transform:capitalize}}
+    @media (max-width:360px){.ui .tabs{padding-inline:6px}.ui .tabs button{padding:0 6px;font-size:12px}.ui .tabs .ch{display:none}.tarif .tiers{grid-template-columns:repeat(2,minmax(0,1fr))}}   /* petit iPhone : « Démo » */
     .pp .say a{width:100%;justify-content:center}
     .how .after a{width:100%;justify-content:center;white-space:nowrap;padding:0 16px;font-size:15.5px}
     .ui .bar span:not(.pill){display:none}   /* le titre du fragment suffit sur un petit écran */
