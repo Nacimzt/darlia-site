@@ -716,6 +716,7 @@
     .tarif .rt{margin-left:0}
     .tarif .t-go{margin-left:auto}
   }
+  .tarif .mq,.tarif .incl-t{display:none}
   .tarif .bquote{visibility:hidden;padding:clamp(30px,3vw,40px) clamp(22px,2.4vw,36px) clamp(30px,3vw,40px)}
   .tarif .bquote .sf{margin:0;font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(56px,5.4vw,76px);line-height:1;letter-spacing:-.015em;color:var(--accent)}
   .tarif .bquote p:not(.sf){margin:16px 0 0;max-width:26em;font-size:16px;line-height:1.5;color:var(--ink-2)}
@@ -1043,32 +1044,45 @@
     .tarif .pcol+.pcol{padding:18px 0 0;border-left:0;border-top:1px solid var(--line)}
     .tarif .num.sm{font-size:40px}
     .tarif .lot{font-size:13px}
-    /* tarif téléphone, version courte : les deux montants côte à côte, le prix par lot dessous sur toute la largeur,
-       ce qui est compris sur deux colonnes ; la feuille tient largement dans un écran */
-    .tarif .top{padding:22px 20px 16px}
-    .tarif .bs{margin-top:8px;font-size:14px}
-    .tarif .row{flex-basis:46px}
-    .tarif .t-note{padding:12px 20px 14px}
-    .tarif .bar{gap:8px;padding:14px 16px}
-    .tarif .tiers{gap:5px}
-    .tarif .t-price{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);grid-template-areas:"l r" "n r" "p r" "lot lot";row-gap:0;align-items:end;padding:16px 20px 16px}
-    .tarif .pcol:first-child{display:contents}
-    .tarif .pcol:first-child .lab{grid-area:l;align-self:start}
-    .tarif .pcol:first-child .num{grid-area:n;margin-top:10px;flex-wrap:nowrap;font-size:clamp(36px,11.6vw,48px)}   /* « 1 690 € » tient sur une ligne : la feuille garde la même hauteur pour toutes les tranches */
-    .tarif .pcol:first-child .per{grid-area:p;margin-top:6px}
-    .tarif .lot{grid-area:lot;justify-self:stretch;align-self:auto;margin-top:14px;justify-content:center;font-size:12.5px}
-    .tarif .pcol+.pcol{grid-area:r;align-self:stretch;justify-content:flex-end;padding:0 0 0 14px;border-top:0;border-left:1px solid var(--line)}
-    .tarif .pcol+.pcol .lab{margin-bottom:auto}
-    .tarif .num.sm{margin-top:10px;flex-wrap:nowrap;font-size:clamp(24px,7.4vw,30px)}
-    .tarif .per{font-size:12.5px}
-    .tarif .incl{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px 14px;padding:14px 20px 14px}
-    .tarif .incl ul{margin-top:7px;gap:4px}
-    .tarif .incl li{font-size:12.5px;line-height:1.3;gap:0}
+    /* tarif téléphone (v5) : une seule vue, sans étape. La question, six tranches à toucher, et le prix juste dessous.
+       Avant le choix, le prix est un tiret : on voit où il va s'afficher. Le détail se déplie à la demande. */
+    .tarif>.t-ask{display:none}
+    html .tarif>.t-res,html .tarif.is-set>.t-res{opacity:1;visibility:visible;transform:none;transition:none;grid-template-rows:auto auto auto auto}
+    .tarif .bar{gap:16px;padding:24px 20px 20px;border-bottom:0}
+    .tarif .bar .lab{display:none}
+    .tarif .mq{display:block;margin:0;font-size:clamp(24px,6.9vw,29px);font-weight:700;letter-spacing:-.042em;line-height:1.04}
+    .tarif .mq em{display:block;margin-top:2px;white-space:nowrap;font-family:var(--serif);font-style:italic;font-weight:400;font-size:1.12em;letter-spacing:-.02em;color:var(--accent)}
+    .tarif .tiers{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+    .tarif .tiers button{height:52px;border-radius:15px;font-size:16px}
+    .tarif .t-price{display:block;padding:22px 20px 20px;border-top:1px solid var(--line);text-align:center}
+    .tarif .pcol,.tarif .pcol:first-child{display:block}
+    .tarif .pcol:first-child .lab{display:none}
+    .tarif .pcol:first-child .num{justify-content:center;flex-wrap:nowrap;margin:0;font-size:clamp(58px,18.5vw,76px)}
+    .tarif .pcol:first-child .per{margin:8px 0 0;font-size:15px}
+    .tarif .lot{display:inline-flex;margin:14px 0 0;font-size:13px}
+    .tarif .pcol+.pcol{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:12px;margin-top:20px;padding:16px 0 0;border-left:0;border-top:1px solid var(--line);text-align:left}
+    .tarif .pcol+.pcol .lab{grid-area:1 / 1;margin:0}
+    .tarif .pcol+.pcol .per{grid-area:2 / 1;margin:3px 0 0;font-size:13.5px}
+    .tarif .num.sm{grid-area:1 / 2 / 3 / 3;margin:0;flex-wrap:nowrap;font-size:30px}
+    .tarif:not(.is-set) .num [data-k]{font-size:0}
+    .tarif:not(.is-set) .num [data-k]::before{content:"—";font-size:clamp(58px,18.5vw,76px);font-weight:300;color:#D6D2C8}
+    .tarif:not(.is-set) .num.sm [data-k]::before{font-size:30px}
+    .tarif:not(.is-set) .num em{color:#D6D2C8}
+    .tarif:not(.is-set) .lot{font-size:0;gap:0;background:#F4F3EF}
+    .tarif:not(.is-set) .lot::before{content:"Touchez votre tranche ci-dessus";white-space:nowrap;font-size:13px;color:var(--ink-2)}
+    .tarif .bquote{padding:26px 20px;text-align:center}
+    .tarif .bquote .sf{font-size:52px}
+    .tarif .bquote p:not(.sf){margin:10px auto 0;font-size:15px}
+    .tarif .incl-t{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:50px;border-top:1px solid var(--line);background:#FBF9F4;font-size:14.5px;font-weight:600;color:var(--ink);cursor:pointer}
+    .tarif .incl-t svg{width:15px;height:15px;transition:transform .3s var(--out)}
+    .tarif .incl-t[aria-expanded="true"] svg{transform:rotate(180deg)}
+    .tarif .incl{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 16px;padding:0 20px 14px;border-top:0}
+    .tarif .incl>div{display:none;padding:2px 0 14px}
+    .tarif .incl-t[aria-expanded="true"]+.incl>div{display:block}
+    .tarif .incl ul{margin-top:7px;gap:5px}
+    .tarif .incl li{font-size:13px;line-height:1.3;gap:0}
     .tarif .incl li svg{display:none}
-    .tarif .incl .launch{font-size:12px}
-    .tarif .bquote{padding:18px 20px}
-    .tarif .bquote .sf{font-size:44px}
-    .tarif .bquote p:not(.sf){margin-top:8px;font-size:14px}
+    .tarif .incl .launch{font-size:12px;text-align:center}
     /* téléphone : le message remplace les montants au lieu de les recouvrir */
     /* téléphone : les capsules du bureau, empilées et toutes ouvertes. Le grand numéro fin passe au-dessus,
        tout le texte prend la pleine largeur (plus de retrait), les trois points gardent coches et filets. */
@@ -1540,12 +1554,13 @@
           <p class="t-note">Tarifs de lancement, hors taxes.</p>
         </div>
         <div class="t-res" id="amounts" aria-live="polite">
-          <div class="bar"><span class="lab">Vos lots</span><div class="tiers" id="tiers" role="group" aria-label="Changer de tranche"><button type="button" data-n="0" aria-pressed="false">100 à 199</button><button type="button" data-n="1" aria-pressed="false">200 à 399</button><button type="button" data-n="2" aria-pressed="false">400 à 699</button><button type="button" data-n="3" aria-pressed="false">700 à 999</button><button type="button" data-n="4" aria-pressed="false">1 000 à 1 499</button><button type="button" data-n="5" aria-pressed="false">1 500 et +</button></div></div>
+          <div class="bar"><span class="lab">Vos lots</span><p class="mq">Combien de lots <em>gérez-vous ?</em></p><div class="tiers" id="tiers" role="group" aria-label="Changer de tranche"><button type="button" data-n="0" aria-pressed="false">100 à 199</button><button type="button" data-n="1" aria-pressed="false">200 à 399</button><button type="button" data-n="2" aria-pressed="false">400 à 699</button><button type="button" data-n="3" aria-pressed="false">700 à 999</button><button type="button" data-n="4" aria-pressed="false">1 000 à 1 499</button><button type="button" data-n="5" aria-pressed="false">1 500 et +</button></div></div>
           <div class="t-price">
             <div class="pcol"><h3 class="lab">Exploitation<span class="d"> Darlia</span></h3><p class="num"><span data-k="sub">590</span><em>€</em></p><p class="per">HT, chaque mois</p><p class="lot">Soit <b data-k="lot">1,48 à 2,95 €</b> par lot et par mois</p></div>
             <div class="pcol"><h3 class="lab">Déploiement<span class="d"> Darlia</span></h3><p class="num sm"><span data-k="setup">3 500</span><em>€</em></p><p class="per">HT, une seule fois</p></div>
           </div>
           <div class="bquote"><p class="sf">Sur devis</p><p>À cette taille, le prix se calcule ensemble, sur votre portefeuille réel. Parlons-en pendant la démonstration.</p></div>
+          <button type="button" class="incl-t" id="incl-t" aria-expanded="false">Voir ce qui est compris<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
           <div class="incl">
             <div><b>Le déploiement comprend</b><ul><li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>L’audit et l’intégration</li><li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Le paramétrage de vos procédures</li><li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>La formation et le rodage</li></ul></div>
             <div><b>L’exploitation comprend</b><ul><li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>La plateforme et l’hébergement</li><li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>L’assistant et la supervision</li><li><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Le support et les évolutions</li></ul></div>
@@ -1910,6 +1925,7 @@
       if (focus) pills[n].focus({preventScroll:true}); };
     seg.addEventListener('click', (e) => { const i = e.target.closest('input'); if (i) show(+i.value, true); });
     pills.forEach((p, i) => p.addEventListener('click', () => show(i)));
+    const inclT = $('#incl-t', sheet); if (inclT) inclT.addEventListener('click', () => inclT.setAttribute('aria-expanded', String(inclT.getAttribute('aria-expanded') !== 'true')));
   }
 
   /* Questions : une seule réponse ouverte à la fois. */
