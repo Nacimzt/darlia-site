@@ -997,13 +997,14 @@
     /* téléphone : la photo part du bord haut de la carte ; la liste remonte sur le bas de la photo, qui se fond
        dans la couleur de la planche sous un voile et un léger flou, comme sur ordinateur */
     .plate{aspect-ratio:auto;padding:0 18px 10px;min-height:0}
-    .plate>img,.js .reveal .plate>img,.js .reveal.in .plate>img{position:relative;z-index:-2;top:0;display:block;width:calc(100% + 36px);margin:0 -18px -30%;height:auto;aspect-ratio:4/5;transform:none;
+    .plate>img,.js .reveal .plate>img,.js .reveal.in .plate>img{position:relative;z-index:-2;top:0;display:block;width:calc(100% + 40px);max-width:none;margin:-2px -20px -30%;height:auto;aspect-ratio:4/5;transform:none;   /* 2 px de débord : le fond sombre de la carte ne dépasse plus en haut ni sur les côtés */
+      
       -webkit-mask-image:linear-gradient(180deg,#000 70%,transparent 96%);mask-image:linear-gradient(180deg,#000 70%,transparent 96%)}
     .plate:hover>img,.js .reveal.in .plate:hover>img{transform:none}
     .plate h3{position:absolute;left:18px;right:18px;top:20px;z-index:1;font-size:clamp(28px,8vw,34px)}
     .plate::before{background:linear-gradient(180deg,var(--top) 0,transparent 24%,transparent 52%,var(--mid) 68%,var(--bot) 100%)}
     .plate ul{position:relative;z-index:1;margin-top:0;isolation:isolate}
-    .plate ul::before{content:"";position:absolute;z-index:-1;left:-18px;right:-18px;top:-48px;bottom:-10px;pointer-events:none;
+    .plate ul::before{content:"";position:absolute;z-index:-1;left:-18px;right:-18px;top:-48px;bottom:-10px;pointer-events:none;border-radius:0 0 22px 22px;
       -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
       -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 38%);mask-image:linear-gradient(180deg,transparent 0,#000 38%)}
     .plate li{padding:9px 0;font-size:16px;grid-template-columns:20px minmax(0,1fr);gap:12px}
