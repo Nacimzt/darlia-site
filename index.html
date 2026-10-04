@@ -1003,10 +1003,13 @@
     .plate:hover>img,.js .reveal.in .plate:hover>img{transform:none}
     .plate h3{position:absolute;left:18px;right:18px;top:20px;z-index:1;font-size:clamp(28px,8vw,34px)}
     .plate::before{background:linear-gradient(180deg,var(--top) 0,transparent 24%,transparent 52%,var(--mid) 68%,var(--bot) 100%)}
-    .plate ul{position:relative;z-index:1;margin-top:0;isolation:isolate}
-    .plate ul::before{content:"";position:absolute;z-index:-1;left:-18px;right:-18px;top:-48px;bottom:-10px;pointer-events:none;border-radius:0 0 22px 22px;
+    /* trois couches, dans cet ordre : le flou du bas de carte, la surbrillance en verre, puis le texte.
+       (Avant, le flou était posé au-dessus de la surbrillance : elle devenait une simple tache floue.) */
+    .plate::after{content:"";position:absolute;z-index:0;left:0;right:0;bottom:0;height:266px;pointer-events:none;border-radius:0 0 22px 22px;
       -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
       -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 38%);mask-image:linear-gradient(180deg,transparent 0,#000 38%)}
+    .plate .glow{z-index:1;border-radius:12px;background:rgba(255,255,255,.13);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22),inset 0 1px 0 rgba(255,255,255,.18)}
+    .plate ul{position:relative;z-index:2;margin-top:0}
     .plate li{padding:9px 0;font-size:16px;grid-template-columns:20px minmax(0,1fr);gap:12px}
     .plate li svg{width:18px;height:18px}
     .seam{display:none}
