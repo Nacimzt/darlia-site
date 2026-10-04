@@ -1043,6 +1043,32 @@
     .tarif .pcol+.pcol{padding:18px 0 0;border-left:0;border-top:1px solid var(--line)}
     .tarif .num.sm{font-size:40px}
     .tarif .lot{font-size:13px}
+    /* tarif téléphone, version courte : les deux montants côte à côte, le prix par lot dessous sur toute la largeur,
+       ce qui est compris sur deux colonnes ; la feuille tient largement dans un écran */
+    .tarif .top{padding:22px 20px 16px}
+    .tarif .bs{margin-top:8px;font-size:14px}
+    .tarif .row{flex-basis:46px}
+    .tarif .t-note{padding:12px 20px 14px}
+    .tarif .bar{gap:8px;padding:14px 16px}
+    .tarif .tiers{gap:5px}
+    .tarif .t-price{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);grid-template-areas:"l r" "n r" "p r" "lot lot";row-gap:0;align-items:end;padding:16px 20px 16px}
+    .tarif .pcol:first-child{display:contents}
+    .tarif .pcol:first-child .lab{grid-area:l;align-self:start}
+    .tarif .pcol:first-child .num{grid-area:n;margin-top:10px;flex-wrap:nowrap;font-size:clamp(36px,11.6vw,48px)}   /* « 1 690 € » tient sur une ligne : la feuille garde la même hauteur pour toutes les tranches */
+    .tarif .pcol:first-child .per{grid-area:p;margin-top:6px}
+    .tarif .lot{grid-area:lot;justify-self:stretch;align-self:auto;margin-top:14px;justify-content:center;font-size:12.5px}
+    .tarif .pcol+.pcol{grid-area:r;align-self:stretch;justify-content:flex-end;padding:0 0 0 14px;border-top:0;border-left:1px solid var(--line)}
+    .tarif .pcol+.pcol .lab{margin-bottom:auto}
+    .tarif .num.sm{margin-top:10px;flex-wrap:nowrap;font-size:clamp(24px,7.4vw,30px)}
+    .tarif .per{font-size:12.5px}
+    .tarif .incl{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px 14px;padding:14px 20px 14px}
+    .tarif .incl ul{margin-top:7px;gap:4px}
+    .tarif .incl li{font-size:12.5px;line-height:1.3;gap:0}
+    .tarif .incl li svg{display:none}
+    .tarif .incl .launch{font-size:12px}
+    .tarif .bquote{padding:18px 20px}
+    .tarif .bquote .sf{font-size:44px}
+    .tarif .bquote p:not(.sf){margin-top:8px;font-size:14px}
     /* téléphone : le message remplace les montants au lieu de les recouvrir */
     /* téléphone : les capsules du bureau, empilées et toutes ouvertes. Le grand numéro fin passe au-dessus,
        tout le texte prend la pleine largeur (plus de retrait), les trois points gardent coches et filets. */
@@ -1124,7 +1150,7 @@
     .dock a.go2{height:44px;padding:0 14px;font-size:14px;gap:6px}
     @media (max-width:360px){.dock a.go2 .lg{display:none}.dock a.go2{text-transform:capitalize}}
     @media (max-width:360px){.ui .tabs{padding-inline:6px}.ui .tabs button{padding:0 6px;font-size:12px}.ui .tabs .ch{display:none}.tarif .tiers{grid-template-columns:repeat(2,minmax(0,1fr))}}   /* petit iPhone : « Démo » */
-    .pp .say a{width:100%;justify-content:center}
+    .pp .say a{width:100%;justify-content:center;white-space:nowrap;padding:0 16px;font-size:15.5px}
     .how .after a{width:100%;justify-content:center;white-space:nowrap;padding:0 16px;font-size:15.5px}
     .ui .bar span:not(.pill){display:none}   /* le titre du fragment suffit sur un petit écran */
     .ui .row{grid-template-columns:minmax(0,1fr) auto;row-gap:4px}
@@ -1516,8 +1542,8 @@
         <div class="t-res" id="amounts" aria-live="polite">
           <div class="bar"><span class="lab">Vos lots</span><div class="tiers" id="tiers" role="group" aria-label="Changer de tranche"><button type="button" data-n="0" aria-pressed="false">100 à 199</button><button type="button" data-n="1" aria-pressed="false">200 à 399</button><button type="button" data-n="2" aria-pressed="false">400 à 699</button><button type="button" data-n="3" aria-pressed="false">700 à 999</button><button type="button" data-n="4" aria-pressed="false">1 000 à 1 499</button><button type="button" data-n="5" aria-pressed="false">1 500 et +</button></div></div>
           <div class="t-price">
-            <div class="pcol"><h3 class="lab">Exploitation Darlia</h3><p class="num"><span data-k="sub">590</span><em>€</em></p><p class="per">HT, chaque mois</p><p class="lot">Soit <b data-k="lot">1,48 à 2,95 €</b> par lot et par mois</p></div>
-            <div class="pcol"><h3 class="lab">Déploiement Darlia</h3><p class="num sm"><span data-k="setup">3 500</span><em>€</em></p><p class="per">HT, une seule fois</p></div>
+            <div class="pcol"><h3 class="lab">Exploitation<span class="d"> Darlia</span></h3><p class="num"><span data-k="sub">590</span><em>€</em></p><p class="per">HT, chaque mois</p><p class="lot">Soit <b data-k="lot">1,48 à 2,95 €</b> par lot et par mois</p></div>
+            <div class="pcol"><h3 class="lab">Déploiement<span class="d"> Darlia</span></h3><p class="num sm"><span data-k="setup">3 500</span><em>€</em></p><p class="per">HT, une seule fois</p></div>
           </div>
           <div class="bquote"><p class="sf">Sur devis</p><p>À cette taille, le prix se calcule ensemble, sur votre portefeuille réel. Parlons-en pendant la démonstration.</p></div>
           <div class="incl">
